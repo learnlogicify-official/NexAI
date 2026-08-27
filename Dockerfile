@@ -1,9 +1,21 @@
-# Replace this with the EXACT Docker image currently used by your Railway Moodle service.
-# Example:
-# FROM erseco/alpine-moodle:latest
 FROM erseco/alpine-moodle:v5.2.1
 
-# Moodle / PHP OPcache tuning
+# --------------------------------------------------
+# Useful administration tools
+# --------------------------------------------------
+RUN apk add --no-cache nano
+
+# --------------------------------------------------
+# Permanent Moodle runtime configuration
+# Redis sessions + PgBouncer compatibility
+# --------------------------------------------------
+COPY 50-moodle-runtime-config.sh /docker-entrypoint-init.d/50-moodle-runtime-config.sh
+
+RUN chmod +x /docker-entrypoint-init.d/50-moodle-runtime-config.sh
+
+# --------------------------------------------------
+# PHP OPcache tuning
+# --------------------------------------------------
 RUN printf '%s\n' \
 'opcache.enable=1' \
 'opcache.enable_cli=1' \
@@ -15,7 +27,9 @@ RUN printf '%s\n' \
 'opcache.save_comments=1' \
 > /etc/php83/conf.d/99-moodle-opcache.ini
 
+# --------------------------------------------------
 # PHP-FPM tuning
+# --------------------------------------------------
 RUN sed -i \
     -e 's/^pm = .*/pm = dynamic/' \
     -e 's/^pm.max_children = .*/pm.max_children = 64/' \
@@ -29,6 +43,3 @@ RUN sed -i \
 'pm.min_spare_servers = 8' \
 'pm.max_spare_servers = 20' \
 >> /etc/php83/php-fpm.d/www.conf
-
-# Keep PostgreSQL and Redis credentials in Railway Variables.
-# Do NOT hard-code passwords or other secrets in this file.
