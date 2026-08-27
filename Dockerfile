@@ -1,7 +1,7 @@
 # Replace this with the EXACT Docker image currently used by your Railway Moodle service.
 # Example:
 # FROM erseco/alpine-moodle:latest
-erseco/alpine-moodle:v5.2.1
+FROM erseco/alpine-moodle:v5.2.1
 
 # Moodle / PHP OPcache tuning
 RUN printf '%s\n' \
