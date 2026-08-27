@@ -2,10 +2,11 @@ FROM erseco/alpine-moodle:v5.2.1
 
 USER root
 
+# Install admin utility
 RUN apk add --no-cache nano
 
+# Permanent Moodle runtime config
 COPY 50-moodle-runtime-config.sh /docker-entrypoint-init.d/50-moodle-runtime-config.sh
-
 RUN chmod +x /docker-entrypoint-init.d/50-moodle-runtime-config.sh
 
 # OPcache tuning
@@ -34,3 +35,6 @@ RUN sed -i \
 'pm.min_spare_servers = 8' \
 'pm.max_spare_servers = 20' \
 >> /etc/php83/php-fpm.d/www.conf
+
+# IMPORTANT: original image runs as nobody
+USER nobody
