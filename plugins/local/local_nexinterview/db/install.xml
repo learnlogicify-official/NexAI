@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/nexinterview/db" VERSION="20260827" COMMENT="NexInterview tables"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="local_nexinterview_attempt" COMMENT="Interview attempts for hub stats">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="sessionid" TYPE="char" LENGTH="64" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="roletrack" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="sde_intern"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="inprogress"/>
+        <FIELD NAME="overallscore" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="0" DECIMALS="2"/>
+        <FIELD NAME="scoresjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timecompleted" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid_ix" UNIQUE="false" FIELDS="userid"/>
+        <INDEX NAME="sessionid_ix" UNIQUE="true" FIELDS="sessionid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_nexinterview_interviewer" COMMENT="Custom interviewer profiles">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="120" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="roletrack" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="sde_intern"/>
+        <FIELD NAME="topics" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="durationminutes" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="17"/>
+        <FIELD NAME="qaminutes" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="style" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="friendly"/>
+        <FIELD NAME="difficulty" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="intermediate"/>
+        <FIELD NAME="pace" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="standard"/>
+        <FIELD NAME="questionmix" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="conceptual"/>
+        <FIELD NAME="followupdepth" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="moderate"/>
+        <FIELD NAME="avoidtopics" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="briefing" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="includecoding" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="enabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="enabled_ix" UNIQUE="false" FIELDS="enabled"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

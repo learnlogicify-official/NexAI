@@ -1,0 +1,16 @@
+{{!
+    @template format_nexcoursepro/local/content
+    Pro learn shell when browsing; core Moodle course editor when editing.
+}}
+<div class="nxpro" data-region="nxpro" data-courseid="{{#nexcoursepro.learn}}{{courseid}}{{/nexcoursepro.learn}}">
+    {{#nexcoursepro.showlearn}}
+        {{#nexcoursepro.learn}}
+            {{> format_nexcoursepro/local/learn }}
+        {{/nexcoursepro.learn}}
+    {{/nexcoursepro.showlearn}}
+
+    <div class="nxpro-core{{#nexcoursepro.hidecore}} nxpro-core--hidden{{/nexcoursepro.hidecore}}"
+         id="nxpro-core">
+        {{> core_courseformat/local/content }}
+    </div>
+</div>

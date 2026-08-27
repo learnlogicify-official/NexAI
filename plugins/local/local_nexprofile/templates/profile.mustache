@@ -1,0 +1,420 @@
+{{!
+    @template local_nexprofile/profile
+    Codolio / LeetCode style coding profile.
+}}
+<div class="nxp" data-region="nexprofile">
+
+    <header class="nxp-hero">
+        <div class="nxp-hero__banner">
+            {{#editurl}}
+                <a class="nxp-hero__banner-edit" href="{{{editurl}}}" title="{{#str}}editprofile, local_nexprofile{{/str}}" aria-label="{{#str}}editprofile, local_nexprofile{{/str}}">
+                    <span aria-hidden="true">✎</span>
+                </a>
+            {{/editurl}}
+        </div>
+        <div class="nxp-hero__body">
+            <img class="nxp-hero__avatar" src="{{{avatar}}}" alt="{{fullname}}">
+            <div class="nxp-hero__info">
+                <div class="nxp-hero__top">
+                    <div>
+                        <h1 class="nxp-hero__name">{{fullname}}</h1>
+                        <p class="nxp-hero__handle">@{{username}}</p>
+                        {{#hasbio}}
+                            <p class="nxp-hero__bio">{{bio}}</p>
+                        {{/hasbio}}
+                    </div>
+                    <div class="nxp-hero__actions">
+                        {{#editurl}}
+                            <a class="nxp-btn" href="{{{editurl}}}">{{#str}}editprofile, local_nexprofile{{/str}}</a>
+                        {{/editurl}}
+                        {{#settingsurl}}
+                            <a class="nxp-btn" href="{{{settingsurl}}}">{{#str}}settingsbtn, local_nexprofile{{/str}}</a>
+                        {{/settingsurl}}
+                        {{^editurl}}
+                            <a class="nxp-btn nxp-btn--ghost" href="{{{classicurl}}}">{{#str}}classicprofile, local_nexprofile{{/str}}</a>
+                        {{/editurl}}
+                    </div>
+                </div>
+                <ul class="nxp-hero__chips">
+                    {{#hasdepartment}}
+                        <li>{{department}}</li>
+                    {{/hasdepartment}}
+                    {{#hasinstitution}}
+                        <li>{{institution}}</li>
+                    {{/hasinstitution}}
+                    {{#haspasstext}}
+                        <li>{{passtext}}</li>
+                    {{/haspasstext}}
+                    <li>{{title}}</li>
+                    <li>{{streaklabel}}</li>
+                    {{#haslongest}}
+                        <li>{{longestlabel}}</li>
+                    {{/haslongest}}
+                    <li>{{xplabel}}</li>
+                    {{#hasrank}}
+                        <li>{{ranklabel}}</li>
+                    {{/hasrank}}
+                    {{#hasacceptance}}
+                        <li>{{acceptancelabel}}</li>
+                    {{/hasacceptance}}
+                </ul>
+                <p class="nxp-hero__social">
+                    <strong>{{followers}}</strong> {{#str}}followers, local_nexprofile{{/str}}
+                    <span aria-hidden="true"> · </span>
+                    <strong>{{following}}</strong> {{#str}}following, local_nexprofile{{/str}}
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <section class="nxp-card nxp-card--heatmap">
+        <div class="nxp-card__head">
+            <h2 class="nxp-card__title">
+                <span class="nxp-ico" aria-hidden="true">▦</span>
+                {{#str}}activityheatmap, local_nexprofile{{/str}}
+            </h2>
+            {{#hasactivity}}
+                <p class="nxp-card__meta">{{activitytotal}} {{#str}}events, local_nexprofile{{/str}} · {{activedays}} {{#str}}activedays, local_nexprofile{{/str}}</p>
+            {{/hasactivity}}
+        </div>
+
+        {{#hasactivity}}
+            <ul class="nxp-activity-summary">
+                {{#activitysummary}}
+                    <li class="nxp-activity-summary__item nxp-activity-summary__item--{{key}}">
+                        <span class="nxp-activity-summary__label">{{label}}</span>
+                        <strong>{{count}}</strong>
+                        {{#hasdetail}}
+                            <em>{{detail}}</em>
+                        {{/hasdetail}}
+                    </li>
+                {{/activitysummary}}
+            </ul>
+        {{/hasactivity}}
+        {{^hasactivity}}
+            <p class="nxp-empty">{{#str}}noactivity, local_nexprofile{{/str}}</p>
+        {{/hasactivity}}
+
+        <div class="nxp-heat nxp-heat--months" aria-label="{{#str}}heatmaphint, local_nexprofile{{/str}}">
+            <div class="nxp-heat__wdays" aria-hidden="true">
+                {{#heatmapweekdays}}
+                    <span>{{label}}</span>
+                {{/heatmapweekdays}}
+            </div>
+            <div class="nxp-heat__months">
+                {{#heatmapmonths}}
+                    <div class="nxp-heat__month">
+                        <div class="nxp-heat__mlabel">{{label}}</div>
+                        <div class="nxp-heat__mgrid">
+                            {{#weeks}}
+                                <div class="nxp-heat__week">
+                                    {{#days}}
+                                        {{#hastooltip}}
+                                            <span class="nxp-heat__cell nxp-heat__cell--lvl{{level}}"
+                                                  data-tip="{{title}}"
+                                                  title="{{title}}"
+                                                  tabindex="0"
+                                                  role="img"
+                                                  aria-label="{{title}}"></span>
+                                        {{/hastooltip}}
+                                        {{^hastooltip}}
+                                            <span class="nxp-heat__cell nxp-heat__cell--lvl{{level}} nxp-heat__cell--pad" aria-hidden="true"></span>
+                                        {{/hastooltip}}
+                                    {{/days}}
+                                </div>
+                            {{/weeks}}
+                        </div>
+                    </div>
+                {{/heatmapmonths}}
+            </div>
+        </div>
+        <div class="nxp-heat__legend nxp-heat__legend--levels">
+            <span>{{#str}}less, local_nexprofile{{/str}}</span>
+            <i class="nxp-heat__cell nxp-heat__cell--lvl0"></i>
+            <i class="nxp-heat__cell nxp-heat__cell--lvl1"></i>
+            <i class="nxp-heat__cell nxp-heat__cell--lvl2"></i>
+            <i class="nxp-heat__cell nxp-heat__cell--lvl3"></i>
+            <i class="nxp-heat__cell nxp-heat__cell--lvl4"></i>
+            <span>{{#str}}more, local_nexprofile{{/str}}</span>
+        </div>
+    </section>
+
+    <div class="nxp-layout">
+        <div class="nxp-col nxp-col--main">
+
+            <section class="nxp-card">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">↻</span>
+                        {{#str}}recentsubmissions, local_nexprofile{{/str}}
+                    </h2>
+                </div>
+                {{#hasrecent}}
+                    <div class="nxp-recent-wrap">
+                        <table class="nxp-recent">
+                            <thead>
+                                <tr>
+                                    <th scope="col">{{#str}}recentwhen, local_nexprofile{{/str}}</th>
+                                    <th scope="col">{{#str}}recentproblem, local_nexprofile{{/str}}</th>
+                                    <th scope="col">{{#str}}recentsource, local_nexprofile{{/str}}</th>
+                                    <th scope="col">{{#str}}recentstatus, local_nexprofile{{/str}}</th>
+                                    <th scope="col">{{#str}}recentlang, local_nexprofile{{/str}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#recent}}
+                                    <tr>
+                                        <td class="nxp-recent__when">{{timestr}}</td>
+                                        <td class="nxp-recent__name"><a href="{{{url}}}">{{name}}</a></td>
+                                        <td><span class="nxp-recent__src nxp-recent__src--{{source}}">{{sourcelabel}}</span></td>
+                                        <td><span class="nxp-recent__verdict nxp-recent__verdict--{{verdict}}">{{status}}</span></td>
+                                        <td class="nxp-recent__lang">{{#haslanguage}}{{language}}{{/haslanguage}}{{^haslanguage}}—{{/haslanguage}}</td>
+                                    </tr>
+                                {{/recent}}
+                            </tbody>
+                        </table>
+                    </div>
+                {{/hasrecent}}
+                {{^hasrecent}}
+                    <p class="nxp-empty">{{#str}}norecent, local_nexprofile{{/str}}</p>
+                {{/hasrecent}}
+            </section>
+
+            <section class="nxp-card">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">{ }</span>
+                        {{#str}}programminglanguages, local_nexprofile{{/str}}
+                    </h2>
+                </div>
+                {{#haslanguages}}
+                    <ul class="nxp-langs">
+                        {{#languages}}
+                            <li>
+                                <div class="nxp-lang__row">
+                                    <span>{{name}}</span>
+                                    <strong>{{pct}}%</strong>
+                                </div>
+                                <span class="nxp-bar"><i style="width: {{pct}}%;"></i></span>
+                            </li>
+                        {{/languages}}
+                    </ul>
+                {{/haslanguages}}
+                {{^haslanguages}}
+                    <p class="nxp-empty">{{#str}}nolanguages, local_nexprofile{{/str}}</p>
+                {{/haslanguages}}
+            </section>
+
+            {{#hasplatforms}}
+            <section class="nxp-card">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">◎</span>
+                        {{#str}}connectedplatforms, local_nexprofile{{/str}}
+                    </h2>
+                    {{#hasportfoliourl}}
+                        <a class="nxp-link" href="{{{portfoliourl}}}">{{#str}}manageportfolio, local_nexprofile{{/str}}</a>
+                    {{/hasportfoliourl}}
+                </div>
+                <ul class="nxp-platforms">
+                    {{#platforms}}
+                        <li class="nxp-platform nxp-platform--{{key}}">
+                            <div class="nxp-platform__head">
+                                <strong class="nxp-platform__label">{{label}}</strong>
+                                <span class="nxp-platform__handle">@{{handle}}</span>
+                            </div>
+                            <ul class="nxp-platform__stats">
+                                {{#hassolved}}
+                                    <li><span>{{#str}}totalsolved, local_nexprofile{{/str}}</span><strong>{{totalsolved}}</strong></li>
+                                {{/hassolved}}
+                                {{#hasrating}}
+                                    <li><span>{{#str}}platformrating, local_nexprofile{{/str}}</span><strong>{{ratingdisplay}}</strong></li>
+                                {{/hasrating}}
+                                {{#hasrank}}
+                                    <li><span>{{#str}}platformrank, local_nexprofile{{/str}}</span><strong>{{ranktext}}</strong></li>
+                                {{/hasrank}}
+                                {{#hascontests}}
+                                    <li><span>{{#str}}platformcontests, local_nexprofile{{/str}}</span><strong>{{contests}}</strong></li>
+                                {{/hascontests}}
+                            </ul>
+                        </li>
+                    {{/platforms}}
+                </ul>
+            </section>
+            {{/hasplatforms}}
+
+            <section class="nxp-card nxp-skills-card">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">▣</span>
+                        {{#str}}technicalskills, local_nexprofile{{/str}}
+                    </h2>
+                </div>
+                {{#hasskills}}
+                    <ul class="nxp-skillcloud">
+                        {{#skills}}
+                            <li class="nxp-skillchip nxp-skillchip--{{size}} nxp-skillchip--{{tone}}">
+                                <span class="nxp-skillchip__name">{{name}}</span>
+                                <span class="nxp-skillchip__count">{{count}}</span>
+                            </li>
+                        {{/skills}}
+                    </ul>
+                {{/hasskills}}
+                {{^hasskills}}
+                    <p class="nxp-empty">{{#str}}noskills, local_nexprofile{{/str}}</p>
+                {{/hasskills}}
+            </section>
+
+        </div>
+
+        <aside class="nxp-col nxp-col--side">
+
+            <section class="nxp-card nxp-product nxp-product--course">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">◈</span>
+                        {{#str}}block_nexcourse, local_nexprofile{{/str}}
+                    </h2>
+                    {{#hascourseurl}}
+                        <a class="nxp-link" href="{{{courseurl}}}">{{#str}}viewproduct, local_nexprofile{{/str}}</a>
+                    {{/hascourseurl}}
+                </div>
+                <ul class="nxp-product__stats nxp-product__stats--dense">
+                    <li><strong>{{course.solved}}</strong><span>{{#str}}codingsolved, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{course.codingtotal}}</strong><span>{{#str}}codingtotal, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{course.mcqsolved}}</strong><span>{{#str}}mcqsolved, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{course.mcqtotal}}</strong><span>{{#str}}mcqtotal, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{course.testssubmitted}}</strong><span>{{#str}}testssubmitted, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{course.enrolled}}</strong><span>{{#str}}coursesenrolled, local_nexprofile{{/str}}</span></li>
+                </ul>
+            </section>
+
+            <section class="nxp-card nxp-product nxp-product--practice">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">◫</span>
+                        {{#str}}block_nexpractice, local_nexprofile{{/str}}
+                    </h2>
+                    {{#haspracticeurl}}
+                        <a class="nxp-link" href="{{{practiceurl}}}">{{#str}}viewproduct, local_nexprofile{{/str}}</a>
+                    {{/haspracticeurl}}
+                </div>
+                <div class="nxp-solved">
+                    <div class="nxp-donut" style="{{practice.donutstyle}}" role="img" aria-label="{{practice.solved}}">
+                        <div class="nxp-donut__hole">
+                            <strong>{{practice.solved}}</strong>
+                        </div>
+                    </div>
+                    <div class="nxp-diffbox">
+                        <p class="nxp-diffbox__label">{{#str}}difficultybreakdown, local_nexprofile{{/str}}</p>
+                        <ul class="nxp-diffs">
+                            {{#practice.difficulties}}
+                                <li class="nxp-diff nxp-diff--{{key}}">
+                                    <div class="nxp-diff__row">
+                                        <span>{{label}}</span>
+                                        <strong>{{pct}}%</strong>
+                                    </div>
+                                    <span class="nxp-bar"><i style="width: {{pct}}%;"></i></span>
+                                </li>
+                            {{/practice.difficulties}}
+                        </ul>
+                    </div>
+                </div>
+                <ul class="nxp-solved__foot">
+                    <li><strong>{{practice.solved}}</strong><span>{{#str}}totalsolved, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{practice.solvedpct}}%</strong><span>{{#str}}completion, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{practice.remaining}}</strong><span>{{#str}}remaining, local_nexprofile{{/str}}</span></li>
+                </ul>
+            </section>
+
+            <section class="nxp-card nxp-product nxp-product--codelab">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">⌘</span>
+                        {{#str}}block_nexcodelab, local_nexprofile{{/str}}
+                    </h2>
+                    {{#hascodelaburl}}
+                        <a class="nxp-link" href="{{{codelaburl}}}">{{#str}}viewproduct, local_nexprofile{{/str}}</a>
+                    {{/hascodelaburl}}
+                </div>
+                <ul class="nxp-product__stats">
+                    <li><strong>{{codelab.solved}}</strong><span>{{#str}}totalsolved, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{codelab.missions}}</strong><span>{{#str}}missionsdone, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{codelab.xp}}</strong><span>{{#str}}codelabxp, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{codelab.streak}}</strong><span>{{#str}}codelabstreak, local_nexprofile{{/str}}</span></li>
+                </ul>
+            </section>
+
+            {{#hasbattle}}
+            <section class="nxp-card nxp-product nxp-product--battle">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">⚔</span>
+                        {{#str}}block_nexbattleground, local_nexprofile{{/str}}
+                    </h2>
+                    {{#hasbattleurl}}
+                        <a class="nxp-link" href="{{{battleurl}}}">{{#str}}viewproduct, local_nexprofile{{/str}}</a>
+                    {{/hasbattleurl}}
+                </div>
+                <ul class="nxp-product__stats">
+                    <li><strong>{{battle.wins}}</strong><span>{{#str}}battlewins, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{battle.losses}}</strong><span>{{#str}}battlelosses, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{battle.winrate}}%</strong><span>{{#str}}battlewinrate, local_nexprofile{{/str}}</span></li>
+                    {{#battle.hasrank}}
+                        <li><strong>#{{battle.rank}}</strong><span>{{#str}}battlerank, local_nexprofile{{/str}}</span></li>
+                    {{/battle.hasrank}}
+                    {{^battle.hasrank}}
+                        <li><strong>{{battle.battles}}</strong><span>{{#str}}battleplayed, local_nexprofile{{/str}}</span></li>
+                    {{/battle.hasrank}}
+                </ul>
+            </section>
+            {{/hasbattle}}
+
+            {{#hasinterview}}
+            <section class="nxp-card nxp-product nxp-product--interview">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">◎</span>
+                        {{#str}}block_nexinterview, local_nexprofile{{/str}}
+                    </h2>
+                    {{#hasinterviewurl}}
+                        <a class="nxp-link" href="{{{interviewurl}}}">{{#str}}viewproduct, local_nexprofile{{/str}}</a>
+                    {{/hasinterviewurl}}
+                </div>
+                <ul class="nxp-product__stats">
+                    <li><strong>{{interview.taken}}</strong><span>{{#str}}interviewstaken, local_nexprofile{{/str}}</span></li>
+                    <li><strong>{{interview.completed}}</strong><span>{{#str}}interviewscompleted, local_nexprofile{{/str}}</span></li>
+                    {{#interview.hasavg}}
+                        <li><strong>{{interview.avg}}</strong><span>{{#str}}interviewavg, local_nexprofile{{/str}}</span></li>
+                    {{/interview.hasavg}}
+                    {{#interview.hasbest}}
+                        <li><strong>{{interview.best}}</strong><span>{{#str}}interviewbest, local_nexprofile{{/str}}</span></li>
+                    {{/interview.hasbest}}
+                </ul>
+            </section>
+            {{/hasinterview}}
+
+            <section class="nxp-card">
+                <div class="nxp-card__head">
+                    <h2 class="nxp-card__title">
+                        <span class="nxp-ico" aria-hidden="true">☎</span>
+                        {{#str}}contact, local_nexprofile{{/str}}
+                    </h2>
+                    {{#editurl}}
+                        <a class="nxp-link" href="{{{editurl}}}">{{#str}}edit, local_nexprofile{{/str}}</a>
+                    {{/editurl}}
+                </div>
+                {{#showemail}}
+                    <div class="nxp-contact">
+                        <span class="nxp-contact__label">{{#str}}email, local_nexprofile{{/str}}</span>
+                        <a class="nxp-contact__value" href="mailto:{{email}}">{{email}}</a>
+                    </div>
+                {{/showemail}}
+                {{^showemail}}
+                    <p class="nxp-empty">{{#str}}nocontact, local_nexprofile{{/str}}</p>
+                {{/showemail}}
+            </section>
+
+        </aside>
+    </div>
+</div>

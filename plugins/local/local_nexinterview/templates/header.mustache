@@ -1,0 +1,57 @@
+{{!
+    @template local_nexinterview/header
+}}
+<section class="nxi-header" data-region="nxi-header">
+    <div class="nxi-header__banner">
+        <div class="nxi-header__veil"></div>
+        <div class="nxi-header__content">
+            <div class="nxi-header__row">
+                <div class="nxi-header__main">
+                    <span class="nxi-header__cat">{{eyebrow}}</span>
+                    <h1 class="nxi-header__title">{{title}}</h1>
+                    <p class="nxi-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="nxi-header__user">{{#str}}greeting, local_nexinterview{{/str}} {{displayname}}</p>
+                    {{/displayname}}
+                    <div class="nxi-header__actions">
+                        {{#hasongoing}}
+                            <a class="nxi-header__link nxi-header__link--resume" href="{{{resumeurl}}}">{{#str}}resumeinterview, local_nexinterview{{/str}} →</a>
+                        {{/hasongoing}}
+                        <a class="nxi-header__link" href="{{{reportsurl}}}">{{#str}}viewreports, local_nexinterview{{/str}} →</a>
+                        {{#canviewall}}
+                            <a class="nxi-header__link" href="{{{allreportsurl}}}">{{#str}}allreports, local_nexinterview{{/str}} →</a>
+                        {{/canviewall}}
+                        {{#canmanage}}
+                            <a class="nxi-header__link" href="{{{manageurl}}}">{{#str}}manageinterviewers, local_nexinterview{{/str}} →</a>
+                        {{/canmanage}}
+                    </div>
+                </div>
+                <div class="nxi-header__meter" aria-label="{{#str}}hubprogress, local_nexinterview{{/str}}">
+                    <div class="nxi-donut" style="--nxi-donut-pct: {{contentpct}};" role="img"
+                         aria-label="{{contentpct}}%">
+                        <span class="nxi-donut__hole" aria-hidden="true"></span>
+                        <strong class="nxi-donut__value">{{contentpct}}%</strong>
+                    </div>
+                    <div class="nxi-header__meter-copy">
+                        <span class="nxi-header__meter-label">{{#str}}hubprogress, local_nexinterview{{/str}}</span>
+                        <strong class="nxi-header__meter-detail">{{completedcount}} / {{attemptscount}}</strong>
+                        <span class="nxi-header__meter-hint">{{#str}}hubprogress_hint, local_nexinterview{{/str}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{#hasstats}}
+        <div class="nxi-header__stats" role="list">
+            {{#stats}}
+                <div class="nxi-hstat nxi-hstat--{{key}}" role="listitem">
+                    <span class="nxi-hstat__icon" aria-hidden="true">{{icon}}</span>
+                    <div class="nxi-hstat__body">
+                        <strong class="nxi-hstat__value">{{value}}</strong>
+                        <span class="nxi-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

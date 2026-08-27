@@ -1,0 +1,159 @@
+{{!
+    @template local_nexstack/studio
+    VS Code–style studio: activity rail | explorer/steps/brief | editor+terminal | preview
+}}
+<link rel="stylesheet" type="text/css" href="{{{studiocssurl}}}" />
+<script type="application/json" id="nxs-bootstrap">{{{bootstrapjson}}}</script>
+<div class="nxs-ide" data-region="nxs-studio" data-theme="dark">
+    <header class="nxs-ide__titlebar" role="banner">
+        <div class="nxs-ide__titlebar-left">
+            <span class="nxs-ide__brand" title="NexStack" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <rect x="1" y="1" width="6" height="6" rx="1" fill="#007acc"/>
+                    <rect x="9" y="1" width="6" height="6" rx="1" fill="#3794ff"/>
+                    <rect x="1" y="9" width="6" height="6" rx="1" fill="#3794ff"/>
+                    <rect x="9" y="9" width="6" height="6" rx="1" fill="#007acc"/>
+                </svg>
+            </span>
+            <a class="nxs-ide__menulink" href="{{{catalogurl}}}">Catalog</a>
+            <span class="nxs-ide__menudivider" aria-hidden="true"></span>
+            <button type="button" class="nxs-ide__menulink" data-action="open-steps" title="Open Steps panel">
+                Steps
+            </button>
+            {{#iswc}}
+                <button type="button" class="nxs-ide__menulink" data-action="boot-wc">{{#str}}bootwc, local_nexstack{{/str}}</button>
+            {{/iswc}}
+        </div>
+        <div class="nxs-ide__titlebar-center" title="{{missionname}}">
+            <span class="nxs-ide__window-title">
+                <span class="nxs-ide__app">NexStack</span>
+                <span class="nxs-ide__sep">—</span>
+                <span class="nxs-ide__mission" data-region="mission-title">{{missionname}}</span>
+            </span>
+        </div>
+        <div class="nxs-ide__titlebar-right">
+            <button type="button" class="nxs-ide__stepchip" data-action="open-steps" title="Open Steps">
+                <span class="nxs-ide__stepchip-label">Step</span>
+                <span class="nxs-ide__stepchip-value" data-region="step-chip">1 / —</span>
+            </button>
+            <button type="button" class="nxs-ide__tbbtn nxs-ide__tbbtn--primary" data-action="check-step" title="{{#str}}checkstep, local_nexstack{{/str}}">
+                Check step
+            </button>
+            <button type="button" class="nxs-ide__tbicon" data-action="refresh-preview" title="{{#str}}refreshpreview, local_nexstack{{/str}}" aria-label="Refresh preview">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.8-3.3L23 10M1 14l4.7 4.3A9 9 0 0 0 20.5 15"/></svg>
+            </button>
+            <button type="button" class="nxs-ide__tbicon" data-action="toggle-theme" title="Toggle color theme" aria-label="Toggle theme">
+                <span data-region="theme-label" class="nxs-ide__theme-text">Dark</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="nxs-ide__main" data-region="workspace">
+        <nav class="nxs-ide__rail" aria-label="Activity bar">
+            <button type="button" class="nxs-ide__railbtn is-active" data-sidebar="files" title="Explorer" aria-label="Explorer">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h6l2 2h10v10H3V7z"/></svg>
+                <span class="nxs-ide__raillabel">Explorer</span>
+            </button>
+            <button type="button" class="nxs-ide__railbtn" data-sidebar="steps" title="Mission steps" aria-label="Steps">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                <span class="nxs-ide__raillabel">Steps</span>
+                <span class="nxs-ide__railbadge" data-region="steps-badge" hidden></span>
+            </button>
+            <button type="button" class="nxs-ide__railbtn" data-sidebar="brief" title="Mission brief" aria-label="Brief">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h12v16H4z"/><path d="M8 8h4M8 12h6M8 16h5"/></svg>
+                <span class="nxs-ide__raillabel">Brief</span>
+            </button>
+        </nav>
+
+        <aside class="nxs-ide__sidebar" data-region="sidebar" style="width: 280px;">
+            <div class="nxs-ide__sidepanel is-active" data-region="panel-files">
+                <div class="nxs-ide__sidehead">
+                    <span>Explorer</span>
+                    <div class="nxs-ide__sidehead-actions">
+                        <span class="nxs-ide__sidemeta" data-region="file-count">—</span>
+                        <button type="button" class="nxs-ide__sideicon" data-action="toggle-sidebar" title="Close sidebar" aria-label="Close sidebar">‹</button>
+                    </div>
+                </div>
+                <div class="nxs-ide__section">Project</div>
+                <div class="nxs-ide__tree" data-region="file-list"></div>
+            </div>
+            <div class="nxs-ide__sidepanel" data-region="panel-steps" hidden>
+                <div class="nxs-ide__sidehead">
+                    <span>{{#str}}steps, local_nexstack{{/str}}</span>
+                    <div class="nxs-ide__sidehead-actions">
+                        <span class="nxs-ide__sidemeta" data-region="steps-sub">—</span>
+                        <button type="button" class="nxs-ide__sideicon" data-action="toggle-sidebar" title="Close sidebar" aria-label="Close sidebar">‹</button>
+                    </div>
+                </div>
+                <div class="nxs-ide__steps-progress" data-region="steps-progress" aria-hidden="true">
+                    <div class="nxs-ide__steps-progress-bar" data-region="steps-progress-bar"></div>
+                </div>
+                <div class="nxs-ide__steplist" data-region="step-list"></div>
+            </div>
+            <div class="nxs-ide__sidepanel" data-region="panel-brief" hidden>
+                <div class="nxs-ide__sidehead">
+                    <span>{{#str}}brief, local_nexstack{{/str}}</span>
+                    <button type="button" class="nxs-ide__sideicon" data-action="toggle-sidebar" title="Close sidebar" aria-label="Close sidebar">‹</button>
+                </div>
+                <pre class="nxs-ide__brief" data-region="brief">{{briefmd}}</pre>
+            </div>
+        </aside>
+
+        <div class="nxs-ide__grip nxs-ide__grip--v" data-resize="sidebar" title="Resize"></div>
+
+        <section class="nxs-ide__center" data-region="center">
+            <div class="nxs-ide__editorwrap" data-region="editor-pane">
+                <div class="nxs-ide__tabbar">
+                    <div class="nxs-ide__tabs" data-region="tabs" role="tablist"></div>
+                    <div class="nxs-ide__tabbar-actions">
+                        <button type="button" class="nxs-ide__tbicon" data-action="refresh-preview" title="{{#str}}refreshpreview, local_nexstack{{/str}}" aria-label="Refresh preview">↻</button>
+                    </div>
+                </div>
+                <div class="nxs-ide__breadcrumb" data-region="breadcrumb"></div>
+                <article class="nxs-ide__stepdoc is-active" data-region="step-doc" tabindex="0" aria-label="Step description"></article>
+                <div class="nxs-ide__editor" data-region="editor" hidden>
+                    <textarea class="nxs-ide__fallback" data-region="editor-fallback" spellcheck="false">{{activecontent}}</textarea>
+                </div>
+            </div>
+            <div class="nxs-ide__grip nxs-ide__grip--h" data-resize="terminal" title="Resize"></div>
+            <div class="nxs-ide__panel" data-region="term-pane" style="height: 220px;">
+                <div class="nxs-ide__panelbar">
+                    <div class="nxs-ide__paneltabs">
+                        <button type="button" class="nxs-ide__paneltab is-active" data-bottom="terminal">Terminal</button>
+                        <button type="button" class="nxs-ide__paneltab" data-bottom="problems">Problems</button>
+                    </div>
+                    <div class="nxs-ide__term-tabs" data-region="term-tabs" role="tablist"></div>
+                    <div class="nxs-ide__panel-actions">
+                        <button type="button" class="nxs-ide__sideicon" data-action="term-new" title="New Terminal" aria-label="New Terminal">+</button>
+                        <button type="button" class="nxs-ide__sideicon" data-action="term-split" title="Split Terminal" aria-label="Split Terminal">⧉</button>
+                        <button type="button" class="nxs-ide__sideicon" data-action="term-clear" title="Clear Terminal" aria-label="Clear">⊘</button>
+                        <button type="button" class="nxs-ide__sideicon" data-action="term-kill" title="Kill Terminal" aria-label="Kill">□</button>
+                        <button type="button" class="nxs-ide__sideicon" data-action="term-toggle" title="Toggle Panel" aria-label="Toggle Panel">⌃</button>
+                        <span class="nxs-ide__status" data-region="status">Ready</span>
+                    </div>
+                </div>
+
+                <div class="nxs-ide__termview is-active" data-region="panel-terminal">
+                    <div class="nxs-ide__term-scroll" data-region="terminal-output" tabindex="0"></div>
+                    <form class="nxs-ide__term-inputrow" data-region="term-form" autocomplete="off">
+                        <span class="nxs-ide__prompt" data-region="term-prompt">nexstack:~$</span>
+                        <input type="text" class="nxs-ide__term-input" data-region="term-input"
+                               spellcheck="false" autocomplete="off" autocapitalize="off"
+                               aria-label="Terminal input" />
+                    </form>
+                </div>
+                <pre class="nxs-ide__term" data-region="problems" hidden></pre>
+            </div>
+        </section>
+
+        <div class="nxs-ide__grip nxs-ide__grip--v" data-resize="preview" title="Resize"></div>
+
+        <section class="nxs-ide__preview" data-region="preview-pane" style="width: 38%;">
+            <div class="nxs-ide__previewbar">
+                <button type="button" class="nxs-ide__iconbtn" data-action="refresh-preview" title="Refresh" aria-label="Refresh">↻</button>
+                <span class="nxs-ide__url" data-region="preview-url">preview://local</span>
+            </div>
+            <iframe class="nxs-ide__iframe" data-region="preview" title="Preview" sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-popups"></iframe>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+{{!
+    @template local_nexcomm/attempt
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-attempt" data-activityid="{{activityid}}"
+     data-label-submit="{{#str}}submit, local_nexcomm{{/str}}"
+     data-label-submitting="{{#str}}submitting, local_nexcomm{{/str}}"
+     data-label-record="{{#str}}record, local_nexcomm{{/str}}"
+     data-label-stop="{{#str}}stop, local_nexcomm{{/str}}"
+     data-label-recording="{{#str}}recording, local_nexcomm{{/str}}"
+     data-label-norecording="{{#str}}norecording, local_nexcomm{{/str}}"
+     data-label-micdenied="{{#str}}micdenied, local_nexcomm{{/str}}"
+     data-label-passed="{{#str}}passed, local_nexcomm{{/str}}"
+     data-label-failed="{{#str}}failed, local_nexcomm{{/str}}"
+     data-label-score="{{#str}}score, local_nexcomm{{/str}}"
+     data-label-xp="{{#str}}xpaward, local_nexcomm{{/str}}"
+     data-label-transcript="{{#str}}transcript, local_nexcomm{{/str}}"
+     data-label-analysis="{{#str}}analysis, local_nexcomm{{/str}}"
+     data-label-playaudio="{{#str}}playaudio, local_nexcomm{{/str}}"
+     data-label-listenhint="{{#str}}listenhint, local_nexcomm{{/str}}"
+     data-label-showscript="{{#str}}showscript, local_nexcomm{{/str}}"
+     data-label-hidescript="{{#str}}hidescript, local_nexcomm{{/str}}"
+     data-label-notts="{{#str}}notts, local_nexcomm{{/str}}"
+     data-label-speakhint="{{#str}}speakhint, local_nexcomm{{/str}}"
+     data-label-rerecord="{{#str}}rerecord, local_nexcomm{{/str}}"
+     data-label-livetranscript="{{#str}}livetranscript, local_nexcomm{{/str}}"
+     data-label-nospeechapi="{{#str}}nospeechapi, local_nexcomm{{/str}}"
+     data-label-transcriptplaceholder="{{#str}}transcriptplaceholder, local_nexcomm{{/str}}"
+     data-label-edittranscript="{{#str}}edittranscript, local_nexcomm{{/str}}"
+     data-label-norecorder="{{#str}}norecorder, local_nexcomm{{/str}}"
+     data-file-itemid="{{draftitemid}}">
+    <div class="nc-attemptbar">
+        <a class="nc-attemptbar__back" href="{{{catalogurl}}}">← {{#str}}backtocatalog, local_nexcomm{{/str}}</a>
+        <strong data-region="title">…</strong>
+        <span class="nc-badge" data-region="skill-badge"></span>
+    </div>
+    <div class="nc-attempt" data-region="player">
+        <p class="nc-muted">Loading…</p>
+    </div>
+    <div class="nc-result" data-region="result" hidden></div>
+</div>

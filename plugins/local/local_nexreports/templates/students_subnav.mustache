@@ -1,0 +1,11 @@
+{{!
+    @template local_nexreports/students_subnav
+    Student report options (Edwiser Learners dropdown parity).
+}}
+{{#showstudentssubnav}}
+<nav class="nxr-subtabs" aria-label="{{#str}}students, local_nexreports{{/str}}">
+    {{#studentssubnav}}
+    <a class="nxr-subtabs__item{{#active}} is-active{{/active}}" href="{{url}}">{{label}}</a>
+    {{/studentssubnav}}
+</nav>
+{{/showstudentssubnav}}

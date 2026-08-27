@@ -1,0 +1,60 @@
+{{!
+    @template local_nexinterview/manage
+}}
+<section class="nxi-manage">
+    <div class="nxi-manage__head">
+        <div>
+            <a class="nxi-manage__back" href="{{{huburl}}}">← {{#str}}backtohub, local_nexinterview{{/str}}</a>
+            <h1>{{title}}</h1>
+            <p>{{subtitle}}</p>
+        </div>
+        <a class="nxi-manage__create" href="{{{createurl}}}">{{#str}}createinterviewer, local_nexinterview{{/str}}</a>
+    </div>
+
+    {{#hasrows}}
+        <div class="nxi-manage__table-wrap">
+            <table class="nxi-manage__table">
+                <thead>
+                    <tr>
+                        <th>{{#str}}interviewer_name, local_nexinterview{{/str}}</th>
+                        <th>{{#str}}interviewer_duration, local_nexinterview{{/str}}</th>
+                        <th>{{#str}}interviewer_style, local_nexinterview{{/str}}</th>
+                        <th>{{#str}}interviewer_includecoding, local_nexinterview{{/str}}</th>
+                        <th>{{#str}}status, moodle{{/str}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#rows}}
+                        <tr>
+                            <td>
+                                <strong>{{name}}</strong>
+                                {{#description}}
+                                    <div class="nxi-manage__desc">{{description}}</div>
+                                {{/description}}
+                            </td>
+                            <td>{{duration}} min</td>
+                            <td>{{style}}</td>
+                            <td>{{coding}}</td>
+                            <td>
+                                <span class="nxi-manage__badge {{#enabled}}is-live{{/enabled}}{{^enabled}}is-off{{/enabled}}">
+                                    {{enabledlabel}}
+                                </span>
+                            </td>
+                            <td class="nxi-manage__actions">
+                                <a href="{{{editurl}}}">{{#str}}edit{{/str}}</a>
+                                <a class="nxi-manage__danger" href="{{{deleteurl}}}">{{#str}}delete{{/str}}</a>
+                            </td>
+                        </tr>
+                    {{/rows}}
+                </tbody>
+            </table>
+        </div>
+    {{/hasrows}}
+    {{^hasrows}}
+        <div class="nxi-manage__empty">
+            <p>{{#str}}nointerviewers, local_nexinterview{{/str}}</p>
+            <a class="nxi-manage__create" href="{{{createurl}}}">{{#str}}createinterviewer, local_nexinterview{{/str}}</a>
+        </div>
+    {{/hasrows}}
+</section>

@@ -1,0 +1,74 @@
+{{!
+    @template local_nexcomm/manage
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-manage"
+     data-label-confirm="{{#str}}confirmdelete, local_nexcomm{{/str}}">
+    {{> local_nexcomm/header }}
+    {{> local_nexcomm/topnav }}
+    <section class="nc-panel">
+        <header class="nc-panel__head nc-panel__head--row">
+            <div>
+                <h2 class="nc-panel__title">{{#str}}manage, local_nexcomm{{/str}}</h2>
+                <p class="nc-panel__sub">{{#str}}managehint, local_nexcomm{{/str}}</p>
+            </div>
+            <button type="button" class="nc-btn nc-btn--primary" data-action="new">{{#str}}addactivity, local_nexcomm{{/str}}</button>
+        </header>
+        <div data-region="list"></div>
+    </section>
+    <section class="nc-panel" data-region="editor" hidden>
+        <h2 class="nc-panel__title" data-region="editor-title">{{#str}}addactivity, local_nexcomm{{/str}}</h2>
+        <form data-region="form" class="nc-form">
+            <input type="hidden" name="id" value="0"/>
+            <label class="nc-field"><span>{{#str}}skill, local_nexcomm{{/str}}</span>
+                <select name="skill">
+                    <option value="reading">{{#str}}reading, local_nexcomm{{/str}}</option>
+                    <option value="listening">{{#str}}listening, local_nexcomm{{/str}}</option>
+                    <option value="speaking">{{#str}}speaking, local_nexcomm{{/str}}</option>
+                    <option value="writing">{{#str}}writing, local_nexcomm{{/str}}</option>
+                </select>
+            </label>
+            <label class="nc-field"><span>{{#str}}difficulty, local_nexcomm{{/str}}</span>
+                <select name="difficulty">
+                    <option value="easy">{{#str}}easy, local_nexcomm{{/str}}</option>
+                    <option value="medium">{{#str}}medium, local_nexcomm{{/str}}</option>
+                    <option value="hard">{{#str}}hard, local_nexcomm{{/str}}</option>
+                </select>
+            </label>
+            <label class="nc-field"><span>{{#str}}title, local_nexcomm{{/str}}</span>
+                <input type="text" name="title" required/>
+            </label>
+            <label class="nc-field"><span>{{#str}}body, local_nexcomm{{/str}}</span>
+                <textarea name="body" rows="5"></textarea>
+            </label>
+            <label class="nc-field"><span>{{#str}}prompt, local_nexcomm{{/str}}</span>
+                <textarea name="prompt" rows="3"></textarea>
+            </label>
+            <label class="nc-field"><span>{{#str}}audiourl, local_nexcomm{{/str}}</span>
+                <input type="text" name="audiourl"/>
+            </label>
+            <label class="nc-field"><span>{{#str}}passmark, local_nexcomm{{/str}}</span>
+                <input type="number" name="passmark" value="70" min="1" max="100"/>
+            </label>
+            <label class="nc-field"><span>Minimum words</span>
+                <input type="number" name="minwords" value="40" min="0"/>
+            </label>
+            <label class="nc-field"><span>{{#str}}tags, local_nexcomm{{/str}}</span>
+                <input type="text" name="tags"/>
+            </label>
+            <label class="nc-field"><span>{{#str}}status, local_nexcomm{{/str}}</span>
+                <select name="status">
+                    <option value="draft">{{#str}}draft, local_nexcomm{{/str}}</option>
+                    <option value="ready">{{#str}}ready, local_nexcomm{{/str}}</option>
+                </select>
+            </label>
+            <label class="nc-field"><span>{{#str}}choices, local_nexcomm{{/str}}</span>
+                <textarea name="questionsraw" rows="8" placeholder="Q: What is the main idea?&#10;*Correct choice&#10;Wrong choice&#10;---&#10;Q: Next question?"></textarea>
+            </label>
+            <div class="nc-form__actions">
+                <button type="submit" class="nc-btn nc-btn--primary">{{#str}}save, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-btn nc-btn--ghost" data-action="cancel">Cancel</button>
+            </div>
+            <p class="nc-status" data-region="form-status" hidden></p>
+        </form>
+    </section>
+</div>

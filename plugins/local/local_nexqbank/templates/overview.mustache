@@ -1,0 +1,73 @@
+<div class="local-nexqbank">
+  <header class="local-nexqbank__hero">
+    <div>
+      <h2 class="local-nexqbank__title">{{title}}</h2>
+      <p class="local-nexqbank__subtitle">{{subtitle}}</p>
+      <p class="local-nexqbank__summary">{{summary}}</p>
+    </div>
+  </header>
+
+  <form class="local-nexqbank__toolbar" method="get" action="{{formaction}}">
+    <input type="hidden" name="level" value="{{level}}">
+    <label class="sr-only" for="local-nexqbank-q">{{searchlabel}}</label>
+    <input
+      id="local-nexqbank-q"
+      type="search"
+      name="q"
+      value="{{search}}"
+      placeholder="{{searchplaceholder}}"
+      class="local-nexqbank__search"
+    >
+    <button type="submit" class="btn btn-primary">{{searchlabel}}</button>
+  </form>
+
+  <nav class="local-nexqbank__filters" aria-label="{{label_level}}">
+    {{#filters}}
+      <a
+        class="local-nexqbank__chip{{#selected}} is-active{{/selected}}"
+        href="{{url}}"
+      >{{label}}</a>
+    {{/filters}}
+  </nav>
+
+  {{#hasbanks}}
+  <div class="local-nexqbank__tablewrap">
+    <table class="local-nexqbank__table generaltable">
+      <thead>
+        <tr>
+          <th>{{label_level}}</th>
+          <th>{{label_name}}</th>
+          <th>{{label_path}}</th>
+          <th class="text-end">{{label_categories}}</th>
+          <th class="text-end">{{label_questions}}</th>
+          <th>{{label_contextid}}</th>
+          <th>{{label_actions}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#banks}}
+        <tr class="local-nexqbank__row local-nexqbank__row--{{levelkey}}{{#isempty}} is-empty{{/isempty}}">
+          <td><span class="local-nexqbank__badge local-nexqbank__badge--{{levelkey}}">{{levellabel}}</span></td>
+          <td>
+            <strong>{{name}}</strong>
+            {{#hasmodname}}<div class="local-nexqbank__mod">{{modname}}</div>{{/hasmodname}}
+            {{#isempty}}<div class="local-nexqbank__empty">{{label_empty}}</div>{{/isempty}}
+          </td>
+          <td class="local-nexqbank__path">{{path}}</td>
+          <td class="text-end">{{categorycount}}</td>
+          <td class="text-end">{{questioncount}}</td>
+          <td><code>{{contextid}}</code></td>
+          <td>
+            <a class="btn btn-sm btn-secondary" href="{{openurl}}">{{label_open}}</a>
+          </td>
+        </tr>
+        {{/banks}}
+      </tbody>
+    </table>
+  </div>
+  {{/hasbanks}}
+
+  {{^hasbanks}}
+    <div class="local-nexqbank__emptybox alert alert-info">{{nobanks}}</div>
+  {{/hasbanks}}
+</div>

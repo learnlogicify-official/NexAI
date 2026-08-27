@@ -1,0 +1,98 @@
+{{!
+    @template local_nexcodelab/list
+}}
+<div class="ncl-app ncl-list-page ncl-app--bleed" data-region="ncl-list">
+    {{> local_nexcodelab/header }}
+
+    <nav class="ncl-topnav" aria-label="NexCodeLab">
+        <a class="ncl-topnav__item is-active" href="{{{listurl}}}">
+            <span class="ncl-ico ncl-ico--book" aria-hidden="true"></span>
+            {{#str}}problems, local_nexcodelab{{/str}}
+        </a>
+        <a class="ncl-topnav__item" href="{{{leaderboardurl}}}">
+            <span class="ncl-ico ncl-ico--trophy" aria-hidden="true"></span>
+            {{#str}}leaderboard, local_nexcodelab{{/str}}
+        </a>
+        <a class="ncl-topnav__item" href="{{{submissionsurl}}}">{{#str}}submissions, local_nexcodelab{{/str}}</a>
+        {{#canmanage}}
+            <a class="ncl-topnav__item ncl-topnav__item--right" href="{{{manageurl}}}">{{#str}}manage, local_nexcodelab{{/str}}</a>
+        {{/canmanage}}
+    </nav>
+
+    <div class="ncl-layout ncl-layout--full">
+        <div class="ncl-layout__main">
+            <section class="ncl-panel">
+                <header class="ncl-panel__head">
+                    <h2 class="ncl-panel__title">
+                        <span class="ncl-ico ncl-ico--book ncl-ico--lg" aria-hidden="true"></span>
+                        {{#str}}codingproblems, local_nexcodelab{{/str}}
+                    </h2>
+                </header>
+
+                <div class="ncl-searchrow">
+                    <label class="ncl-search">
+                        <span class="ncl-ico ncl-ico--search" aria-hidden="true"></span>
+                        <input type="search" class="ncl-search__input" data-filter="search"
+                               placeholder="{{#str}}searchplaceholder, local_nexcodelab{{/str}}"
+                               autocomplete="off">
+                        <kbd class="ncl-search__kbd">⌘K</kbd>
+                    </label>
+                    <div class="ncl-diffpills" data-region="track-pills" role="group" aria-label="{{#str}}track, local_nexcodelab{{/str}}">
+                        <button type="button" class="ncl-diffpill is-active" data-track="">{{#str}}all, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill" data-track="wrangling">{{#str}}track_wrangling, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill" data-track="eda">{{#str}}track_eda, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill" data-track="ml">{{#str}}track_ml, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill" data-track="nlp">{{#str}}track_nlp, local_nexcodelab{{/str}}</button>
+                    </div>
+                    <input type="hidden" data-filter="track" value="">
+                    <div class="ncl-diffpills" data-region="diff-pills" role="group" aria-label="{{#str}}difficulty, local_nexcodelab{{/str}}">
+                        <button type="button" class="ncl-diffpill is-active" data-diff="">{{#str}}all, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill ncl-diffpill--easy" data-diff="easy">{{#str}}easy, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill ncl-diffpill--medium" data-diff="medium">{{#str}}medium, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-diffpill ncl-diffpill--hard" data-diff="hard">{{#str}}hard, local_nexcodelab{{/str}}</button>
+                    </div>
+                    <input type="hidden" data-filter="difficulty" value="">
+                </div>
+
+                <div class="ncl-populartags">
+                    <span class="ncl-populartags__label">{{#str}}populartags, local_nexcodelab{{/str}}</span>
+                    <div class="ncl-populartags__list" data-region="popular-tags"></div>
+                    <button type="button" class="ncl-linkbtn" data-action="toggle-tags">{{#str}}showalltags, local_nexcodelab{{/str}}</button>
+                </div>
+                <div class="ncl-tagcloud" data-region="tag-cloud" hidden></div>
+                <input type="hidden" data-filter="tagid" value="0">
+
+                <div class="ncl-statustabs" data-region="status-tabs" role="tablist">
+                    <button type="button" class="ncl-statustab is-active" data-status="all" role="tab">
+                        {{#str}}allproblems, local_nexcodelab{{/str}} <span data-count="all">0</span>
+                    </button>
+                    <button type="button" class="ncl-statustab ncl-statustab--done" data-status="completed" role="tab">
+                        <span class="ncl-ico ncl-ico--check" aria-hidden="true"></span>
+                        {{#str}}completed, local_nexcodelab{{/str}} <span data-count="completed">0</span>
+                    </button>
+                    <button type="button" class="ncl-statustab ncl-statustab--progress" data-status="inprogress" role="tab">
+                        <span class="ncl-ico ncl-ico--clock" aria-hidden="true"></span>
+                        {{#str}}inprogress, local_nexcodelab{{/str}} <span data-count="inprogress">0</span>
+                    </button>
+                    <button type="button" class="ncl-statustab ncl-statustab--todo" data-status="notstarted" role="tab">
+                        <span class="ncl-ico ncl-ico--circle" aria-hidden="true"></span>
+                        {{#str}}notstarted, local_nexcodelab{{/str}} <span data-count="notstarted">0</span>
+                    </button>
+                </div>
+                <input type="hidden" data-filter="userstatus" value="all">
+            </section>
+
+            <section class="ncl-results">
+                <div class="ncl-results__bar">
+                    <h2 class="ncl-results__title" data-region="found-count">0 {{#str}}problemsfound, local_nexcodelab{{/str}}</h2>
+                    <div class="ncl-results__actions">
+                        <button type="button" class="ncl-ghostbtn" disabled>{{#str}}sortby, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-ghostbtn" disabled>{{#str}}morefilters, local_nexcodelab{{/str}}</button>
+                    </div>
+                </div>
+                <div class="ncl-grid" data-region="grid"></div>
+                <nav class="ncl-pager" data-region="pager" aria-label="{{#str}}pagination, local_nexcodelab{{/str}}" hidden></nav>
+            </section>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+{{!
+    @template format_nexcourse/local/section_panel
+    Module page: back nav, title, subsection tabs, activity list.
+}}
+<section class="nx-section" data-region="nx-section-tabs">
+    {{#backurl}}
+        <a class="nx-section__back" href="{{{backurl}}}">
+            <span class="nx-section__back-icon" aria-hidden="true"></span>
+            <span class="nx-section__back-label">{{backlabel}}</span>
+        </a>
+    {{/backurl}}
+
+    <header class="nx-section__head">
+        <p class="nx-section__eyebrow">{{#str}}sectionname, format_nexcourse{{/str}}</p>
+        <h2 class="nx-section__title">{{sectionname}}</h2>
+    </header>
+
+    {{#hasmultipletabs}}
+        <div class="nx-section__tabs" role="tablist" aria-label="{{#str}}subsections, format_nexcourse{{/str}}">
+            {{#tabs}}
+                <button type="button"
+                        class="nx-section__tab{{#active}} is-active{{/active}}"
+                        role="tab"
+                        id="nx-tab-{{id}}"
+                        data-nx-tab="{{id}}"
+                        aria-selected="{{#active}}true{{/active}}{{^active}}false{{/active}}"
+                        aria-controls="nx-panel-{{id}}"
+                        tabindex="{{tabindex}}">
+                    <span class="nx-section__tab-name">{{name}}</span>
+                    <span class="nx-section__tab-count">{{activitycount}}</span>
+                </button>
+            {{/tabs}}
+        </div>
+    {{/hasmultipletabs}}
+
+    <div class="nx-section__panels">
+        {{#tabs}}
+            <div class="nx-section__panel{{#active}} is-active{{/active}}"
+                 role="tabpanel"
+                 id="nx-panel-{{id}}"
+                 data-nx-panel="{{id}}"
+                 aria-labelledby="nx-tab-{{id}}"
+                 {{^active}}hidden{{/active}}>
+                {{> format_nexcourse/local/activity_list }}
+            </div>
+        {{/tabs}}
+    </div>
+</section>

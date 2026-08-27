@@ -1,0 +1,82 @@
+{{!
+    @template local_nexreports/weekly_insights
+    Weekly learner improvement insights.
+}}
+<div class="nxr-app" data-region="nxr-weekly-insights"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-building="{{#str}}weeklyinsightsbuilding, local_nexreports{{/str}}"
+     data-label-all-colleges="{{#str}}allcolleges, local_nexreports{{/str}}"
+     data-label-all-years="{{#str}}allyears, local_nexreports{{/str}}"
+     data-label-all-departments="{{#str}}alldepartments, local_nexreports{{/str}}"
+     data-label-firstname="{{#str}}firstname, local_nexreports{{/str}}"
+     data-label-lastname="{{#str}}lastname, local_nexreports{{/str}}"
+     data-label-username="{{#str}}username, local_nexreports{{/str}}"
+     data-label-institution="{{#str}}college, local_nexreports{{/str}}"
+     data-label-yearofpassing="{{#str}}yearofpassing, local_nexreports{{/str}}"
+     data-label-department="{{#str}}department, local_nexreports{{/str}}"
+     data-label-overall="{{#str}}insightoverall, local_nexreports{{/str}}"
+     data-label-timespent="{{#str}}insighttimespent, local_nexreports{{/str}}"
+     data-label-visits="{{#str}}insightvisits, local_nexreports{{/str}}"
+     data-label-activedays="{{#str}}insightactivedays, local_nexreports{{/str}}"
+     data-label-activities="{{#str}}insightactivities, local_nexreports{{/str}}"
+     data-label-coding="{{#str}}insightcoding, local_nexreports{{/str}}"
+     data-label-quiz="{{#str}}insightquiz, local_nexreports{{/str}}"
+     data-label-improving="{{#str}}insightimproving, local_nexreports{{/str}}"
+     data-label-declining="{{#str}}insightdeclining, local_nexreports{{/str}}"
+     data-label-stable="{{#str}}insightstable, local_nexreports{{/str}}"
+     data-label-neworidle="{{#str}}insightneworidle, local_nexreports{{/str}}"
+     data-label-delta="{{#str}}insightdelta, local_nexreports{{/str}}"
+     data-label-latestweek="{{#str}}insightlatestweek, local_nexreports{{/str}}"
+     data-export-url="{{exporturl}}">
+
+    {{> local_nexreports/shell }}
+    {{> local_nexreports/students_subnav }}
+
+    <article class="nxr-card">
+        <header class="nxr-card__head">
+            <h2 class="nxr-card__title">{{#str}}weeklyinsights, local_nexreports{{/str}}</h2>
+            {{> local_nexreports/table_export }}
+        </header>
+        <p class="nxr-card__hint">{{#str}}weeklyinsights_help, local_nexreports{{/str}}</p>
+
+        <div class="nxr-report-filters">
+            {{#showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}college, local_nexreports{{/str}}</span>
+                <select data-filter="college" name="nxr_wi_college" autocomplete="off">
+                    <option value="" selected>{{#str}}allcolleges, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}yearofpassing, local_nexreports{{/str}}</span>
+                <select data-filter="year" name="nxr_wi_year" autocomplete="off">
+                    <option value="" selected>{{#str}}allyears, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{#showdepartment}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}department, local_nexreports{{/str}}</span>
+                <select data-filter="department" name="nxr_wi_department" autocomplete="off">
+                    <option value="" selected>{{#str}}alldepartments, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showdepartment}}
+            <label class="nxr-search">
+                <span class="nxr-search__icon" aria-hidden="true"></span>
+                <input type="search" data-filter="search" placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}">
+            </label>
+        </div>
+
+        <div class="nxr-kpis nxr-kpis--insights" data-region="insights-kpis">
+            <div class="nxr-skeleton nxr-skeleton--kpis"></div>
+        </div>
+
+        <p class="nxr-card__hint" data-region="insights-weeklabel"></p>
+
+        <div data-region="insights-table">
+            <div class="nxr-skeleton nxr-skeleton--table"></div>
+        </div>
+    </article>
+</div>

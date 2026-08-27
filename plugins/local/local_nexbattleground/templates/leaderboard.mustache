@@ -1,0 +1,40 @@
+{{!
+    @template local_nexbattleground/leaderboard
+}}
+<div class="nbg nbg-app nbg-app--bleed"
+     data-region="nbg-leaderboard"
+     data-label-rank="{{#str}}rank, local_nexbattleground{{/str}}"
+     data-label-user="{{#str}}leaderboarduser, local_nexbattleground{{/str}}"
+     data-label-institution="{{#str}}institution, local_nexbattleground{{/str}}"
+     data-label-wins="{{#str}}wins, local_nexbattleground{{/str}}"
+     data-label-easy="{{#str}}easy, local_nexbattleground{{/str}}"
+     data-label-medium="{{#str}}medium, local_nexbattleground{{/str}}"
+     data-label-hard="{{#str}}hard, local_nexbattleground{{/str}}"
+     data-label-losses="{{#str}}losses, local_nexbattleground{{/str}}"
+     data-label-winrate="{{#str}}winrate, local_nexbattleground{{/str}}"
+     data-label-battles="{{#str}}stattotal, local_nexbattleground{{/str}}"
+     data-label-battlexp="{{#str}}battlexp, local_nexbattleground{{/str}}"
+     data-label-you="{{#str}}you, local_nexbattleground{{/str}}"
+     data-label-your-rank="{{#str}}yourrank, local_nexbattleground{{/str}}"
+     data-label-not-ranked-global="{{#str}}notranked, local_nexbattleground{{/str}}"
+     data-label-not-ranked="{{#str}}notrankedincollege, local_nexbattleground{{/str}}"
+     data-label-empty="{{#str}}noleaderboard, local_nexbattleground{{/str}}">
+    {{> local_nexbattleground/header }}
+    {{> local_nexbattleground/topnav }}
+    <section class="nbg-panel">
+        <header class="nbg-panel__head">
+            <h2 class="nbg-panel__title">{{#str}}leaderboard, local_nexbattleground{{/str}}</h2>
+            <p class="nbg-panel__sub">{{#str}}leaderboardhint, local_nexbattleground{{/str}}</p>
+        </header>
+        <div class="nbg-leaderboard-toolbar">
+            <label class="nbg-leaderboard-filter">
+                <span>{{#str}}collegefilter, local_nexbattleground{{/str}}</span>
+                <select data-filter="institution">
+                    <option value="">{{#str}}allcolleges, local_nexbattleground{{/str}}</option>
+                </select>
+            </label>
+            <div class="nbg-my-rank" data-region="my-rank" aria-live="polite"></div>
+        </div>
+        <div data-region="board"></div>
+    </section>
+</div>

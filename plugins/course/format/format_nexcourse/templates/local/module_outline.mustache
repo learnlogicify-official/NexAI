@@ -1,0 +1,70 @@
+{{!
+    @template format_nexcourse/local/module_outline
+    Mobile hierarchical outline (module → submodule → activities).
+}}
+<details class="nexcourse-outline__mod{{#active}} is-active{{/active}}"{{#active}} open{{/active}}>
+    <summary class="nexcourse-outline__summary">
+        <span class="nexcourse-outline__badge">{{modulenolabel}}</span>
+        <span class="nexcourse-outline__title">{{name}}</span>
+        <span class="nexcourse-outline__pct">{{progresspct}}%</span>
+        <span class="nexcourse-outline__caret" aria-hidden="true"></span>
+    </summary>
+    <div class="nexcourse-outline__body">
+        {{#hassummary}}
+            <p class="nexcourse-outline__blurb">{{summary}}</p>
+        {{/hassummary}}
+        <div class="nexcourse-outline__progress">
+            <div class="nexcourse-outline__progress-row">
+                <span>{{#str}}progress, format_nexcourse{{/str}}</span>
+                <strong>{{activitydisplay}}</strong>
+            </div>
+            <div class="nexcourse-bar nexcourse-bar--sm" aria-hidden="true">
+                <div class="nexcourse-bar__fill" style="width: {{progresspct}}%;"></div>
+            </div>
+        </div>
+        <div class="nexcourse-outline__meta">
+            <div class="nexcourse-pane__badges">
+                {{#badges}}
+                    <span class="nexcourse-chip nexcourse-chip--{{type}}">{{label}}</span>
+                {{/badges}}
+            </div>
+            <div class="nexcourse-pane__marks">
+                <span class="nexcourse-pane__marks-label">{{#str}}marks, format_nexcourse{{/str}}</span>
+                {{#hashmarks}}
+                    <span class="nexcourse-pane__marks-value">{{marksdisplay}}</span>
+                {{/hashmarks}}
+                {{^hashmarks}}
+                    <span class="nexcourse-pane__marks-value nexcourse-pane__marks-value--empty">{{#str}}marksnone, format_nexcourse{{/str}}</span>
+                {{/hashmarks}}
+            </div>
+        </div>
+
+        {{#hasgroups}}
+            {{#hasmultiplegroups}}
+                {{#groups}}
+                    <details class="nexcourse-outline__sub" open>
+                        <summary class="nexcourse-outline__sub-summary">
+                            <span class="nexcourse-outline__sub-title">{{name}}</span>
+                            <span class="nexcourse-outline__sub-count">{{countlabel}}</span>
+                            <span class="nexcourse-outline__caret" aria-hidden="true"></span>
+                        </summary>
+                        <div class="nexcourse-outline__sub-body">
+                            {{> format_nexcourse/local/activity_list }}
+                        </div>
+                    </details>
+                {{/groups}}
+            {{/hasmultiplegroups}}
+            {{^hasmultiplegroups}}
+                {{#groups}}
+                    {{#showgroupheading}}
+                        <h4 class="nexcourse-pane__group-title">{{name}}</h4>
+                    {{/showgroupheading}}
+                    {{> format_nexcourse/local/activity_list }}
+                {{/groups}}
+            {{/hasmultiplegroups}}
+        {{/hasgroups}}
+        {{^hasgroups}}
+            <p class="nx-section__empty">{{#str}}noactivities, format_nexcourse{{/str}}</p>
+        {{/hasgroups}}
+    </div>
+</details>

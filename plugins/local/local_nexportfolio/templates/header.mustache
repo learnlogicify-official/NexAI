@@ -1,0 +1,65 @@
+{{!
+    @template local_nexportfolio/header
+    NexPortfolio banner + stats strip (NexPractice / NexCodeLab visual language).
+}}
+<section class="nxf-header" data-region="nxf-header">
+    <div class="nxf-header__banner">
+        <div class="nxf-header__veil"></div>
+        <div class="nxf-header__content">
+            <div class="nxf-header__row">
+                <div class="nxf-header__main">
+                    <span class="nxf-header__cat">{{eyebrow}}</span>
+                    <h1 class="nxf-header__title">{{title}}</h1>
+                    <p class="nxf-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="nxf-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="nxf-header__progress" aria-label="{{#str}}portfolioprogress, local_nexportfolio{{/str}}">
+                    <div class="nxf-header__progress-grid">
+                        <div class="nxf-donut" style="--nxf-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{contentpct}}%"
+                             data-region="donut">
+                            <span class="nxf-donut__ring" aria-hidden="true"></span>
+                            <span class="nxf-donut__hole" aria-hidden="true"></span>
+                            <strong class="nxf-donut__value" data-region="donut-value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="nxf-header__breakdown">
+                            <div class="nxf-header__progress-label">{{#str}}portfolioprogress, local_nexportfolio{{/str}}</div>
+                            <ul class="nxf-content-stats" data-region="content-stats">
+                                {{#contentitems}}
+                                    <li class="nxf-content-stat nxf-content-stat--{{key}}">
+                                        <span class="nxf-content-stat__label">{{label}}</span>
+                                        <strong class="nxf-content-stat__value" data-stat="{{key}}">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+        <div class="nxf-header__stats" data-region="header-stats">
+            {{#stats}}
+                <div class="nxf-hstat nxf-hstat--{{key}}">
+                    <span class="nxf-hstat__icon" aria-hidden="true"></span>
+                    <div class="nxf-hstat__body">
+                        <strong class="nxf-hstat__value" data-hstat="{{key}}">{{value}}</strong>
+                        <span class="nxf-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+            <div class="nxf-hstat nxf-hstat--projects">
+                <span class="nxf-hstat__icon" aria-hidden="true"></span>
+                <div class="nxf-hstat__body">
+                    <strong class="nxf-hstat__value" data-hstat="projects">{{projectcount}}</strong>
+                    <span class="nxf-hstat__label">{{#str}}projects, local_nexportfolio{{/str}}</span>
+                </div>
+            </div>
+        </div>
+    {{/hasstats}}
+</section>

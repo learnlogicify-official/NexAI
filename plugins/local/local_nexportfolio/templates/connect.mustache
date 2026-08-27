@@ -1,0 +1,92 @@
+{{!
+    @template local_nexportfolio/connect
+
+    Connect platform usernames form with NexPractice-style chrome.
+}}
+<div id="np-connect" class="nxf-app nxf-app--bleed" data-region="nexportfolio-connect">
+    {{> local_nexportfolio/header }}
+
+    <div class="nxf-bar">
+        <nav class="nxf-topnav" aria-label="NexPortfolio">
+            <a class="nxf-topnav__item" href="{{{dashboardurl}}}">
+                {{#str}}dashboard, local_nexportfolio{{/str}}
+            </a>
+            <a class="nxf-topnav__item is-active" href="#">
+                {{#str}}connect, local_nexportfolio{{/str}}
+            </a>
+        </nav>
+    </div>
+
+    <section class="np-connect">
+        <h2 class="np-connect__title">{{heading}}</h2>
+        <p class="np-connect__sub">{{help}}</p>
+
+        <form class="np-connect-form" data-region="connect-form">
+            <div class="np-connect-grid">
+                {{#platforms}}
+                <label class="np-connect-card {{cssclass}}">
+                    <span class="np-connect-card__label">{{label}}</span>
+                    <input type="text"
+                           class="form-control"
+                           name="handle_{{platform}}"
+                           data-platform="{{platform}}"
+                           value="{{handle}}"
+                           placeholder="{{usernamelabel}}"
+                           autocomplete="off"
+                           maxlength="100">
+                </label>
+                {{/platforms}}
+            </div>
+            <div class="np-connect-actions">
+                <button type="submit" class="nxf-btn nxf-btn--primary" data-action="save">{{savelabel}}</button>
+                <span class="np-status" data-region="status" aria-live="polite"></span>
+            </div>
+        </form>
+
+        {{#githubenabled}}
+        <section class="np-github" data-region="github-section">
+            <h3 class="np-github__title">{{githubheading}}</h3>
+            <p class="np-github__sub">{{githubhelp}}</p>
+
+            <div class="np-github__status" data-region="github-status">
+                {{#githublogin}}
+                    <div class="np-github__connected">
+                        {{#githubavatar}}
+                            <img class="np-github__avatar" src="{{githubavatar}}" alt="" width="40" height="40">
+                        {{/githubavatar}}
+                        <span>{{#str}}githubstatus_public, local_nexportfolio, {{githublogin}}{{/str}}</span>
+                    </div>
+                {{/githublogin}}
+                {{^githublogin}}
+                    <p>{{#str}}githubstatus_none, local_nexportfolio{{/str}}</p>
+                {{/githublogin}}
+            </div>
+
+            <label class="np-connect-card np-platform--github">
+                <span class="np-connect-card__label">{{githubusernamelabel}}</span>
+                <input type="text"
+                       class="form-control"
+                       name="github_username"
+                       data-region="github-username"
+                       value="{{githublogin}}"
+                       placeholder="{{githubusernamelabel}}"
+                       autocomplete="off"
+                       maxlength="100"
+                       required>
+                <span class="np-connect-card__hint">{{githubuserhelp}}</span>
+            </label>
+
+            <div class="np-github__actions">
+                <button type="button" class="nxf-btn nxf-btn--primary" data-action="github-import">
+                    {{#str}}githubimport, local_nexportfolio{{/str}}
+                </button>
+                {{#githublogin}}
+                    <button type="button" class="nxf-btn nxf-btn--ghost" data-action="github-disconnect">
+                        {{#str}}githubdisconnect, local_nexportfolio{{/str}}
+                    </button>
+                {{/githublogin}}
+            </div>
+        </section>
+        {{/githubenabled}}
+    </section>
+</div>

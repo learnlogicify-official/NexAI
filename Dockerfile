@@ -2,14 +2,36 @@ FROM erseco/alpine-moodle:v5.2.1
 
 USER root
 
-# Install admin utility
+# --------------------------------------------------
+# Install administration tools
+# --------------------------------------------------
 RUN apk add --no-cache nano
 
-# Permanent Moodle runtime config
-COPY 50-moodle-runtime-config.sh /docker-entrypoint-init.d/50-moodle-runtime-config.sh
+# --------------------------------------------------
+# Restore custom Moodle plugins
+#
+# Repository structure must mirror /var/www/html/
+# Example:
+# plugins/course/format/tiles/
+# plugins/mod/quiz/accessrule/...
+# plugins/question/bank/...
+# plugins/question/type/...
+# plugins/local/...
+# --------------------------------------------------
+COPY plugins/ /var/www/html/
+
+# --------------------------------------------------
+# Permanent Moodle runtime configuration
+# Redis sessions + PgBouncer compatibility
+# --------------------------------------------------
+COPY 50-moodle-runtime-config.sh \
+     /docker-entrypoint-init.d/50-moodle-runtime-config.sh
+
 RUN chmod +x /docker-entrypoint-init.d/50-moodle-runtime-config.sh
 
+# --------------------------------------------------
 # OPcache tuning
+# --------------------------------------------------
 RUN printf '%s\n' \
 'opcache.enable=1' \
 'opcache.enable_cli=1' \
@@ -21,7 +43,9 @@ RUN printf '%s\n' \
 'opcache.save_comments=1' \
 > /etc/php83/conf.d/99-moodle-opcache.ini
 
+# --------------------------------------------------
 # PHP-FPM tuning
+# --------------------------------------------------
 RUN sed -i \
     -e 's/^pm = .*/pm = dynamic/' \
     -e 's/^pm.max_children = .*/pm.max_children = 64/' \
@@ -36,5 +60,5 @@ RUN sed -i \
 'pm.max_spare_servers = 20' \
 >> /etc/php83/php-fpm.d/www.conf
 
-# IMPORTANT: original image runs as nobody
+# Base Moodle image expects to run as nobody
 USER nobody

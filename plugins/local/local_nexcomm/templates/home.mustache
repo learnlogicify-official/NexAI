@@ -1,0 +1,73 @@
+{{!
+    @template local_nexcomm/home
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-home">
+    {{> local_nexcomm/header }}
+    {{> local_nexcomm/topnav }}
+
+    <section class="nc-ecgoals" data-region="ec-goals">
+        <div class="nc-ecgoal">
+            <span class="nc-ecgoal__label">{{#str}}watch, local_nexcomm{{/str}}</span>
+            <strong>{{watchDone}} / {{watchGoal}}</strong>
+            <div class="nc-targetcard__bar"><div class="nc-targetcard__fill" style="width: {{watchPct}}%;"></div></div>
+        </div>
+        <div class="nc-ecgoal">
+            <span class="nc-ecgoal__label">{{#str}}learn, local_nexcomm{{/str}}</span>
+            <strong>{{learnDone}} / {{learnGoal}}</strong>
+            <div class="nc-targetcard__bar"><div class="nc-targetcard__fill" style="width: {{learnPct}}%;"></div></div>
+        </div>
+        <div class="nc-ecgoal">
+            <span class="nc-ecgoal__label">{{#str}}speak, local_nexcomm{{/str}}</span>
+            <strong>{{speakDone}} / {{speakGoal}}</strong>
+            <div class="nc-targetcard__bar"><div class="nc-targetcard__fill" style="width: {{speakPct}}%;"></div></div>
+        </div>
+    </section>
+
+    <section class="nc-targets" data-region="targets">
+        <div class="nc-targetcard{{#dailycomplete}} is-complete{{/dailycomplete}}">
+            <div class="nc-targetcard__head">
+                <strong>{{#str}}todaystarget, local_nexcomm{{/str}}</strong>
+                <span data-region="daily-meta">{{dailydone}} / {{dailygoal}}</span>
+            </div>
+            <div class="nc-targetcard__bar">
+                <div class="nc-targetcard__fill" data-region="daily-fill" style="width: {{dailypct}}%;"></div>
+            </div>
+        </div>
+        <div class="nc-targetcard{{#weeklycomplete}} is-complete{{/weeklycomplete}}">
+            <div class="nc-targetcard__head">
+                <strong>{{#str}}weekstarget, local_nexcomm{{/str}}</strong>
+                <span data-region="weekly-meta">{{weeklydone}} / {{weeklygoal}}</span>
+            </div>
+            <div class="nc-targetcard__bar">
+                <div class="nc-targetcard__fill" data-region="weekly-fill" style="width: {{weeklypct}}%;"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="nc-panel">
+        <header class="nc-panel__head nc-panel__head--row">
+            <div>
+                <h2 class="nc-panel__title">{{#str}}videolab, local_nexcomm{{/str}}</h2>
+                <p class="nc-panel__sub">{{#str}}videolabhint, local_nexcomm{{/str}}</p>
+            </div>
+            <a class="nc-btn nc-btn--primary" href="{{{videosurl}}}">{{#str}}openvideolab, local_nexcomm{{/str}}</a>
+        </header>
+    </section>
+
+    <section class="nc-panel">
+        <header class="nc-panel__head nc-panel__head--row">
+            <div>
+                <h2 class="nc-panel__title">{{#str}}homescrub, local_nexcomm{{/str}}</h2>
+            </div>
+            <a class="nc-btn nc-btn--ghost" href="{{{catalogurl}}}">{{#str}}viewcatalog, local_nexcomm{{/str}}</a>
+        </header>
+        <div class="nc-skillgrid">
+            {{#skills}}
+                <a class="nc-skillcard nc-skillcard--{{key}}" href="{{{url}}}">
+                    <strong>{{label}}</strong>
+                    <span>{{hint}}</span>
+                </a>
+            {{/skills}}
+        </div>
+    </section>
+</div>

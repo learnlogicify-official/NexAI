@@ -1,0 +1,180 @@
+{{!
+    @template local_nexcourse/courses
+}}
+<div class="nxc-app nxc-list-page nxc-app--bleed" data-region="nxc-courses">
+    {{> local_nexcourse/header }}
+
+    <nav class="nxc-topnav" aria-label="NexCourse">
+        <a class="nxc-topnav__item is-active" href="{{{listurl}}}">
+            <span class="nxc-ico nxc-ico--book" aria-hidden="true"></span>
+            {{#str}}mycourses, local_nexcourse{{/str}}
+        </a>
+        {{#hasdashboard}}
+            <a class="nxc-topnav__item nxc-topnav__item--right" href="{{{dashboardurl}}}">Dashboard</a>
+        {{/hasdashboard}}
+    </nav>
+
+    <div class="nxc-layout nxc-layout--full">
+        <div class="nxc-layout__main">
+            <section class="nxc-panel">
+                <header class="nxc-panel__head">
+                    <h2 class="nxc-panel__title">
+                        <span class="nxc-ico nxc-ico--book nxc-ico--lg" aria-hidden="true"></span>
+                        {{#str}}courselist, local_nexcourse{{/str}}
+                    </h2>
+                    {{#manage.hasany}}
+                        <div class="nxc-manage" data-region="manage-actions">
+                            {{#manage.hasnewcourse}}
+                                <a class="nxc-manage__btn nxc-manage__btn--primary" href="{{{manage.newcourseurl}}}">
+                                    {{#str}}createnewcourse, local_nexcourse{{/str}}
+                                </a>
+                            {{/manage.hasnewcourse}}
+                            {{#manage.hasmanagecourses}}
+                                <a class="nxc-manage__btn" href="{{{manage.manageurl}}}">
+                                    {{#str}}managecourses, local_nexcourse{{/str}}
+                                </a>
+                            {{/manage.hasmanagecourses}}
+                            {{#manage.hasrequest}}
+                                <a class="nxc-manage__btn" href="{{{manage.requesturl}}}">
+                                    {{#str}}requestcourse, local_nexcourse{{/str}}
+                                </a>
+                            {{/manage.hasrequest}}
+                        </div>
+                    {{/manage.hasany}}
+                </header>
+
+                <div class="nxc-searchrow">
+                    <label class="nxc-search">
+                        <span class="nxc-ico nxc-ico--search" aria-hidden="true"></span>
+                        <input type="search" class="nxc-search__input" data-filter="search"
+                               placeholder="{{#str}}searchplaceholder, local_nexcourse{{/str}}"
+                               autocomplete="off">
+                        <kbd class="nxc-search__kbd">⌘K</kbd>
+                    </label>
+                    {{#hascategories}}
+                        <div class="nxc-catpills" data-region="category-pills" role="group"
+                             aria-label="{{#str}}categories, local_nexcourse{{/str}}">
+                            <button type="button" class="nxc-catpill is-active" data-category="0">
+                                {{#str}}allcategories, local_nexcourse{{/str}}
+                            </button>
+                            {{#categories}}
+                                <button type="button" class="nxc-catpill" data-category="{{id}}">
+                                    {{name}} <span>({{count}})</span>
+                                </button>
+                            {{/categories}}
+                        </div>
+                        <input type="hidden" data-filter="category" value="0">
+                    {{/hascategories}}
+                </div>
+
+                <div class="nxc-statustabs" data-region="status-tabs" role="tablist">
+                    <button type="button" class="nxc-statustab is-active" data-status="all" role="tab">
+                        {{#str}}allcourses, local_nexcourse{{/str}} <span data-count="all">({{counts.all}})</span>
+                    </button>
+                    <button type="button" class="nxc-statustab nxc-statustab--done" data-status="completed" role="tab">
+                        {{#str}}completed, local_nexcourse{{/str}} <span data-count="completed">({{counts.completed}})</span>
+                    </button>
+                    <button type="button" class="nxc-statustab nxc-statustab--progress" data-status="inprogress" role="tab">
+                        {{#str}}inprogress, local_nexcourse{{/str}} <span data-count="inprogress">({{counts.inprogress}})</span>
+                    </button>
+                    <button type="button" class="nxc-statustab nxc-statustab--todo" data-status="notstarted" role="tab">
+                        {{#str}}notstarted, local_nexcourse{{/str}} <span data-count="notstarted">({{counts.notstarted}})</span>
+                    </button>
+                </div>
+                <input type="hidden" data-filter="userstatus" value="all">
+            </section>
+
+            <section class="nxc-results">
+                <div class="nxc-results__bar">
+                    <h2 class="nxc-results__title" data-region="found-count">
+                        {{total}} {{#str}}coursesfound, local_nexcourse{{/str}}
+                    </h2>
+                </div>
+
+                {{^hascourses}}
+                    <div class="nxc-empty-state" data-region="empty-none">
+                        <p class="nxc-empty">{{#str}}nocourses, local_nexcourse{{/str}}</p>
+                        {{#manage.hasany}}
+                            <div class="nxc-manage nxc-manage--empty">
+                                {{#manage.hasnewcourse}}
+                                    <a class="nxc-manage__btn nxc-manage__btn--primary" href="{{{manage.newcourseurl}}}">
+                                        {{#str}}createnewcourse, local_nexcourse{{/str}}
+                                    </a>
+                                {{/manage.hasnewcourse}}
+                                {{#manage.hasmanagecourses}}
+                                    <a class="nxc-manage__btn" href="{{{manage.manageurl}}}">
+                                        {{#str}}managecourses, local_nexcourse{{/str}}
+                                    </a>
+                                {{/manage.hasmanagecourses}}
+                            </div>
+                        {{/manage.hasany}}
+                    </div>
+                {{/hascourses}}
+
+                <div class="nxc-skel" data-region="skeleton" {{^autoload}}hidden{{/autoload}} aria-hidden="{{#autoload}}false{{/autoload}}{{^autoload}}true{{/autoload}}">
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                    <div class="nxc-skel-card"></div>
+                </div>
+
+                <div class="nxc-grid" data-region="grid" {{#autoload}}hidden{{/autoload}}>
+                    {{#courses}}
+                        <article class="nxc-ccard nxc-ccard--{{tone}}">
+                            <div class="nxc-ccard__main">
+                                <div class="nxc-ccard__content">
+                                    <span class="nxc-ccard__badge">{{badge}}</span>
+                                    <h3 class="nxc-ccard__title">
+                                        <a href="{{{url}}}">{{name}}</a>
+                                    </h3>
+                                    <p class="nxc-ccard__summary">{{summary}}</p>
+                                    <div class="nxc-ccard__meta">
+                                        <span class="nxc-ccard__meta-item">
+                                            <i class="nxc-mini nxc-mini--task" aria-hidden="true"></i>
+                                            {{activitieslabel}}
+                                        </span>
+                                        {{#hassections}}
+                                            <span class="nxc-ccard__dot" aria-hidden="true"></span>
+                                            <span class="nxc-ccard__meta-item">
+                                                <i class="nxc-mini nxc-mini--section" aria-hidden="true"></i>
+                                                {{sectionslabel}}
+                                            </span>
+                                        {{/hassections}}
+                                    </div>
+                                    <div class="nxc-ccard__progress">
+                                        <div class="nxc-ccard__progress-top">
+                                            <span>{{#str}}progress, local_nexcourse{{/str}}</span>
+                                            <strong>{{progress}}%</strong>
+                                        </div>
+                                        <div class="nxc-ccard__bar" role="progressbar"
+                                             aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100">
+                                            <span style="width: {{progress}}%"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="nxc-ccard__art" aria-hidden="true">
+                                    <span class="nxc-ccard__avatar">{{initials}}</span>
+                                </div>
+                            </div>
+                            <div class="nxc-ccard__foot">
+                                <div class="nxc-ccard__foot-text">
+                                    {{footlabel}}: <strong>{{footvalue}}</strong>
+                                </div>
+                                <a class="nxc-ccard__btn" href="{{{url}}}">{{cta}}</a>
+                            </div>
+                        </article>
+                    {{/courses}}
+                </div>
+                <p class="nxc-empty" data-region="empty-filtered" hidden>
+                    {{#str}}nocourses_filtered, local_nexcourse{{/str}}
+                </p>
+                <nav class="nxc-pager" data-region="pager" aria-label="{{#str}}pagination, local_nexcourse{{/str}}"
+                     {{^showpager}}hidden{{/showpager}}></nav>
+            </section>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,355 @@
+{{!
+    @template local_nexdashboard/dashboard
+    Student dashboard — original light card UI + skeleton loader.
+}}
+<div class="nxd-app is-loading" data-region="nxd-dashboard" aria-busy="true">
+    <div class="nxd-skeleton" data-region="skeleton" aria-hidden="false">
+        <div class="nxd-skel-hero">
+            <div class="nxd-skel-hero__main">
+                <div class="nxd-skel-line nxd-skel-line--sm"></div>
+                <div class="nxd-skel-line nxd-skel-line--xl"></div>
+                <div class="nxd-skel-line nxd-skel-line--md"></div>
+            </div>
+            <div class="nxd-skel-hero__stats">
+                <div class="nxd-skel-pill"></div>
+                <div class="nxd-skel-pill"></div>
+            </div>
+        </div>
+        <div class="nxd-skel-layout">
+            <div class="nxd-skel-main">
+                <div class="nxd-skel-card nxd-skel-card--next">
+                    <div class="nxd-skel-line nxd-skel-line--md nxd-skel-line--w40"></div>
+                    <div class="nxd-skel-line nxd-skel-line--md"></div>
+                    <div class="nxd-skel-btn"></div>
+                </div>
+                <div class="nxd-skel-section">
+                    <div class="nxd-skel-line nxd-skel-line--md nxd-skel-line--w40"></div>
+                    <div class="nxd-skel-continue">
+                        <div class="nxd-skel-card"></div>
+                        <div class="nxd-skel-card"></div>
+                        <div class="nxd-skel-card"></div>
+                        <div class="nxd-skel-card"></div>
+                        <div class="nxd-skel-card"></div>
+                    </div>
+                </div>
+                <div class="nxd-skel-card nxd-skel-card--analytics">
+                    <div class="nxd-skel-line nxd-skel-line--md nxd-skel-line--w40"></div>
+                    <div class="nxd-skel-metrics">
+                        <div class="nxd-skel-block"></div>
+                        <div class="nxd-skel-block"></div>
+                        <div class="nxd-skel-block"></div>
+                    </div>
+                    <div class="nxd-skel-chart"></div>
+                </div>
+            </div>
+            <div class="nxd-skel-aside">
+                <div class="nxd-skel-card nxd-skel-card--streak">
+                    <div class="nxd-skel-streak-top">
+                        <div class="nxd-skel-circle"></div>
+                        <div>
+                            <div class="nxd-skel-line nxd-skel-line--xs"></div>
+                            <div class="nxd-skel-line nxd-skel-line--lg"></div>
+                        </div>
+                    </div>
+                    <div class="nxd-skel-week">
+                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+                <div class="nxd-skel-card">
+                    <div class="nxd-skel-line nxd-skel-line--md nxd-skel-line--w50"></div>
+                    <div class="nxd-skel-player">
+                        <div class="nxd-skel-block"></div>
+                        <div class="nxd-skel-block"></div>
+                        <div class="nxd-skel-block"></div>
+                        <div class="nxd-skel-block"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="sr-only" data-label="loading">Loading dashboard…</span>
+    </div>
+
+    <div class="nxd-content" data-region="content" hidden>
+        <section class="nxd-hero">
+            <div class="nxd-hero__main">
+                <p class="nxd-hero__greeting" data-region="greeting">…</p>
+                <h1 class="nxd-hero__welcome" data-region="welcome">…</h1>
+                <p class="nxd-hero__tagline" data-region="tagline">…</p>
+            </div>
+            <div class="nxd-hero__focus" data-region="hero-focus">
+                <div class="nxd-hero__focus-kicker" data-label="todaysfocus">Today’s focus</div>
+                <strong class="nxd-hero__focus-title" data-region="hero-focus-title">…</strong>
+                <p class="nxd-hero__focus-detail" data-region="hero-focus-detail"></p>
+                <a class="nxd-btn nxd-btn--primary nxd-btn--sm" data-region="hero-focus-cta" href="#">Start</a>
+            </div>
+            <div class="nxd-hero__stats">
+                <div class="nxd-pillstat" data-region="learning-time-wrap">
+                    <span class="nxd-pillstat__ico nxd-pillstat__ico--time" aria-hidden="true"></span>
+                    <div>
+                        <strong data-region="learning-time" class="nxd-skel-inline">—</strong>
+                        <span data-label="learningtime">Learning time</span>
+                    </div>
+                </div>
+                <div class="nxd-pillstat">
+                    <span class="nxd-pillstat__ico nxd-pillstat__ico--courses" aria-hidden="true"></span>
+                    <div>
+                        <strong data-region="course-count">0</strong>
+                        <span data-label="courses">Courses</span>
+                    </div>
+                </div>
+                <div class="nxd-pillstat">
+                    <span class="nxd-pillstat__ico nxd-pillstat__ico--streak" aria-hidden="true"></span>
+                    <div>
+                        <strong data-region="hero-streak">0</strong>
+                        <span data-label="currentstreak">Current streak</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="nxd-layout">
+            <div class="nxd-main">
+                <section class="nxd-learn-block">
+                    <div class="nxd-goal-strip nxd-card" data-region="goal-card">
+                        <div class="nxd-goal-strip__main">
+                            <div class="nxd-goal-strip__title">
+                                <strong data-label="weeklygoal">This week</strong>
+                                <span data-region="goal-count">0/5</span>
+                            </div>
+                            <p class="nxd-goal-strip__text" data-region="goal-label"></p>
+                            <div class="nxd-progress"><span data-region="goal-bar" style="width:0%"></span></div>
+                        </div>
+                        <div class="nxd-goal__choices" data-region="goal-choices" role="group" aria-label="Goal target"></div>
+                    </div>
+
+                    <section class="nxd-section nxd-section--continue">
+                        <header class="nxd-section__head">
+                            <h2 data-label="continuelearning">Continue learning</h2>
+                            <a class="nxd-link" data-region="view-all" href="#">View all</a>
+                        </header>
+                        <div class="nxd-continue-grid" data-region="continue-grid"></div>
+                    </section>
+                </section>
+
+                <section class="nxd-card nxd-deadlines" data-region="deadlines-card">
+                    <header class="nxd-section__head">
+                        <h2 data-label="deadlines">Upcoming deadlines</h2>
+                        <a class="nxd-link" data-region="calendar-link" href="#" data-label="viewall">View all</a>
+                    </header>
+                    <div data-region="deadlines-list"></div>
+                </section>
+
+                <div class="nxd-split">
+                    <section class="nxd-card nxd-skills" data-region="skills-card">
+                        <header class="nxd-section__head">
+                            <h2 data-label="skillmap">Skill focus</h2>
+                            <p class="nxd-section__hint" data-label="skillmap_hint">{{#str}}skillmap_hint, local_nexdashboard{{/str}}</p>
+                        </header>
+                        <div data-region="skills-list"></div>
+                    </section>
+                    <section class="nxd-card nxd-tracks" data-region="tracks-card">
+                        <header class="nxd-section__head">
+                            <h2 data-label="tracks">Mission tracks</h2>
+                            <p class="nxd-section__hint" data-label="tracks_hint">{{#str}}tracks_hint, local_nexdashboard{{/str}}</p>
+                        </header>
+                        <div data-region="tracks-list"></div>
+                    </section>
+                </div>
+
+                <section class="nxd-card nxd-analytics" data-region="analytics">
+                    <header class="nxd-analytics__head">
+                        <div class="nxd-analytics__title">
+                            <span class="nxd-analytics__icon" aria-hidden="true">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </span>
+                            <h2 data-label="learninganalytics">Learning Analytics</h2>
+                            <span class="nxd-analytics__clock" aria-hidden="true" title="Time-based">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            </span>
+                        </div>
+                        <div class="nxd-analytics__filters">
+                            <label class="nxd-select">
+                                <span class="sr-only" data-label="period">Period</span>
+                                <select data-region="analytics-period" aria-label="Period">
+                                    <option value="daily" data-label="daily">Daily</option>
+                                    <option value="weekly" selected data-label="weekly">Weekly</option>
+                                    <option value="monthly" data-label="monthly">Monthly</option>
+                                </select>
+                            </label>
+                            <label class="nxd-select">
+                                <span class="sr-only" data-label="metric">Metric</span>
+                                <select data-region="analytics-metric" aria-label="Metric">
+                                    <option value="xp" selected data-label="xpearned">XP Earned</option>
+                                    <option value="solved" data-label="problemssolved">Problems Solved</option>
+                                    <option value="time" data-label="timespent">Time Spent</option>
+                                </select>
+                            </label>
+                        </div>
+                    </header>
+                    <div class="nxd-analytics__metrics">
+                        <div class="nxd-metric nxd-metric--total" data-region="analytics-total-metric">
+                            <span data-region="total-metric-label" data-label="totalxpearned">Total XP Earned</span>
+                            <strong>
+                                <i class="nxd-metric__ico" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M7 10l5-5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </i>
+                                <span data-region="total-xp">0</span>
+                            </strong>
+                            <em data-label="alltimelabel">All time</em>
+                            <p class="nxd-metric__hint" data-region="xp-breakdown" hidden></p>
+                        </div>
+                        <div class="nxd-metric nxd-metric--avg">
+                            <span data-label="average">Average</span>
+                            <strong>
+                                <i class="nxd-metric__ico" aria-hidden="true">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l2.5 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                                </i>
+                                <span data-region="avg-xp">0</span>
+                            </strong>
+                            <em data-region="avg-label" data-label="perweek">Per week</em>
+                        </div>
+                        <div class="nxd-metric nxd-metric--trend">
+                            <span data-label="trend">Trend</span>
+                            <strong>
+                                <span data-region="trend">0%</span>
+                                <i class="nxd-metric__ico nxd-metric__ico--trail" aria-hidden="true">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M7 10l5-5 5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </i>
+                            </strong>
+                            <em data-label="trendhint">vs average of previous periods</em>
+                        </div>
+                    </div>
+                    <div class="nxd-chart nxd-chart--line" data-region="xp-chart" aria-label="Learning analytics chart"></div>
+                </section>
+
+                <section class="nxd-card nxd-activity-card" data-region="activity-card">
+                    <header class="nxd-section__head">
+                        <h2 data-label="recentactivity">Recent activity</h2>
+                    </header>
+                    <div data-region="activity-list"></div>
+                </section>
+            </div>
+
+            <aside class="nxd-aside">
+                <section class="nxd-card nxd-online" data-region="online-card" hidden>
+                    <header class="nxd-section__head">
+                        <h2 data-label="onlineusers">Online users</h2>
+                        <a class="nxd-link" data-region="online-link" href="#" data-label="browseusers">Browse</a>
+                    </header>
+                    <p class="nxd-online__meta">
+                        <strong data-region="online-count">0</strong>
+                        <span data-region="online-period" data-label="onlineperioddefault"></span>
+                    </p>
+                    <div class="nxd-online__list" data-region="online-list"></div>
+                </section>
+
+                <section class="nxd-card nxd-streak">
+                    <div class="nxd-streak__top">
+                        <span class="nxd-streak__flame" aria-hidden="true">🔥</span>
+                        <div>
+                            <div class="nxd-streak__label" data-label="dailystreak">Daily streak</div>
+                            <strong class="nxd-streak__value"><span data-region="streak-current">0</span> <span data-label="days">Days</span></strong>
+                            <p class="nxd-streak__sub" data-region="streak-longest"></p>
+                        </div>
+                    </div>
+                    <div class="nxd-streak__week" data-region="streak-week"></div>
+                    <p class="nxd-streak__foot" data-region="streak-hint" data-label="streakhint">Counts Practice, CodeLab, course tests, battles, and interviews — not visits or time on site.</p>
+                </section>
+
+                <section class="nxd-card nxd-stuck" data-region="stuck-card" hidden>
+                    <header class="nxd-section__head">
+                        <h2 data-label="needsattention">Needs attention</h2>
+                    </header>
+                    <div data-region="stuck-list"></div>
+                </section>
+
+                <section class="nxd-card nxd-month" data-region="month-card">
+                    <header class="nxd-section__head">
+                        <h2 data-label="monthsummary">This month</h2>
+                        <button type="button" class="nxd-link nxd-link--btn" data-region="copy-summary" data-label="copysummary">Copy summary</button>
+                    </header>
+                    <p class="nxd-month__label" data-region="month-label"></p>
+                    <div class="nxd-month__grid nxd-month__grid--rich">
+                        <div>
+                            <span data-label="coursecodingsolved">NexCourse problems</span>
+                            <strong data-region="month-course-coding">0</strong>
+                        </div>
+                        <div>
+                            <span data-label="coursemcqcorrect">NexCourse MCQs</span>
+                            <strong data-region="month-course-mcq">0</strong>
+                        </div>
+                        <div>
+                            <span data-label="practicesolvedlabel">NexPractice solved</span>
+                            <strong data-region="month-practice">0</strong>
+                        </div>
+                        <div>
+                            <span data-label="battleswon">Battles won</span>
+                            <strong data-region="month-battles">0</strong>
+                        </div>
+                        <div>
+                            <span data-label="interviewscompleted">Interviews completed</span>
+                            <strong data-region="month-interviews">0</strong>
+                        </div>
+                        <div>
+                            <span data-label="totalxp">Total XP</span>
+                            <strong data-region="month-xp">0</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="nxd-card nxd-peers" data-region="peers-card" hidden>
+                    <header class="nxd-section__head">
+                        <h2 data-region="peers-title" data-label="peers">Peer context</h2>
+                        <a class="nxd-link" data-region="peers-link" href="#" data-label="viewleaderboard">Full board</a>
+                    </header>
+                    <p class="nxd-peers__rank" data-region="peers-rank"></p>
+                    <div data-region="peers-list"></div>
+                </section>
+
+                <section class="nxd-card nxd-player">
+                    <h2 data-label="playerstats">Player stats</h2>
+                    <div class="nxd-player__grid nxd-player__grid--rich">
+                        <div class="nxd-player__cell nxd-player__cell--blue">
+                            <span data-label="coursecodingsolved">NexCourse problems</span>
+                            <strong data-region="stat-course-coding">0</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--teal">
+                            <span data-label="coursemcqcorrect">NexCourse MCQs</span>
+                            <strong data-region="stat-course-mcq">0</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--amber">
+                            <span data-label="practicesolvedlabel">NexPractice solved</span>
+                            <strong data-region="stat-practice">0</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--rose">
+                            <span data-label="battleswon">Battles won</span>
+                            <strong data-region="stat-battles">0</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--green">
+                            <span data-label="platformsconnected">Platforms connected</span>
+                            <strong data-region="stat-platforms">0 / 5</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--slate">
+                            <span data-label="githubconnected">GitHub</span>
+                            <strong data-region="stat-github">No</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--violet">
+                            <span data-label="interviewstaken">NexInterview taken</span>
+                            <strong data-region="stat-interviews">0</strong>
+                        </div>
+                        <div class="nxd-player__cell nxd-player__cell--indigo">
+                            <span data-label="currentstreak">Current streak</span>
+                            <strong data-region="stat-streak">0</strong>
+                        </div>
+                    </div>
+                    <div class="nxd-quicklinks" data-region="quicklinks"></div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <div class="nxd-error" data-region="error" hidden>
+        <p data-region="error-message"></p>
+        <button type="button" class="nxd-btn nxd-btn--primary" data-region="retry">Retry</button>
+    </div>
+</div>

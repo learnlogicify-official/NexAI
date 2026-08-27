@@ -1,0 +1,46 @@
+{{!
+    @template local_nexresume/builder
+}}
+<div id="nr-builder" class="nxf-app nxf-app--bleed" data-region="nexresume-builder">
+    {{> local_nexresume/header }}
+
+    <div class="nxf-bar nr-bar">
+        <div class="nr-bar__copy">
+            <div class="nr-bar__title">{{#str}} resumebuilder, local_nexresume {{/str}}</div>
+            <p class="nr-bar__hint">{{#str}} editor_help, local_nexresume {{/str}}</p>
+        </div>
+        {{#canmanage}}
+            <div class="nxf-bar__actions">
+                <span class="nr-status" data-region="status" aria-live="polite"></span>
+                <button type="button" class="nxf-btn" data-action="refresh">{{#str}} refreshsources, local_nexresume {{/str}}</button>
+                <button type="button" class="nxf-btn nxf-btn--primary" data-action="save">{{#str}} save, local_nexresume {{/str}}</button>
+                <button type="button" class="nxf-btn nxf-btn--accent" data-action="export">{{#str}} exportpdf, local_nexresume {{/str}}</button>
+            </div>
+        {{/canmanage}}
+    </div>
+
+    <div class="nr-layout">
+        <aside class="nr-editor" data-region="editor" {{^canmanage}}aria-readonly="true"{{/canmanage}}>
+            <header class="nr-panel-head">
+                <h2 class="nr-panel-title">{{#str}} editor, local_nexresume {{/str}}</h2>
+            </header>
+            <div class="nr-editor__body" data-region="editor-body"></div>
+        </aside>
+        <section class="nr-preview-wrap">
+            <header class="nr-panel-head">
+                <h2 class="nr-panel-title">{{#str}} preview, local_nexresume {{/str}}</h2>
+                <p class="nr-preview-hint">{{#str}} previewedit, local_nexresume {{/str}}</p>
+            </header>
+            <div class="nr-stage">
+                <div class="nr-preview" data-region="preview"></div>
+            </div>
+        </section>
+    </div>
+
+    {{#portfoliourl}}
+        <p class="nr-footnote">
+            {{#str}}autosource, local_nexresume{{/str}} —
+            <a href="{{{portfoliourl}}}">{{#str}}connectportfolio, local_nexresume{{/str}}</a>
+        </p>
+    {{/portfoliourl}}
+</div>

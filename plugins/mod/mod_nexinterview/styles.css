@@ -1,0 +1,64 @@
+/* Course activity pages only (view / reports). Room reuses local_nexinterview styles. */
+.nxi-act {
+    --nxi-act-ink: #0f172a;
+    --nxi-act-muted: #64748b;
+    --nxi-act-line: #e2e8f0;
+    --nxi-act-accent: #0f766e;
+    --nxi-act-soft: #ccfbf1;
+    font-family: 'Hind Siliguri', 'Segoe UI', system-ui, sans-serif;
+    color: var(--nxi-act-ink);
+    max-width: 920px;
+    margin: 0 auto 2rem;
+}
+.nxi-act__eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--nxi-act-accent);
+    margin: 0 0 .35rem;
+}
+.nxi-act__hero {
+    background:
+        radial-gradient(900px 320px at 8% -20%, var(--nxi-act-soft), transparent 55%),
+        linear-gradient(180deg, #f8fafc, #f1f5f9);
+    border: 1px solid var(--nxi-act-line);
+    border-radius: 14px;
+    padding: 1.6rem 1.4rem 1.4rem;
+}
+.nxi-act__title {
+    margin: 0 0 .45rem;
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    line-height: 1.2;
+}
+.nxi-act__intro { margin: 0 0 .75rem; color: var(--nxi-act-ink); }
+.nxi-act__blurb, .nxi-act__meta { color: var(--nxi-act-muted); max-width: 40rem; }
+.nxi-act__actions { margin: 1.1rem 0 0; }
+.nxi-act__btn {
+    display: inline-block;
+    padding: .6rem 1.1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    text-decoration: none;
+    border: 1px solid var(--nxi-act-line);
+    background: #fff;
+    color: var(--nxi-act-ink);
+}
+.nxi-act__btn--primary {
+    background: var(--nxi-act-accent);
+    border-color: var(--nxi-act-accent);
+    color: #fff;
+}
+.nxi-act__warn { color: #b45309; font-weight: 600; }
+.nxi-act__link { color: var(--nxi-act-accent); font-weight: 600; }
+.nxi-act__attempts { margin-top: 1.5rem; }
+.nxi-act__list { list-style: none; padding: 0; margin: 0; }
+.nxi-act__list li {
+    display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
+    padding: .65rem 0; border-bottom: 1px solid var(--nxi-act-line);
+}
+.nxi-act__score { font-size: 1.25rem; }
+.nxi-act__table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+.nxi-act__table th, .nxi-act__table td {
+    text-align: left; padding: .55rem .4rem; border-bottom: 1px solid var(--nxi-act-line);
+}

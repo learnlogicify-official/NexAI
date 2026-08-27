@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/nexcodelab/db" VERSION="20260807" COMMENT="XMLDB for local_nexcodelab"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="local_nexcodelab_problem" COMMENT="DS/ML CodeLab challenges">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true"/>
+        <FIELD NAME="slug" TYPE="char" LENGTH="100" NOTNULL="true"/>
+        <FIELD NAME="statement" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="difficulty" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="easy"/>
+        <FIELD NAME="track" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="wrangling"/>
+        <FIELD NAME="fixturepath" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="draft"/>
+        <FIELD NAME="defaultlanguage" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="python3"/>
+        <FIELD NAME="sourcequestionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="slug_uix" UNIQUE="true" FIELDS="slug"/>
+        <INDEX NAME="status_diff_ix" UNIQUE="false" FIELDS="status, difficulty"/>
+        <INDEX NAME="track_ix" UNIQUE="false" FIELDS="track, status"/>
+        <INDEX NAME="sourceq_ix" UNIQUE="false" FIELDS="sourcequestionid"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_tag" COMMENT="Problem tags">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="100" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="name_uix" UNIQUE="true" FIELDS="name"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_problem_tag" COMMENT="Problem-tag map">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="problemid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="tagid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="prob_tag_uix" UNIQUE="true" FIELDS="problemid, tagid"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_lang" COMMENT="Per-problem language starters">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="problemid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="language" TYPE="char" LENGTH="40" NOTNULL="true"/>
+        <FIELD NAME="preload" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="prototype" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="prob_lang_uix" UNIQUE="true" FIELDS="problemid, language"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_testcase" COMMENT="Sample and hidden tests">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="problemid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="stdin" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="expected" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="display" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="sample"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="explanation" TYPE="text" NOTNULL="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="prob_disp_ix" UNIQUE="false" FIELDS="problemid, display, sortorder"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_submission" COMMENT="User submissions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="problemid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="language" TYPE="char" LENGTH="40" NOTNULL="true"/>
+        <FIELD NAME="code" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="WRONG_ANSWER"/>
+        <FIELD NAME="passed" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="total" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="runtime" TYPE="char" LENGTH="40" NOTNULL="false"/>
+        <FIELD NAME="memory" TYPE="char" LENGTH="40" NOTNULL="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="user_prob_ix" UNIQUE="false" FIELDS="userid, problemid, timecreated"/>
+        <INDEX NAME="status_ix" UNIQUE="false" FIELDS="status"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_draft" COMMENT="Autosaved drafts">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="problemid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="language" TYPE="char" LENGTH="40" NOTNULL="true"/>
+        <FIELD NAME="code" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="draft_uix" UNIQUE="true" FIELDS="userid, problemid, language"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_userxp" COMMENT="User XP totals">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="xp" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid_uix" UNIQUE="true" FIELDS="userid"/>
+        <INDEX NAME="xp_ix" UNIQUE="false" FIELDS="xp"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_xpevent" COMMENT="XP award log">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="problemid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="amount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="reason" TYPE="char" LENGTH="40" NOTNULL="true"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="user_time_ix" UNIQUE="false" FIELDS="userid, timecreated"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_streak" COMMENT="Daily solve streaks">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="currentstreak" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="longest" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="lastday" TYPE="char" LENGTH="10" NOTNULL="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid_uix" UNIQUE="true" FIELDS="userid"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_mission" COMMENT="Scenario mission labs">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true"/>
+        <FIELD NAME="slug" TYPE="char" LENGTH="100" NOTNULL="true"/>
+        <FIELD NAME="scenario" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="track" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="wrangling"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="draft"/>
+        <FIELD NAME="estimateminutes" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="30"/>
+        <FIELD NAME="coverkey" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="lab"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mission_slug_uix" UNIQUE="true" FIELDS="slug"/>
+        <INDEX NAME="mission_track_ix" UNIQUE="false" FIELDS="track, status"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_mission_step" COMMENT="Ordered mission steps">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="missionid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true"/>
+        <FIELD NAME="instructions" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="hint" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="checkkind" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="stdout"/>
+        <FIELD NAME="graderpayload" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="xp" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="25"/>
+        <FIELD NAME="unlockprev" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="step_mission_ix" UNIQUE="false" FIELDS="missionid, sortorder"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_mission_file" COMMENT="Workspace files per mission">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="missionid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="path" TYPE="char" LENGTH="100" NOTNULL="true"/>
+        <FIELD NAME="role" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="code"/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="readonly" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="file_mission_path_uix" UNIQUE="true" FIELDS="missionid, path"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_step_attempt" COMMENT="Per-step check attempts">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="stepid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="fail"/>
+        <FIELD NAME="code_snapshot" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="output" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="step_attempt_ix" UNIQUE="false" FIELDS="userid, stepid, timecreated"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_mission_progress" COMMENT="User mission progress">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="missionid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="currentstep" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="completed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="mission_progress_uix" UNIQUE="true" FIELDS="userid, missionid"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexcodelab_workspace" COMMENT="Autosaved workspace code per mission">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="missionid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="path" TYPE="char" LENGTH="100" NOTNULL="true"/>
+        <FIELD NAME="content" TYPE="text" NOTNULL="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="workspace_uix" UNIQUE="true" FIELDS="userid, missionid, path"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

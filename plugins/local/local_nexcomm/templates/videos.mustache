@@ -1,0 +1,43 @@
+{{!
+    @template local_nexcomm/videos
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-videos"
+     data-label-watch="{{#str}}watch, local_nexcomm{{/str}}"
+     data-label-learn="{{#str}}learn, local_nexcomm{{/str}}"
+     data-label-speak="{{#str}}speak, local_nexcomm{{/str}}"
+     data-label-lines="{{#str}}lines, local_nexcomm{{/str}}"
+     data-label-words="{{#str}}words, local_nexcomm{{/str}}"
+     data-label-start="{{#str}}startlesson, local_nexcomm{{/str}}"
+     data-label-continue="{{#str}}continuelesson, local_nexcomm{{/str}}"
+     data-label-complete="{{#str}}lessoncomplete, local_nexcomm{{/str}}"
+     data-label-empty="{{#str}}nolessons, local_nexcomm{{/str}}">
+    {{> local_nexcomm/header }}
+    {{> local_nexcomm/topnav }}
+
+    <section class="nc-ecgoals" data-region="ec-goals">
+        <div class="nc-ecgoal">
+            <span class="nc-ecgoal__label">{{#str}}watch, local_nexcomm{{/str}}</span>
+            <strong data-region="watch-meta">{{watchDone}} / {{watchGoal}}</strong>
+            <div class="nc-targetcard__bar"><div class="nc-targetcard__fill" data-region="watch-fill" style="width: {{watchPct}}%;"></div></div>
+        </div>
+        <div class="nc-ecgoal">
+            <span class="nc-ecgoal__label">{{#str}}learn, local_nexcomm{{/str}}</span>
+            <strong data-region="learn-meta">{{learnDone}} / {{learnGoal}}</strong>
+            <div class="nc-targetcard__bar"><div class="nc-targetcard__fill" data-region="learn-fill" style="width: {{learnPct}}%;"></div></div>
+        </div>
+        <div class="nc-ecgoal">
+            <span class="nc-ecgoal__label">{{#str}}speak, local_nexcomm{{/str}}</span>
+            <strong data-region="speak-meta">{{speakDone}} / {{speakGoal}}</strong>
+            <div class="nc-targetcard__bar"><div class="nc-targetcard__fill" data-region="speak-fill" style="width: {{speakPct}}%;"></div></div>
+        </div>
+    </section>
+
+    <section class="nc-panel">
+        <header class="nc-panel__head">
+            <h2 class="nc-panel__title">{{#str}}videolab, local_nexcomm{{/str}}</h2>
+            <p class="nc-panel__sub">{{#str}}videolabhint, local_nexcomm{{/str}}</p>
+        </header>
+        <div class="nc-grid" data-region="grid"></div>
+        <p class="nc-empty" data-region="empty" hidden>{{#str}}nolessons, local_nexcomm{{/str}}</p>
+    </section>
+</div>

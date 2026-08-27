@@ -1,0 +1,44 @@
+{{!
+    @template local_nexcodelab/progress
+}}
+<div class="ncl-app ncl-app--bleed" data-region="ncl-progress">
+    {{> local_nexcodelab/header }}
+    <nav class="ncl-topnav" aria-label="NexCodeLab">
+        <a class="ncl-topnav__item" href="{{{listurl}}}">
+            <span class="ncl-ico ncl-ico--book" aria-hidden="true"></span>
+            {{#str}}catalog, local_nexcodelab{{/str}}
+        </a>
+        <a class="ncl-topnav__item is-active" href="{{{progressurl}}}">
+            {{#str}}myprogress, local_nexcodelab{{/str}}
+        </a>
+        <a class="ncl-topnav__item" href="{{{leaderboardurl}}}">
+            <span class="ncl-ico ncl-ico--trophy" aria-hidden="true"></span>
+            {{#str}}leaderboard, local_nexcodelab{{/str}}
+        </a>
+        {{#canmanage}}
+            <a class="ncl-topnav__item ncl-topnav__item--right" href="{{{manageurl}}}">{{#str}}manage, local_nexcodelab{{/str}}</a>
+        {{/canmanage}}
+    </nav>
+
+    <div class="ncl-layout ncl-layout--full">
+        <div class="ncl-layout__main">
+            <section class="ncl-panel">
+                <header class="ncl-panel__head">
+                    <h2 class="ncl-panel__title">{{#str}}myprogress, local_nexcodelab{{/str}}</h2>
+                </header>
+                <div class="ncl-statustabs" role="presentation">
+                    <span class="ncl-statustab ncl-statustab--done">{{#str}}completed, local_nexcodelab{{/str}} <strong data-p="completed">0</strong></span>
+                    <span class="ncl-statustab ncl-statustab--progress">{{#str}}inprogress, local_nexcodelab{{/str}} <strong data-p="inprogress">0</strong></span>
+                    <span class="ncl-statustab">{{#str}}stattotal, local_nexcodelab{{/str}} <strong data-p="total">0</strong></span>
+                    <span class="ncl-statustab">{{#str}}xp, local_nexcodelab{{/str}} <strong data-p="xp">0</strong></span>
+                </div>
+            </section>
+            <section class="ncl-results">
+                <div class="ncl-grid" data-region="progress-grid"></div>
+                <p style="margin-top:1.5rem">
+                    <a class="ncl-btn ncl-btn--primary" href="{{{starturl}}}">{{#str}}startmission, local_nexcodelab{{/str}}</a>
+                </p>
+            </section>
+        </div>
+    </div>
+</div>

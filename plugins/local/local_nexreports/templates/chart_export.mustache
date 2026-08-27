@@ -1,0 +1,34 @@
+{{!
+    @template local_nexreports/chart_export
+
+    Ellipsis export menu for overview chart cards (PDF / PNG / JPEG / SVG).
+}}
+<div class="nxr-chart-export">
+    <button type="button" class="nxr-chart-export__toggle" aria-haspopup="true" aria-expanded="false"
+            title="{{#str}}exportchart, local_nexreports{{/str}}"
+            aria-label="{{#str}}exportchart, local_nexreports{{/str}}">
+        <span class="nxr-chart-export__dots" aria-hidden="true"></span>
+    </button>
+    <ul class="nxr-chart-export__menu" role="menu" hidden>
+        <li role="none">
+            <button type="button" role="menuitem" data-chart-format="pdf">
+                {{#str}}exportpdf, local_nexreports{{/str}}
+            </button>
+        </li>
+        <li role="none">
+            <button type="button" role="menuitem" data-chart-format="png">
+                {{#str}}exportpng, local_nexreports{{/str}}
+            </button>
+        </li>
+        <li role="none">
+            <button type="button" role="menuitem" data-chart-format="jpeg">
+                {{#str}}exportjpeg, local_nexreports{{/str}}
+            </button>
+        </li>
+        <li role="none">
+            <button type="button" role="menuitem" data-chart-format="svg">
+                {{#str}}exportsvg, local_nexreports{{/str}}
+            </button>
+        </li>
+    </ul>
+</div>

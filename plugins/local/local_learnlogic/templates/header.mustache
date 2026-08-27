@@ -1,0 +1,68 @@
+{{!
+    @template local_learnlogic/header
+    NexPractice banner + stats strip (NexCourse visual language).
+}}
+<section class="ll-header" data-region="ll-header">
+    <div class="ll-header__banner">
+        <div class="ll-header__veil"></div>
+        <div class="ll-header__content">
+            <div class="ll-header__row">
+                <div class="ll-header__main">
+                    <span class="ll-header__cat">{{eyebrow}}</span>
+                    <h1 class="ll-header__title">{{title}}</h1>
+                    <p class="ll-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="ll-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="ll-header__progress" aria-label="{{#str}}solved, local_learnlogic{{/str}}">
+                    <div class="ll-header__progress-grid">
+                        <div class="ll-donut" style="--ll-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{contentpct}}%"
+                             data-region="donut">
+                            <span class="ll-donut__ring" aria-hidden="true"></span>
+                            <span class="ll-donut__hole" aria-hidden="true"></span>
+                            <strong class="ll-donut__value" data-region="donut-value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="ll-header__breakdown">
+                            <div class="ll-header__progress-label">{{#str}}practiceprogress, local_learnlogic{{/str}}</div>
+                            <ul class="ll-content-stats" data-region="content-stats">
+                                {{#contentitems}}
+                                    <li class="ll-content-stat ll-content-stat--{{key}}">
+                                        <span class="ll-content-stat__label">{{label}}</span>
+                                        <strong class="ll-content-stat__value" data-stat="{{key}}">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+        <style>
+            .ll-header__stats[data-stat-count="5"] {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+            }
+            .ll-header__stats[data-stat-count="5"] > .ll-hstat {
+                flex: 1 1 0 !important;
+                min-width: 0;
+            }
+        </style>
+        <div class="ll-header__stats" data-region="header-stats" data-stat-count="5">
+            {{#stats}}
+                <div class="ll-hstat ll-hstat--{{key}}">
+                    <span class="ll-hstat__icon" aria-hidden="true"></span>
+                    <div class="ll-hstat__body">
+                        <strong class="ll-hstat__value" data-hstat="{{key}}">{{value}}</strong>
+                        <span class="ll-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

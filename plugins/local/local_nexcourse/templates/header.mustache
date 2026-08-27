@@ -1,0 +1,58 @@
+{{!
+    @template local_nexcourse/header
+    NexCourse banner + stats strip (aligned with NexPractice / CodeLab).
+}}
+<section class="nxc-header" data-region="nxc-header">
+    <div class="nxc-header__banner">
+        <div class="nxc-header__veil"></div>
+        <div class="nxc-header__content">
+            <div class="nxc-header__row">
+                <div class="nxc-header__main">
+                    <span class="nxc-header__cat">{{eyebrow}}</span>
+                    <h1 class="nxc-header__title">{{title}}</h1>
+                    <p class="nxc-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="nxc-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="nxc-header__progress" aria-label="{{#str}}courseprogress, local_nexcourse{{/str}}">
+                    <div class="nxc-header__progress-grid">
+                        <div class="nxc-donut" style="--nxc-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{contentpct}}%"
+                             data-region="header-donut">
+                            <span class="nxc-donut__ring" aria-hidden="true"></span>
+                            <span class="nxc-donut__hole" aria-hidden="true"></span>
+                            <strong class="nxc-donut__value" data-region="header-pct">{{contentpct}}%</strong>
+                        </div>
+                        <div class="nxc-header__breakdown">
+                            <div class="nxc-header__progress-label">{{#str}}courseprogress, local_nexcourse{{/str}}</div>
+                            <ul class="nxc-content-stats">
+                                {{#contentitems}}
+                                    <li class="nxc-content-stat nxc-content-stat--{{key}}">
+                                        <span class="nxc-content-stat__label">{{label}}</span>
+                                        <strong class="nxc-content-stat__value" data-header-item="{{key}}">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+                <div class="nxc-header__stats">
+            {{#stats}}
+                <div class="nxc-hstat nxc-hstat--{{key}}">
+                    <span class="nxc-hstat__icon" aria-hidden="true"></span>
+                    <div class="nxc-hstat__body">
+                        <strong class="nxc-hstat__value" data-header-stat="{{key}}">{{value}}</strong>
+                        <span class="nxc-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

@@ -1,0 +1,98 @@
+{{!
+    @template local_nexinterview/room
+    HackerRank-style technical screen room.
+}}
+<div class="nxi-fs" data-region="nxi-room" data-phase="gate">
+    <div class="nxi-gate" data-region="gate">
+        <div class="nxi-gate__card">
+            <p class="nxi-gate__eyebrow">NexInterview</p>
+            {{#resuming}}
+                <h1>{{#str}}continuetitle, local_nexinterview{{/str}}</h1>
+                <p class="nxi-gate__sub">{{#str}}continuesub, local_nexinterview{{/str}}</p>
+                <p class="nxi-gate__error" data-region="gate-error" hidden></p>
+                <button type="button" class="nxi-btn-solid nxi-gate__go" data-action="begin"
+                        data-label-busy="{{#str}}continuing, local_nexinterview{{/str}}"
+                        data-label-idle="{{#str}}continueinterview, local_nexinterview{{/str}}">{{#str}}continueinterview, local_nexinterview{{/str}}</button>
+            {{/resuming}}
+            {{^resuming}}
+                <h1>Ready when you are</h1>
+                <p class="nxi-gate__sub">Tap below to unlock audio and start the live interviewer.</p>
+                <p class="nxi-gate__error" data-region="gate-error" hidden></p>
+                <button type="button" class="nxi-btn-solid nxi-gate__go" data-action="begin"
+                        data-label-busy="Starting…"
+                        data-label-idle="Start interview">Start interview</button>
+            {{/resuming}}
+            <a class="nxi-gate__back" href="{{{huburl}}}">Back to hub</a>
+        </div>
+    </div>
+
+    <div class="nxi-live" data-region="live" hidden>
+        <header class="nxi-live__top">
+            <div class="nxi-live__brand">
+                <span class="nxi-logo">Nex</span>
+                <span class="nxi-live__sep" aria-hidden="true"></span>
+                <span class="nxi-live__title">Technical Screen Mock Interview</span>
+            </div>
+            <div class="nxi-live__right">
+                <span class="nxi-timer" data-region="timer-wrap">
+                    <svg class="nxi-timer__icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    <span class="nxi-timer__val" data-region="timer">—</span>
+                </span>
+                <button type="button" class="nxi-end" data-action="end">End Interview</button>
+            </div>
+        </header>
+
+        <div class="nxi-live__body" data-region="live-body">
+            <section class="nxi-talk" data-region="talk-pane">
+                <div class="nxi-turn" data-region="turn" data-turn="idle" aria-live="polite">Ready</div>
+                <div class="nxi-chat" data-region="chat" aria-live="polite"></div>
+                <div class="nxi-caption nxi-caption--stream" data-region="caption" aria-live="polite" hidden>
+                    <span class="nxi-caption__placeholder">NexAI is speaking…</span>
+                </div>
+                <p class="nxi-yousaid" data-region="yousaid" hidden aria-live="polite"></p>
+                <div class="nxi-snippet-stage" data-region="snippet-stage" hidden></div>
+            </section>
+
+            <aside class="nxi-video-wrap" data-region="video-wrap">
+                <video data-region="live-video" playsinline autoplay muted></video>
+                <div class="nxi-signal" data-region="signal" aria-hidden="true">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </aside>
+
+            <section class="nxi-ide-host" data-region="ide-host" hidden>
+                {{> local_learnlogic/problem }}
+            </section>
+        </div>
+
+        <div class="nxi-bottom" data-region="voice-viz" aria-hidden="true">
+            <div class="nxi-dome">
+                <canvas class="nxi-dome__canvas" data-region="eq" width="1600" height="320"></canvas>
+            </div>
+            <div class="nxi-pill">
+                <button type="button" class="nxi-pill__btn is-on" data-action="toggle-mic" title="Microphone" aria-label="Microphone">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg>
+                </button>
+                <button type="button" class="nxi-pill__btn is-on" data-action="toggle-cam" title="Camera" aria-label="Camera">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="13" height="10" rx="2"/><path d="M16 10l5-3v10l-5-3"/></svg>
+                </button>
+                <button type="button" class="nxi-pill__btn" data-action="replay" title="Replay" aria-label="Replay last line">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+                </button>
+            </div>
+            <form class="nxi-type" data-region="type-form" autocomplete="off">
+                <input type="text" class="nxi-type__input" data-region="type-input"
+                       placeholder="Type a reply if the mic misses you…" maxlength="2000">
+                <button type="submit" class="nxi-type__send">Send</button>
+            </form>
+        </div>
+
+        <div class="nxi-wrapup" data-region="wrapup" hidden>
+            <div class="nxi-wrapup__card">
+                <span class="nxi-spinner" aria-hidden="true"></span>
+                <p class="nxi-wrapup__title" data-region="wrapup-title">Wrapping up the interview…</p>
+                <p class="nxi-wrapup__sub" data-region="wrapup-sub">Hold on — your feedback report is being generated.</p>
+            </div>
+        </div>
+    </div>
+</div>

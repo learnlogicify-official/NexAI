@@ -1,0 +1,34 @@
+{{!
+    @template mod_nexinterview/reports
+}}
+<div class="nxi-act nxi-act--reports">
+    <p class="nxi-act__eyebrow">NexInterview</p>
+    <h1 class="nxi-act__title">{{#str}}viewreports, nexinterview{{/str}}</h1>
+    <p class="nxi-act__meta">{{name}}</p>
+    {{#hasrows}}
+        <table class="nxi-act__table">
+            <thead>
+                <tr>
+                    <th>{{#str}}student, nexinterview{{/str}}</th>
+                    <th>{{#str}}score, nexinterview{{/str}}</th>
+                    <th>{{#str}}completedon, nexinterview{{/str}}</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#rows}}
+                <tr>
+                    <td>{{student}}</td>
+                    <td>{{score}}</td>
+                    <td>{{completed}}</td>
+                    <td><a href="{{{url}}}">{{#str}}viewfeedback, nexinterview{{/str}}</a></td>
+                </tr>
+                {{/rows}}
+            </tbody>
+        </table>
+    {{/hasrows}}
+    {{^hasrows}}
+        <p class="nxi-act__meta">{{#str}}reportsempty, nexinterview{{/str}}</p>
+    {{/hasrows}}
+    <p><a class="nxi-act__link" href="{{{backurl}}}">← Back</a></p>
+</div>

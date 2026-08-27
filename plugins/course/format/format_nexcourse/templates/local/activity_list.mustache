@@ -1,0 +1,52 @@
+{{!
+    @template format_nexcourse/local/activity_list
+    Shared activity rows (module page + home accordion).
+}}
+{{#hasactivities}}
+    <ul class="nx-activity-list">
+        {{#activities}}
+            <li class="nx-activity{{#completed}} is-complete{{/completed}}{{#manualquizcompletion}} nx-activity--has-completion{{/manualquizcompletion}}" data-cmid="{{id}}">
+                <a class="nx-activity__link" href="{{{url}}}">
+                    <span class="nx-activity__icon-wrap nx-activity__icon-wrap--{{modname}}" aria-hidden="true">
+                        {{#hasicon}}
+                            <img class="nx-activity__icon" src="{{{iconurl}}}" alt="" width="22" height="22">
+                        {{/hasicon}}
+                        {{^hasicon}}
+                            <span class="nx-activity__icon-fallback"></span>
+                        {{/hasicon}}
+                    </span>
+                    <span class="nx-activity__body">
+                        <span class="nx-activity__name">{{name}}</span>
+                        <span class="nx-activity__type">{{modnamelabel}}</span>
+                    </span>
+                    {{#showcompletionstatus}}
+                        <span class="nx-activity__status{{#completed}} is-done{{/completed}}"
+                              aria-hidden="true"></span>
+                    {{/showcompletionstatus}}
+                </a>
+                {{#manualquizcompletion}}
+                    <div class="nx-activity__actions" data-region="nx-completion">
+                        <button type="button"
+                                class="nx-completion-btn{{#completed}} is-done{{/completed}}"
+                                data-action="nx-completion-toggle"
+                                data-cmid="{{id}}"
+                                data-completed="{{#completed}}1{{/completed}}{{^completed}}0{{/completed}}"
+                                data-label-mark="{{#str}}markdone, format_nexcourse{{/str}}"
+                                data-label-done="{{#str}}markedasdone, format_nexcourse{{/str}}"
+                                aria-pressed="{{#completed}}true{{/completed}}{{^completed}}false{{/completed}}">
+                            <span class="nx-completion-btn__icon" aria-hidden="true"></span>
+                            <span class="nx-completion-btn__label">
+                                {{#completed}}{{#str}}markedasdone, format_nexcourse{{/str}}{{/completed}}
+                                {{^completed}}{{#str}}markdone, format_nexcourse{{/str}}{{/completed}}
+                            </span>
+                        </button>
+                    </div>
+                {{/manualquizcompletion}}
+                <span class="nx-activity__chevron" aria-hidden="true"></span>
+            </li>
+        {{/activities}}
+    </ul>
+{{/hasactivities}}
+{{^hasactivities}}
+    <p class="nx-section__empty">{{#str}}noactivities, format_nexcourse{{/str}}</p>
+{{/hasactivities}}

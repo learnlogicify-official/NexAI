@@ -1,0 +1,34 @@
+{{!
+    @template local_learnlogic/manage_import_banks
+}}
+<div class="ll-app ll-manage ll-manage--modern" data-region="ll-import-banks">
+    <header class="ll-manage__hero">
+        <div class="ll-manage__hero-main">
+            <a class="ll-back" href="{{{manageurl}}}">← {{#str}}manage, local_learnlogic{{/str}}</a>
+            <h1 class="ll-page-title">{{#str}}importcoderunner, local_learnlogic{{/str}}</h1>
+            <p class="ll-manage__lead">{{#str}}importcoderunner_desc, local_learnlogic{{/str}}</p>
+        </div>
+    </header>
+
+    <ol class="ll-steps" aria-label="{{#str}}importsteps, local_learnlogic{{/str}}">
+        <li class="ll-steps__item is-active"><span>1</span> {{#str}}importstep1, local_learnlogic{{/str}}</li>
+        <li class="ll-steps__item"><span>2</span> {{#str}}importstep2short, local_learnlogic{{/str}}</li>
+    </ol>
+
+    {{#hasbanks}}
+        <div class="ll-bank-grid">
+            {{#banks}}
+                <a class="ll-bank-card" href="{{{openurl}}}">
+                    <strong class="ll-bank-card__name">{{name}}</strong>
+                    <span class="ll-bank-card__count">{{count}} {{#str}}importbankcount, local_learnlogic{{/str}}</span>
+                    <span class="ll-bank-card__cta">{{#str}}importopenbank, local_learnlogic{{/str}} →</span>
+                </a>
+            {{/banks}}
+        </div>
+    {{/hasbanks}}
+    {{^hasbanks}}
+        <div class="ll-manage__empty">
+            <p>{{#str}}importnobanks, local_learnlogic{{/str}}</p>
+        </div>
+    {{/hasbanks}}
+</div>

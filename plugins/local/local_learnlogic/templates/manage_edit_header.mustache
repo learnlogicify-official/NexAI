@@ -1,0 +1,28 @@
+{{!
+    @template local_learnlogic/manage_edit_header
+}}
+<header class="ll-manage__hero">
+    <div class="ll-manage__hero-main">
+        <a class="ll-back" href="{{{manageurl}}}">← {{#str}}manage, local_learnlogic{{/str}}</a>
+        <h1 class="ll-page-title">{{title}}</h1>
+        {{#subtitle}}
+            <p class="ll-manage__lead">{{subtitle}}</p>
+        {{/subtitle}}
+    </div>
+</header>
+{{#showimportednotice}}
+    <div class="ll-manage-alert ll-manage-alert--info">{{#str}}importfixmultilang, local_learnlogic{{/str}}</div>
+    {{#sourcelabel}}
+        <p class="ll-manage-alert-meta">{{sourcelabel}}</p>
+    {{/sourcelabel}}
+{{/showimportednotice}}
+{{#showsolutionimport}}
+    <div class="ll-manage-solution-import">
+        <form method="post" action="{{{solutionimporturl}}}">
+            <button type="submit" class="ll-btn ll-btn--secondary">{{#str}}solutionimport, local_learnlogic{{/str}}</button>
+        </form>
+        <form method="post" action="{{{solutionimportoverwriteurl}}}">
+            <button type="submit" class="ll-btn ll-btn--secondary">{{#str}}solutionimportoverwrite, local_learnlogic{{/str}}</button>
+        </form>
+    </div>
+{{/showsolutionimport}}

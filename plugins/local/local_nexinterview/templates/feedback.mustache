@@ -1,0 +1,187 @@
+{{!
+    @template local_nexinterview/feedback
+}}
+<section class="nxi-feedback-page">
+    <div class="nxi-feedback__nav">
+        <a class="nxi-back" href="{{{huburl}}}">← {{#str}}backtohub, local_nexinterview{{/str}}</a>
+        <a class="nxi-back" href="{{{reportsurl}}}">{{#str}}viewreports, local_nexinterview{{/str}}</a>
+    </div>
+
+    <header class="nxi-feedback__hero">
+        <div class="nxi-feedback__hero-main">
+            <p class="nxi-feedback__eyebrow">{{#str}}feedbackeyebrow, local_nexinterview{{/str}}</p>
+            <h1>{{#str}}feedbacktitle, local_nexinterview{{/str}}</h1>
+            <p class="nxi-feedback__sub">{{#str}}feedbacksub, local_nexinterview{{/str}}</p>
+        </div>
+        {{#hasreport}}
+            <div class="nxi-feedback__scorecard">
+                <div class="nxi-score-donut" style="--nxi-score-pct: {{overall}};" role="img"
+                     aria-label="{{overall}} {{#str}}outof100, local_nexinterview{{/str}}">
+                    <span class="nxi-score-donut__ring" aria-hidden="true"></span>
+                    <span class="nxi-score-donut__hole" aria-hidden="true"></span>
+                    <div class="nxi-score-donut__value">
+                        <strong>{{overall}}</strong>
+                        <span>/ 100</span>
+                    </div>
+                </div>
+                <div class="nxi-feedback__badges">
+                    {{#bandlabel}}
+                        <span class="nxi-pill nxi-pill--{{bandkey}}">{{bandlabel}}</span>
+                    {{/bandlabel}}
+                    {{#reclabel}}
+                        <span class="nxi-pill nxi-pill--rec nxi-pill--{{reckey}}">{{reclabel}}</span>
+                    {{/reclabel}}
+                </div>
+            </div>
+        {{/hasreport}}
+    </header>
+
+    {{#error}}
+        <div class="nxi-feedback__error" role="alert">{{error}}</div>
+    {{/error}}
+
+    {{#hasreport}}
+        {{#hasdims}}
+            <section class="nxi-panel">
+                <div class="nxi-panel__head">
+                    <h2>{{#str}}dimensions, local_nexinterview{{/str}}</h2>
+                    <p>{{#str}}dimensions_sub, local_nexinterview{{/str}}</p>
+                </div>
+                <ul class="nxi-bars">
+                    {{#dims}}
+                        <li class="nxi-bar">
+                            <div class="nxi-bar__meta">
+                                <span>{{label}}</span>
+                                <strong>{{value}}</strong>
+                            </div>
+                            <div class="nxi-bar__track" aria-hidden="true">
+                                <span class="nxi-bar__fill nxi-bar__fill--{{tone}}" style="width: {{pct}}%;"></span>
+                            </div>
+                        </li>
+                    {{/dims}}
+                </ul>
+            </section>
+        {{/hasdims}}
+
+        {{#hasindependence}}
+            <section class="nxi-panel nxi-panel--indep">
+                <div class="nxi-panel__head">
+                    <h2>{{#str}}independence, local_nexinterview{{/str}}</h2>
+                    <p>{{#str}}independence_sub, local_nexinterview{{/str}}</p>
+                </div>
+                <div class="nxi-indep">
+                    <div class="nxi-indep__score">
+                        <strong>{{independence}}</strong>
+                        <span>/ 100</span>
+                    </div>
+                    <div class="nxi-indep__bar">
+                        <div class="nxi-bar__track" aria-hidden="true">
+                            <span class="nxi-bar__fill nxi-bar__fill--{{indeptone}}" style="width: {{indeppct}}%;"></span>
+                        </div>
+                        {{#indepbandlabel}}
+                            <p class="nxi-indep__band">{{indepbandlabel}}</p>
+                        {{/indepbandlabel}}
+                    </div>
+                </div>
+            </section>
+        {{/hasindependence}}
+
+        {{#hasskills}}
+            <section class="nxi-panel">
+                <div class="nxi-panel__head">
+                    <h2>{{#str}}skillgraph, local_nexinterview{{/str}}</h2>
+                    <p>{{#str}}skillgraph_sub, local_nexinterview{{/str}}</p>
+                </div>
+                <ul class="nxi-bars nxi-bars--compact">
+                    {{#skills}}
+                        <li class="nxi-bar">
+                            <div class="nxi-bar__meta">
+                                <span>{{label}}</span>
+                                <strong>{{value}}</strong>
+                            </div>
+                            <div class="nxi-bar__track" aria-hidden="true">
+                                <span class="nxi-bar__fill nxi-bar__fill--{{tone}}" style="width: {{pct}}%;"></span>
+                            </div>
+                        </li>
+                    {{/skills}}
+                </ul>
+            </section>
+        {{/hasskills}}
+
+        <div class="nxi-feedback__cols">
+            <section class="nxi-panel nxi-panel--good">
+                <div class="nxi-panel__head">
+                    <h2>{{#str}}strengths, local_nexinterview{{/str}}</h2>
+                </div>
+                <ul class="nxi-chips">
+                    {{#strengths}}
+                        <li class="nxi-chip nxi-chip--good">{{text}}</li>
+                    {{/strengths}}
+                </ul>
+            </section>
+            <section class="nxi-panel nxi-panel--focus">
+                <div class="nxi-panel__head">
+                    <h2>{{#str}}gaps, local_nexinterview{{/str}}</h2>
+                </div>
+                <ul class="nxi-chips">
+                    {{#gaps}}
+                        <li class="nxi-chip nxi-chip--focus">{{text}}</li>
+                    {{/gaps}}
+                </ul>
+            </section>
+        </div>
+
+        <section class="nxi-panel">
+            <div class="nxi-panel__head">
+                <h2>{{#str}}nextsteps, local_nexinterview{{/str}}</h2>
+                <p>{{#str}}nextsteps_sub, local_nexinterview{{/str}}</p>
+            </div>
+            <ol class="nxi-steps-list">
+                {{#nextsteps}}
+                    <li>{{text}}</li>
+                {{/nextsteps}}
+            </ol>
+        </section>
+
+        {{#hastimeline}}
+            <section class="nxi-panel nxi-panel--timeline">
+                <div class="nxi-panel__head">
+                    <h2>{{#str}}timeline, local_nexinterview{{/str}}</h2>
+                    <p>{{#str}}timeline_sub, local_nexinterview{{/str}}</p>
+                </div>
+                <ol class="nxi-timeline">
+                    {{#timeline}}
+                        <li class="nxi-timeline__item{{#isevidence}} nxi-timeline__item--evidence{{/isevidence}}{{#isassistant}} nxi-timeline__item--ai{{/isassistant}}{{#isstudent}} nxi-timeline__item--you{{/isstudent}}">
+                            <div class="nxi-timeline__meta">
+                                {{#isassistant}}<span>{{#str}}role_interviewer, local_nexinterview{{/str}}</span>{{/isassistant}}
+                                {{#isstudent}}<span>{{#str}}role_candidate, local_nexinterview{{/str}}</span>{{/isstudent}}
+                                {{#isevidence}}<span>{{#str}}role_evidence, local_nexinterview{{/str}}</span>{{/isevidence}}
+                                {{#stage}}<em>{{stage}}</em>{{/stage}}
+                            </div>
+                            <p>{{preview}}</p>
+                        </li>
+                    {{/timeline}}
+                </ol>
+            </section>
+        {{/hastimeline}}
+
+        <div class="nxi-feedback__footer">
+            <a class="nxi-btn-solid" href="{{{huburl}}}">{{#str}}backtohub, local_nexinterview{{/str}}</a>
+        </div>
+    {{/hasreport}}
+
+    {{^hasreport}}
+        {{^error}}
+            <div class="nxi-panel nxi-panel--empty">
+                <h2>{{#str}}feedbackpending, local_nexinterview{{/str}}</h2>
+                <p>{{#str}}feedbackpending_sub, local_nexinterview{{/str}}</p>
+                <a class="nxi-btn-solid" href="{{{huburl}}}">{{#str}}backtohub, local_nexinterview{{/str}}</a>
+            </div>
+        {{/error}}
+        {{#error}}
+            <div class="nxi-feedback__footer">
+                <a class="nxi-btn-solid" href="{{{huburl}}}">{{#str}}backtohub, local_nexinterview{{/str}}</a>
+            </div>
+        {{/error}}
+    {{/hasreport}}
+</section>

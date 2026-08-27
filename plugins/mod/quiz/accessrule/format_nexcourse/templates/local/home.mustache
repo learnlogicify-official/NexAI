@@ -1,0 +1,33 @@
+{{!
+    @template format_nexcourse/local/home
+    Full-width module accordions (expanded body = former right pane).
+}}
+<div class="nexcourse-layout">
+    <div class="nexcourse-layout__main">
+        <div class="nexcourse-sectionhead">
+            <h2 class="nexcourse-sectiontitle">{{#str}}coursemodules, format_nexcourse{{/str}}</h2>
+            {{#hasmodules}}
+                <div class="nexcourse-acc-tools" data-region="nx-acc-tools">
+                    <button type="button" class="nexcourse-acc-tools__btn" data-action="nx-expand-all">{{#str}}expandall, format_nexcourse{{/str}}</button>
+                    <span class="nexcourse-acc-tools__sep" aria-hidden="true">·</span>
+                    <button type="button" class="nexcourse-acc-tools__btn" data-action="nx-collapse-all">{{#str}}collapseall, format_nexcourse{{/str}}</button>
+                </div>
+            {{/hasmodules}}
+        </div>
+        {{#hascontinue}}
+            {{#continue}}
+                {{> format_nexcourse/local/continue_card }}
+            {{/continue}}
+        {{/hascontinue}}
+        {{#hasmodules}}
+            <div class="nexcourse-acc-list" data-region="nx-module-acc">
+                {{#modules}}
+                    {{> format_nexcourse/local/module_card }}
+                {{/modules}}
+            </div>
+        {{/hasmodules}}
+        {{^hasmodules}}
+            <p class="nexcourse-empty">{{#str}}nomodules, format_nexcourse{{/str}}</p>
+        {{/hasmodules}}
+    </div>
+</div>

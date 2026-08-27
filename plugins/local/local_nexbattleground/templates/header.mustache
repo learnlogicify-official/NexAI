@@ -1,0 +1,58 @@
+{{!
+    @template local_nexbattleground/header
+    NexBattleGround banner + stats strip (NexPractice / NexCodeLab visual language).
+}}
+<section class="nbg-header" data-region="nbg-header">
+    <div class="nbg-header__banner">
+        <div class="nbg-header__veil"></div>
+        <div class="nbg-header__content">
+            <div class="nbg-header__row">
+                <div class="nbg-header__main">
+                    <span class="nbg-header__cat">{{eyebrow}}</span>
+                    <h1 class="nbg-header__title">{{title}}</h1>
+                    <p class="nbg-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="nbg-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="nbg-header__progress" aria-label="{{#str}}battleprogress, local_nexbattleground{{/str}}">
+                    <div class="nbg-header__progress-grid">
+                        <div class="nbg-donut" style="--nbg-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{contentpct}}%"
+                             data-region="donut">
+                            <span class="nbg-donut__ring" aria-hidden="true"></span>
+                            <span class="nbg-donut__hole" aria-hidden="true"></span>
+                            <strong class="nbg-donut__value" data-region="donut-value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="nbg-header__breakdown">
+                            <div class="nbg-header__progress-label">{{#str}}battleprogress, local_nexbattleground{{/str}}</div>
+                            <ul class="nbg-content-stats" data-region="content-stats">
+                                {{#contentitems}}
+                                    <li class="nbg-content-stat nbg-content-stat--{{key}}">
+                                        <span class="nbg-content-stat__label">{{label}}</span>
+                                        <strong class="nbg-content-stat__value" data-stat="{{key}}">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+        <div class="nbg-header__stats" data-region="header-stats">
+            {{#stats}}
+                <div class="nbg-hstat nbg-hstat--{{key}}">
+                    <span class="nbg-hstat__icon" aria-hidden="true"></span>
+                    <div class="nbg-hstat__body">
+                        <strong class="nbg-hstat__value" data-hstat="{{key}}">{{value}}</strong>
+                        <span class="nbg-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

@@ -1,0 +1,94 @@
+{{!
+    @template local_learnlogic/manage_tags
+}}
+<div class="ll-app ll-manage ll-manage--modern" data-region="ll-manage-tags">
+    <header class="ll-manage__hero">
+        <div class="ll-manage__hero-main">
+            <a class="ll-back" href="{{{manageurl}}}">← {{#str}}manage, local_learnlogic{{/str}}</a>
+            <h1 class="ll-page-title">{{#str}}managetags, local_learnlogic{{/str}}</h1>
+            <p class="ll-manage__lead">{{#str}}managetags_desc, local_learnlogic{{/str}}</p>
+        </div>
+    </header>
+
+    <section class="ll-manage-tags__add">
+        <form class="ll-manage-tags__form" method="post" action="{{{formaction}}}">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="action" value="add">
+            <label class="ll-manage-tags__label" for="ll-tagname">{{#str}}tagname, local_learnlogic{{/str}}</label>
+            <div class="ll-manage-tags__row">
+                <input type="text" class="ll-input" id="ll-tagname" name="tagname" maxlength="100"
+                       placeholder="{{#str}}tags_placeholder, local_learnlogic{{/str}}" autocomplete="off" required>
+                <select class="ll-input ll-manage-tags__kind" name="tagkind" aria-label="{{#str}}tagkind, local_learnlogic{{/str}}">
+                    <option value="topic">{{#str}}tagkind_topic, local_learnlogic{{/str}}</option>
+                    <option value="company">{{#str}}tagkind_company, local_learnlogic{{/str}}</option>
+                </select>
+                <button type="submit" class="ll-btn ll-btn--primary">{{#str}}tagadd, local_learnlogic{{/str}}</button>
+            </div>
+        </form>
+    </section>
+
+    <div class="ll-manage-kindtabs" role="tablist">
+        <a class="ll-manage-kindtab{{#isfilterall}} is-active{{/isfilterall}}" href="{{{filterallurl}}}">{{#str}}tagkind_all, local_learnlogic{{/str}}</a>
+        <a class="ll-manage-kindtab{{#isfiltertopic}} is-active{{/isfiltertopic}}" href="{{{filtertopicurl}}}">{{#str}}tagkind_topic, local_learnlogic{{/str}}</a>
+        <a class="ll-manage-kindtab{{#isfiltercompany}} is-active{{/isfiltercompany}}" href="{{{filtercompanyurl}}}">{{#str}}tagkind_company, local_learnlogic{{/str}}</a>
+    </div>
+
+    {{#hastags}}
+        <div class="ll-manage__toolbar">
+            <label class="ll-manage__search">
+                <span class="ll-ico ll-ico--search" aria-hidden="true"></span>
+                <input type="search" class="ll-input" data-action="filter-tags"
+                       placeholder="{{#str}}tagsearch, local_learnlogic{{/str}}" autocomplete="off">
+            </label>
+            <span class="ll-manage__count" data-region="tags-count">{{tagcount}} {{#str}}tags, local_learnlogic{{/str}}</span>
+            <button type="button" class="ll-linkbtn" data-action="clear-filters" hidden>{{#str}}clearfilters, local_learnlogic{{/str}}</button>
+        </div>
+
+        <div class="ll-table-wrap" data-region="tags-list">
+            <table class="ll-table ll-manage-table">
+                <thead>
+                    <tr>
+                        <th>{{#str}}tagname, local_learnlogic{{/str}}</th>
+                        <th>{{#str}}tagkind, local_learnlogic{{/str}}</th>
+                        <th>{{#str}}tagproblemcount, local_learnlogic{{/str}}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#tags}}
+                        <tr class="ll-manage-tr ll-manage-tags-tr" data-name="{{namesearch}}" data-tags="{{namesearch}} {{kind}}">
+                            <td class="ll-manage-tags__namecell">
+                                <span class="ll-mtag{{#iskindcompany}} ll-mtag--company{{/iskindcompany}}" data-region="tag-label">{{displayname}}</span>
+                                <form class="ll-manage-tags__rename" method="post" action="{{{formaction}}}" data-region="tag-rename-form" hidden>
+                                    <input type="hidden" name="sesskey" value="{{sesskey}}">
+                                    <input type="hidden" name="action" value="rename">
+                                    <input type="hidden" name="id" value="{{id}}">
+                                    <input type="text" class="ll-input" name="tagname" value="{{name}}" maxlength="100" required>
+                                    <button type="submit" class="ll-btn ll-btn--primary ll-btn--sm">{{#str}}tagsave, local_learnlogic{{/str}}</button>
+                                    <button type="button" class="ll-btn ll-btn--secondary ll-btn--sm" data-action="cancel-rename">{{#str}}cancel, local_learnlogic{{/str}}</button>
+                                </form>
+                            </td>
+                            <td><span class="ll-mbadge ll-mbadge--{{kind}}">{{kindlabel}}</span></td>
+                            <td>{{problemcount}}</td>
+                            <td class="ll-manage-table__actions">
+                                <button type="button" class="ll-link" data-action="start-rename">{{#str}}tagrename, local_learnlogic{{/str}}</button>
+                                {{#iskindtopic}}
+                                    <a class="ll-link" href="{{{setcompanyurl}}}">{{#str}}tagmakecompany, local_learnlogic{{/str}}</a>
+                                {{/iskindtopic}}
+                                {{#iskindcompany}}
+                                    <a class="ll-link" href="{{{settopicurl}}}">{{#str}}tagmaketopic, local_learnlogic{{/str}}</a>
+                                {{/iskindcompany}}
+                                <a class="ll-link ll-danger" href="{{{deleteurl}}}">{{#str}}delete, local_learnlogic{{/str}}</a>
+                            </td>
+                        </tr>
+                    {{/tags}}
+                </tbody>
+            </table>
+        </div>
+    {{/hastags}}
+    {{^hastags}}
+        <div class="ll-manage__empty">
+            <p>{{#str}}notagsyet, local_learnlogic{{/str}}</p>
+        </div>
+    {{/hastags}}
+</div>

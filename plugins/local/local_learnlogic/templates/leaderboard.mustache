@@ -1,0 +1,46 @@
+{{!
+    @template local_learnlogic/leaderboard
+}}
+<div class="ll-app ll-app--bleed"
+     data-region="ll-leaderboard"
+     data-label-rank="{{#str}}rank, local_learnlogic{{/str}}"
+     data-label-user="{{#str}}leaderboarduser, local_learnlogic{{/str}}"
+     data-label-institution="{{#str}}institution, local_learnlogic{{/str}}"
+     data-label-xp="{{#str}}xp, local_learnlogic{{/str}}"
+     data-label-solved="{{#str}}solved, local_learnlogic{{/str}}"
+     data-label-easy="{{#str}}easy, local_learnlogic{{/str}}"
+     data-label-medium="{{#str}}medium, local_learnlogic{{/str}}"
+     data-label-hard="{{#str}}hard, local_learnlogic{{/str}}"
+     data-label-veryhard="{{#str}}veryhard, local_learnlogic{{/str}}"
+     data-label-you="{{#str}}you, local_learnlogic{{/str}}"
+     data-label-your-rank="{{#str}}yourrank, local_learnlogic{{/str}}"
+     data-label-not-ranked-global="{{#str}}notranked, local_learnlogic{{/str}}"
+     data-label-not-ranked="{{#str}}notrankedincollege, local_learnlogic{{/str}}"
+     data-label-empty="{{#str}}noleaderboard, local_learnlogic{{/str}}">
+    {{> local_learnlogic/header }}
+    <nav class="ll-topnav" aria-label="NexPractice">
+        <a class="ll-topnav__item" href="{{{listurl}}}">
+            <span class="ll-ico ll-ico--book" aria-hidden="true"></span>
+            {{#str}}problems, local_learnlogic{{/str}}
+        </a>
+        <a class="ll-topnav__item is-active" href="#">
+            <span class="ll-ico ll-ico--trophy" aria-hidden="true"></span>
+            {{#str}}leaderboard, local_learnlogic{{/str}}
+        </a>
+        <a class="ll-topnav__item" href="{{{submissionsurl}}}">{{#str}}submissions, local_learnlogic{{/str}}</a>
+    </nav>
+    <section class="ll-panel">
+        <h2 class="ll-panel__title">{{#str}}leaderboard, local_learnlogic{{/str}}</h2>
+        <div class="ll-leaderboard-toolbar">
+            <label class="ll-leaderboard-filter">
+                <span>{{#str}}collegefilter, local_learnlogic{{/str}}</span>
+                <select data-filter="institution">
+                    <option value="">{{#str}}allcolleges, local_learnlogic{{/str}}</option>
+                </select>
+            </label>
+            <div class="ll-my-rank" data-region="my-rank" aria-live="polite"></div>
+        </div>
+        <div data-region="board"></div>
+        <nav class="ll-pager" data-region="pager" aria-label="{{#str}}pagination, local_learnlogic{{/str}}" hidden></nav>
+    </section>
+</div>

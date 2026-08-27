@@ -1,0 +1,58 @@
+{{!
+    @template local_nexstack/header
+    NexStack banner + stats strip (NexCodeLab visual language).
+}}
+<section class="nxs-header" data-region="nxs-header">
+    <div class="nxs-header__banner">
+        <div class="nxs-header__veil"></div>
+        <div class="nxs-header__content">
+            <div class="nxs-header__row">
+                <div class="nxs-header__main">
+                    <span class="nxs-header__cat">{{eyebrow}}</span>
+                    <h1 class="nxs-header__title">{{title}}</h1>
+                    <p class="nxs-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="nxs-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="nxs-header__progress" aria-label="{{#str}}practiceprogress, local_nexstack{{/str}}">
+                    <div class="nxs-header__progress-grid">
+                        <div class="nxs-donut" style="--nxs-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{contentpct}}%"
+                             data-region="donut">
+                            <span class="nxs-donut__ring" aria-hidden="true"></span>
+                            <span class="nxs-donut__hole" aria-hidden="true"></span>
+                            <strong class="nxs-donut__value" data-region="donut-value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="nxs-header__breakdown">
+                            <div class="nxs-header__progress-label">{{#str}}practiceprogress, local_nexstack{{/str}}</div>
+                            <ul class="nxs-content-stats" data-region="content-stats">
+                                {{#contentitems}}
+                                    <li class="nxs-content-stat nxs-content-stat--{{key}}">
+                                        <span class="nxs-content-stat__label">{{label}}</span>
+                                        <strong class="nxs-content-stat__value" data-stat="{{key}}">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+        <div class="nxs-header__stats" data-region="header-stats">
+            {{#stats}}
+                <div class="nxs-hstat nxs-hstat--{{key}}">
+                    <span class="nxs-hstat__icon" aria-hidden="true"></span>
+                    <div class="nxs-hstat__body">
+                        <strong class="nxs-hstat__value" data-hstat="{{key}}">{{value}}</strong>
+                        <span class="nxs-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

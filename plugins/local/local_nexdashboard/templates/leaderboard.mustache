@@ -1,0 +1,46 @@
+{{!
+    @template local_nexdashboard/leaderboard
+}}
+<div class="nxd-app nxd-app--leaderboard"
+     data-region="nxd-leaderboard"
+     data-label-rank="{{#str}}rank, local_nexdashboard{{/str}}"
+     data-label-user="{{#str}}leaderboarduser, local_nexdashboard{{/str}}"
+     data-label-institution="{{#str}}institution, local_nexdashboard{{/str}}"
+     data-label-course="{{#str}}colcoursegrades, local_nexdashboard{{/str}}"
+     data-label-practice="{{#str}}colpracticexp, local_nexdashboard{{/str}}"
+     data-label-codelab="{{#str}}colcodelabxp, local_nexdashboard{{/str}}"
+     data-label-battle="{{#str}}colbattlexp, local_nexdashboard{{/str}}"
+     data-label-total="{{#str}}coltotal, local_nexdashboard{{/str}}"
+     data-label-you="{{#str}}you, local_nexdashboard{{/str}}"
+     data-label-your-rank="{{#str}}yourrank, local_nexdashboard{{/str}}"
+     data-label-not-ranked-global="{{#str}}notranked, local_nexdashboard{{/str}}"
+     data-label-not-ranked="{{#str}}notrankedincollege, local_nexdashboard{{/str}}"
+     data-label-empty="{{#str}}noleaderboard, local_nexdashboard{{/str}}"
+     data-label-prev="{{#str}}prevpage, local_nexdashboard{{/str}}"
+     data-label-next="{{#str}}nextpage, local_nexdashboard{{/str}}"
+     data-label-showing="{{#str}}showrange, local_nexdashboard{{/str}}"
+     data-label-podium="{{#str}}podiumtitle, local_nexdashboard{{/str}}"
+     data-label-podium-hint="{{#str}}podiumhint, local_nexdashboard{{/str}}"
+     data-label-gold="{{#str}}medalgold, local_nexdashboard{{/str}}"
+     data-label-silver="{{#str}}medalsilver, local_nexdashboard{{/str}}"
+     data-label-bronze="{{#str}}medalbronze, local_nexdashboard{{/str}}">
+    <section class="nxd-card nxd-leaderboard-panel">
+        <header class="nxd-leaderboard-hero">
+            <p class="nxd-leaderboard-kicker">{{#str}}navleaderboard, local_nexdashboard{{/str}}</p>
+            <h1 class="nxd-leaderboard-title">{{#str}}overallleaderboard, local_nexdashboard{{/str}}</h1>
+            <p class="nxd-leaderboard-hint">{{#str}}overallleaderboardhint, local_nexdashboard{{/str}}</p>
+        </header>
+        <div class="nxd-podium-wrap" data-region="podium" hidden></div>
+        <div class="nxd-leaderboard-toolbar">
+            <label class="nxd-leaderboard-filter">
+                <span>{{#str}}collegefilter, local_nexdashboard{{/str}}</span>
+                <select data-filter="institution">
+                    <option value="">{{#str}}allcolleges, local_nexdashboard{{/str}}</option>
+                </select>
+            </label>
+            <div class="nxd-my-rank" data-region="my-rank" aria-live="polite"></div>
+        </div>
+        <div data-region="board"></div>
+        <nav class="nxd-pager" data-region="pager" aria-label="{{#str}}pagination, local_nexdashboard{{/str}}" hidden></nav>
+    </section>
+</div>

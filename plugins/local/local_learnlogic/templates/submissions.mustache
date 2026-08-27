@@ -1,0 +1,21 @@
+{{!
+    @template local_learnlogic/submissions
+}}
+<div class="ll-app ll-app--bleed" data-region="ll-submissions">
+    {{> local_learnlogic/header }}
+    <nav class="ll-topnav" aria-label="NexPractice">
+        <a class="ll-topnav__item" href="{{{listurl}}}">
+            <span class="ll-ico ll-ico--book" aria-hidden="true"></span>
+            {{#str}}problems, local_learnlogic{{/str}}
+        </a>
+        <a class="ll-topnav__item" href="{{{leaderboardurl}}}">
+            <span class="ll-ico ll-ico--trophy" aria-hidden="true"></span>
+            {{#str}}leaderboard, local_learnlogic{{/str}}
+        </a>
+        <a class="ll-topnav__item is-active" href="#">{{#str}}submissions, local_learnlogic{{/str}}</a>
+    </nav>
+    <section class="ll-panel">
+        <h2 class="ll-panel__title">{{#str}}submissions, local_learnlogic{{/str}}</h2>
+        <div data-region="subs" style="margin-top:1rem"></div>
+    </section>
+</div>

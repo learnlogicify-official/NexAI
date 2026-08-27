@@ -1,0 +1,33 @@
+{{!
+    @template local_nexcomm/lesson
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-lesson" data-lessonid="{{lessonid}}"
+     data-label-watch="{{#str}}watch, local_nexcomm{{/str}}"
+     data-label-learn="{{#str}}learn, local_nexcomm{{/str}}"
+     data-label-speak="{{#str}}speak, local_nexcomm{{/str}}"
+     data-label-playall="{{#str}}playdialogue, local_nexcomm{{/str}}"
+     data-label-markwatched="{{#str}}markwatched, local_nexcomm{{/str}}"
+     data-label-watched="{{#str}}watched, local_nexcomm{{/str}}"
+     data-label-checklearn="{{#str}}checklearn, local_nexcomm{{/str}}"
+     data-label-recordline="{{#str}}recordline, local_nexcomm{{/str}}"
+     data-label-stopline="{{#str}}stopline, local_nexcomm{{/str}}"
+     data-label-hearline="{{#str}}hearline, local_nexcomm{{/str}}"
+     data-label-linescore="{{#str}}linescore, local_nexcomm{{/str}}"
+     data-label-micdenied="{{#str}}micdenied, local_nexcomm{{/str}}"
+     data-label-complete="{{#str}}lessoncomplete, local_nexcomm{{/str}}"
+     data-label-hint="{{#str}}wordhint, local_nexcomm{{/str}}">
+    <div class="nc-attemptbar">
+        <a class="nc-attemptbar__back" href="{{{videosurl}}}">← {{#str}}backtovideos, local_nexcomm{{/str}}</a>
+        <strong data-region="title">…</strong>
+        <span class="nc-badge" data-region="diff-badge"></span>
+    </div>
+    <nav class="nc-ec-tabs" data-region="tabs" role="tablist">
+        <button type="button" class="nc-ec-tab is-active" data-tab="watch" role="tab">{{#str}}watch, local_nexcomm{{/str}}</button>
+        <button type="button" class="nc-ec-tab" data-tab="learn" role="tab">{{#str}}learn, local_nexcomm{{/str}}</button>
+        <button type="button" class="nc-ec-tab" data-tab="speak" role="tab">{{#str}}speak, local_nexcomm{{/str}}</button>
+    </nav>
+    <div class="nc-ec-progress" data-region="progress"></div>
+    <div class="nc-attempt" data-region="stage">
+        <p class="nc-muted">Loading…</p>
+    </div>
+</div>

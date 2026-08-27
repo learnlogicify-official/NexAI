@@ -1,0 +1,2254 @@
+/* NexCourse format — LL Assessment visual language */
+
+@import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap");
+
+.format-nexcourse,
+body.format-nexcourse {
+  --nx-blue: #2563eb;
+  --nx-blue-soft: #eff6ff;
+  --nx-blue-bar: #dbeafe;
+  --nx-text: #111827;
+  --nx-muted: #6b7280;
+  --nx-border: #e5e7eb;
+  --nx-card: #ffffff;
+  --nx-bg: #f5f6f8;
+  --nx-success: #16a34a;
+  --nx-success-soft: #dcfce7;
+  --nx-font: "Hind Siliguri", "Segoe UI", system-ui, sans-serif;
+}
+
+body.format-nexcourse #region-main {
+  background: transparent;
+  font-family: var(--nx-font);
+}
+
+.nexcourse {
+  color: var(--nx-text);
+  margin: 0 0 2rem;
+  font-family: var(--nx-font);
+}
+
+.nexcourse-core--hidden {
+  display: none !important;
+}
+
+/* Force-hide RemUI leftovers marked by AMD (course/view.php + course/section.php) */
+body.format-nexcourse .nexcourse-theme-header-hidden,
+body.format-nexcourse .nexcourse-space-collapsed {
+  display: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  min-height: 0 !important;
+}
+
+/* Known RemUI / Edwiser course chrome — CSS backup when AMD is late or absent.
+   Applies while editing too; the AMD lifts editing controls out of this chrome
+   before it is hidden. Do not target generic wrappers. */
+body.format-nexcourse .edw-course-header,
+body.format-nexcourse .edwiser-course-header,
+body.format-nexcourse .remui-course-header,
+body.format-nexcourse .edw-course-header-stats,
+body.format-nexcourse .course-header-stats,
+body.format-nexcourse .header-course-stats,
+body.format-nexcourse .edw-course-status,
+body.format-nexcourse [data-region="edw-course-header"],
+body.format-nexcourse:not(.editing) .page-context-header {
+  display: none !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  border: 0 !important;
+}
+
+/* RemUI leaves empty #page-header / spacers after banner is removed.
+   path-course-view = view.php; single-section-page = section.php;
+   nx-course-chrome = Participants / Grades / Activities / Competencies. */
+body.format-nexcourse.path-course-view #page-header.nexcourse-space-collapsed,
+body.format-nexcourse.path-course-view #page-header:empty,
+body.format-nexcourse.single-section-page #page-header.nexcourse-space-collapsed,
+body.format-nexcourse.single-section-page #page-header:empty,
+body.format-nexcourse.pagetype-course-view-section-nexcourse #page-header.nexcourse-space-collapsed,
+body.format-nexcourse.pagetype-course-view-section-nexcourse #page-header:empty,
+body.format-nexcourse.nx-course-chrome #page-header.nexcourse-space-collapsed,
+body.format-nexcourse.nx-course-chrome #page-header:empty {
+  display: none !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+body.format-nexcourse.path-course-view #page-header,
+body.format-nexcourse.single-section-page #page-header,
+body.format-nexcourse.pagetype-course-view-section-nexcourse #page-header,
+body.format-nexcourse.nx-course-chrome #page-header {
+  min-height: 0 !important;
+}
+
+body.format-nexcourse.path-course-view #page-header .header-maxwidth,
+body.format-nexcourse.single-section-page #page-header .header-maxwidth,
+body.format-nexcourse.pagetype-course-view-section-nexcourse #page-header .header-maxwidth,
+body.format-nexcourse.nx-course-chrome #page-header .header-maxwidth {
+  min-height: 0 !important;
+}
+
+/* Footer/top mount used before AMD places the header above secondary nav */
+.nx-chrome-mount {
+  /* Keep in document flow briefly; AMD moves .nx-header above tabs. */
+  margin: 0;
+  padding: 0;
+}
+
+.nx-chrome-mount[hidden],
+#nx-chrome-mount[hidden] {
+  display: none !important;
+}
+
+/* Do NOT zero #page / #topofscroll padding — that is the fixed navbar offset.
+   Only tighten leftover RemUI header chrome below the navbar. */
+body.format-nexcourse .nx-header {
+  margin-top: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------------------------------ */
+/* Course secondary nav ONLY — never touch site primary navbar         */
+/* ------------------------------------------------------------------ */
+body.format-nexcourse .secondary-navigation.nexcourse-secondary,
+body.format-nexcourse .secondary-navigation {
+  margin: 0 0 1.15rem;
+  background: transparent;
+  /* Single hairline under the whole tab row */
+  border-bottom: 1px solid var(--nx-border) !important;
+  box-shadow: none !important;
+}
+
+/* Kill RemUI/Moodle double border stacks inside secondary nav */
+body.format-nexcourse .secondary-navigation .navigation,
+body.format-nexcourse .secondary-navigation .moremenu,
+body.format-nexcourse .secondary-navigation .moremenu > ul,
+body.format-nexcourse .secondary-navigation ul.nav,
+body.format-nexcourse .secondary-navigation .more-nav {
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+body.format-nexcourse .secondary-navigation .nav-item {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+body.format-nexcourse .secondary-navigation .nav-link {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.7rem 0.65rem 0.75rem !important;
+  color: var(--nx-muted) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none !important;
+  /* One underline indicator — only the active tab paints it blue */
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin-bottom: -1px;
+  position: relative;
+}
+
+/* Suppress theme pseudo-element underlines (causes double lines).
+   Skipped on quiz module pages, where local_llassessment draws its tab icons
+   with ::before — this body class is still present there because core adds
+   format-<name> to every page in the course. */
+body.format-nexcourse:not(.ll-quiz-nav) .secondary-navigation .nav-link::before,
+body.format-nexcourse:not(.ll-quiz-nav) .secondary-navigation .nav-item::before,
+body.format-nexcourse .secondary-navigation .nav-link::after,
+body.format-nexcourse .secondary-navigation .nav-item::after {
+  content: none !important;
+  display: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+body.format-nexcourse .secondary-navigation .nav-link:hover {
+  color: var(--nx-blue) !important;
+  text-decoration: none !important;
+  background: transparent !important;
+}
+
+body.format-nexcourse .secondary-navigation .nav-link.active,
+body.format-nexcourse .secondary-navigation .nav-item.active > .nav-link,
+body.format-nexcourse .secondary-navigation .nav-link[aria-current="page"] {
+  color: var(--nx-blue) !important;
+  border-bottom-color: var(--nx-blue) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Icons only inside secondary nav */
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex: 0 0 auto;
+  display: inline-block;
+  background: currentColor;
+  opacity: 0.9;
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z'/%3E%3C/svg%3E");
+}
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--course {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z'/%3E%3C/svg%3E");
+}
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--settings {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a7.2 7.2 0 00-1.62-.94l-.36-2.54A.48.48 0 0014 2h-4a.48.48 0 00-.48.42l-.36 2.54c-.58.23-1.12.54-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.64 8.87a.49.49 0 00.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.76 14.5a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.3.59.22l2.39-.96c.5.4 1.04.72 1.62.94l.36 2.54c.05.24.24.42.48.42h4c.24 0 .44-.18.48-.42l.36-2.54c.58-.23 1.12-.54 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a7.2 7.2 0 00-1.62-.94l-.36-2.54A.48.48 0 0014 2h-4a.48.48 0 00-.48.42l-.36 2.54c-.58.23-1.12.54-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.64 8.87a.49.49 0 00.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.76 14.5a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.3.59.22l2.39-.96c.5.4 1.04.72 1.62.94l.36 2.54c.05.24.24.42.48.42h4c.24 0 .44-.18.48-.42l.36-2.54c.58-.23 1.12-.54 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z'/%3E%3C/svg%3E");
+}
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--users,
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--enrol {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'/%3E%3C/svg%3E");
+}
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--grades {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'/%3E%3C/svg%3E");
+}
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--activities,
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--reports {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z'/%3E%3C/svg%3E");
+}
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--competencies,
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--badges,
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--questions,
+body.format-nexcourse .secondary-navigation .nexcourse-nav-icon--generic {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E");
+}
+
+/* ------------------------------------------------------------------ */
+/* LL-styled course header (replaces RemUI banner + stats)             */
+/* ------------------------------------------------------------------ */
+.nx-header {
+  margin: 0 0 1.25rem;
+  font-family: var(--nx-font);
+}
+
+.nx-header__banner {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 0;
+  background:
+    linear-gradient(135deg, #0f172a 0%, #1e293b 55%, #0b1220 100%);
+  color: #fff;
+}
+
+.nx-header__banner--image {
+  background-image:
+    linear-gradient(105deg, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.72) 48%, rgba(15, 23, 42, 0.55) 100%),
+    var(--nx-header-image);
+  background-size: cover;
+  background-position: center;
+  min-height: 180px;
+}
+
+.nx-header__veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.35) 100%);
+  pointer-events: none;
+}
+
+.nx-header__content {
+  position: relative;
+  z-index: 1;
+  padding: 1.25rem 1.5rem 1.35rem;
+}
+
+.nx-header__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 1.25rem 1.75rem;
+  align-items: start;
+}
+
+.nx-header__cat {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: var(--nx-success);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.nx-header__title {
+  margin: 0 0 1rem;
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+  max-width: 42rem;
+}
+
+.nx-header__staff {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.15rem;
+}
+
+.nx-header__person-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+.nx-header__person-link:hover {
+  text-decoration: none;
+  color: #fff;
+  opacity: 0.92;
+}
+
+.nx-header__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  background: #334155;
+}
+
+.nx-header__person-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.nx-header__person-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.nx-header__person-role {
+  font-size: 0.72rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Progress panel — always readable on the banner */
+.nx-header__progress {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 14px;
+  padding: 0.95rem 1.05rem;
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+.nx-header__progress-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem 1rem;
+  align-items: center;
+}
+
+.nx-donut {
+  --nx-donut-pct: 0;
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  flex: 0 0 auto;
+}
+
+.nx-donut__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    #60a5fa 0deg,
+    #3b82f6 calc(var(--nx-donut-pct) * 3.6deg),
+    rgba(255, 255, 255, 0.22) calc(var(--nx-donut-pct) * 3.6deg)
+  );
+}
+
+.nx-donut__hole {
+  position: absolute;
+  inset: 0.72rem;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.nx-donut__value {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.nx-header__breakdown {
+  min-width: 0;
+}
+
+.nx-content-stats {
+  list-style: none;
+  margin: 0.45rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.nx-content-stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.25;
+}
+
+.nx-content-stat__label {
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.nx-content-stat__value {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.nx-content-stat--activities .nx-content-stat__value { color: #fcd34d; }
+.nx-content-stat--coding .nx-content-stat__value { color: #93c5fd; }
+.nx-content-stat--mcq .nx-content-stat__value { color: #a5b4fc; }
+.nx-content-stat--videos .nx-content-stat__value { color: #6ee7b7; }
+
+.nx-header__progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.nx-header__progress-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.nx-header__progress-pct {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.nx-header__progress-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+}
+
+.nx-header__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #60a5fa 0%, #2563eb 100%);
+  min-width: 0;
+  transition: width 0.35s ease;
+}
+
+.nx-header__progress-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* Enrollment stats strip */
+.nx-header__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+  margin-top: -1.1rem;
+  position: relative;
+  z-index: 2;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding: 1rem 1.15rem;
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.nx-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.nx-stat__icon {
+  flex: 0 0 auto;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  background: var(--nx-success-soft);
+  color: var(--nx-success);
+  display: inline-block;
+  -webkit-mask: center / 1.15rem no-repeat;
+  mask: center / 1.15rem no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5C15 14.17 10.33 13 8 13zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z'/%3E%3C/svg%3E");
+  background-color: var(--nx-success);
+}
+
+.nx-stat--completed .nx-stat__icon {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm-1.2 14.2l-3.7-3.7 1.4-1.4 2.3 2.3 5-5 1.4 1.4-6.4 6.4z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm-1.2 14.2l-3.7-3.7 1.4-1.4 2.3 2.3 5-5 1.4 1.4-6.4 6.4z'/%3E%3C/svg%3E");
+}
+.nx-stat--inprogress .nx-stat__icon {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm1 11H7v-2h4V7h2v6z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm1 11H7v-2h4V7h2v6z'/%3E%3C/svg%3E");
+}
+.nx-stat--yettostart .nx-stat__icon {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 2a8 8 0 110 16 8 8 0 010-16zm-1 3h2v5.2l3.4 2-1 1.7L11 13V7z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12 2a10 10 0 100 20 10 10 0 000-20zm0 2a8 8 0 110 16 8 8 0 010-16zm-1 3h2v5.2l3.4 2-1 1.7L11 13V7z'/%3E%3C/svg%3E");
+}
+
+.nx-stat__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.nx-stat__value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--nx-text);
+  line-height: 1.15;
+}
+
+.nx-stat__label {
+  font-size: 0.78rem;
+  color: var(--nx-muted);
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .nx-header__row {
+    grid-template-columns: 1fr;
+  }
+  .nx-header__progress {
+    max-width: 360px;
+  }
+  .nx-header__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+@media (max-width: 520px) {
+  .nx-header__stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nexcourse-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--nx-blue-bar);
+  overflow: hidden;
+}
+.nexcourse-bar--sm { height: 8px; }
+.nexcourse-bar__fill {
+  height: 100%;
+  background: var(--nx-blue);
+  border-radius: 999px;
+}
+
+/* Layout */
+.nexcourse-layout {
+  display: block;
+}
+.nexcourse-sectiontitle {
+  margin: 0 0 0.9rem;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+/* Continue learning hero */
+.nexcourse-continue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  margin: 0 0 1rem;
+  padding: 1.05rem 1.2rem;
+  border-radius: 16px;
+  border: 1px solid #bfdbfe;
+  background:
+    linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(255, 255, 255, 0.92)),
+    var(--nx-card);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+}
+
+.nexcourse-continue.is-complete {
+  border-color: #bbf7d0;
+  background:
+    linear-gradient(135deg, rgba(220, 252, 231, 0.9), rgba(255, 255, 255, 0.95)),
+    var(--nx-card);
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.08);
+}
+
+.nexcourse-continue__copy {
+  min-width: 0;
+  flex: 1 1 16rem;
+}
+
+.nexcourse-continue__eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--nx-blue);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.nexcourse-continue.is-complete .nexcourse-continue__eyebrow {
+  color: #15803d;
+}
+
+.nexcourse-continue__title {
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--nx-text);
+}
+
+.nexcourse-continue__path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.45rem;
+  margin: 0;
+  color: var(--nx-muted);
+  font-size: 0.86rem;
+}
+
+.nexcourse-continue__badge {
+  display: inline-flex;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: var(--nx-blue-soft);
+  color: var(--nx-blue);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.nexcourse-continue.is-complete .nexcourse-continue__badge {
+  background: var(--nx-success-soft);
+  color: #15803d;
+}
+
+.nexcourse-continue__mod,
+.nexcourse-continue__group {
+  font-weight: 650;
+  color: var(--nx-text);
+}
+
+.nexcourse-continue__sep {
+  color: #cbd5e1;
+}
+
+.nexcourse-continue__type {
+  margin-left: 0.15rem;
+  padding-left: 0.55rem;
+  border-left: 1px solid var(--nx-border);
+  color: var(--nx-muted);
+  font-weight: 600;
+}
+
+.nexcourse-continue__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 0 0 auto;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  background: var(--nx-blue);
+  color: #fff !important;
+  font-size: 0.92rem;
+  font-weight: 750;
+  text-decoration: none !important;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.28);
+}
+
+.nexcourse-continue__cta:hover {
+  filter: brightness(1.05);
+  color: #fff !important;
+}
+
+.nexcourse-continue.is-complete .nexcourse-continue__cta {
+  background: #16a34a;
+  box-shadow: 0 8px 18px rgba(22, 163, 74, 0.28);
+}
+
+.nexcourse-continue__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+/* Full-width module accordions */
+.nexcourse-acc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.nexcourse-acc {
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+  overflow: hidden;
+}
+
+.nexcourse-acc__summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.1rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.nexcourse-acc__summary::-webkit-details-marker {
+  display: none;
+}
+
+.nexcourse-acc__summary::marker {
+  content: '';
+}
+
+.nexcourse-acc__badge {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--nx-blue-soft);
+  color: var(--nx-blue);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.nexcourse-acc__title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 1.02rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--nx-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nexcourse-acc__meta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.nexcourse-acc__bar {
+  display: none;
+  width: 4.5rem;
+  height: 5px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.nexcourse-acc__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--nx-blue);
+}
+
+.nexcourse-acc__pct {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: var(--nx-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+.nexcourse-acc__caret {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid #94a3b8;
+  border-bottom: 2px solid #94a3b8;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+  margin-top: -0.15rem;
+}
+
+.nexcourse-acc[open] > .nexcourse-acc__summary .nexcourse-acc__caret {
+  transform: rotate(-135deg);
+  margin-top: 0.15rem;
+}
+
+.nexcourse-acc[open] > .nexcourse-acc__summary {
+  border-bottom: 1px solid var(--nx-border);
+  background: #f8fafc;
+}
+
+.nexcourse-acc__body {
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+.nexcourse-acc__content {
+  margin-top: 0.95rem;
+  padding-top: 0.95rem;
+  border-top: 1px solid var(--nx-border);
+}
+
+.nexcourse-acc__content .nx-section__tabs {
+  margin-bottom: 0.85rem;
+}
+
+@media (min-width: 720px) {
+  .nexcourse-acc__bar {
+    display: block;
+  }
+}
+
+@media (max-width: 640px) {
+  .nexcourse-acc__title {
+    white-space: normal;
+  }
+}
+
+/* Hide legacy studio / outline if cached templates linger */
+.nexcourse-studio,
+.nexcourse-outline {
+  display: none !important;
+}
+
+/* Studio: sticky module rail + activity pane (unused) */
+.nexcourse-studio {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+  min-height: 28rem;
+}
+
+.nexcourse-rail {
+  position: sticky;
+  top: 5.5rem;
+  max-height: calc(100vh - 6.5rem);
+  overflow: auto;
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 16px;
+  padding: 0.55rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.nexcourse-rail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.nexcourse-rail__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.55rem 0.6rem;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.nexcourse-rail__item:hover {
+  background: #f8fafc;
+}
+
+.nexcourse-rail__item.is-active {
+  background: var(--nx-blue);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+}
+
+.nexcourse-rail__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: var(--nx-blue-soft);
+  color: var(--nx-blue);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.nexcourse-rail__item.is-active .nexcourse-rail__badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.nexcourse-rail__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.nexcourse-rail__name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--nx-text);
+}
+
+.nexcourse-rail__item.is-active .nexcourse-rail__name {
+  color: #fff;
+}
+
+.nexcourse-rail__bar {
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.nexcourse-rail__item.is-active .nexcourse-rail__bar {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.nexcourse-rail__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--nx-blue);
+}
+
+.nexcourse-rail__item.is-active .nexcourse-rail__bar-fill {
+  background: #fff;
+}
+
+.nexcourse-rail__pct {
+  font-size: 0.78rem;
+  font-weight: 750;
+  color: var(--nx-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nexcourse-rail__item.is-active .nexcourse-rail__pct {
+  color: #fff;
+}
+
+.nexcourse-pane {
+  min-width: 0;
+}
+
+.nexcourse-pane__panel {
+  display: none;
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 16px;
+  padding: 1.15rem 1.2rem 1.25rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.nexcourse-pane__panel.is-active,
+.nexcourse-pane__panel:not([hidden]) {
+  display: block;
+}
+
+.nexcourse-pane__panel[hidden] {
+  display: none !important;
+}
+
+.nexcourse-pane__head {
+  margin-bottom: 1rem;
+  padding-bottom: 0.95rem;
+  border-bottom: 1px solid var(--nx-border);
+}
+
+.nexcourse-pane__head-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.45rem;
+}
+
+.nexcourse-pane__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: var(--nx-blue-soft);
+  color: var(--nx-blue);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.nexcourse-pane__pct {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--nx-blue);
+  font-variant-numeric: tabular-nums;
+}
+
+.nexcourse-pane__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--nx-text);
+}
+
+.nexcourse-pane__summary {
+  margin: 0 0 0.85rem;
+  color: var(--nx-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.nexcourse-pane__progress {
+  margin-bottom: 0.75rem;
+}
+
+.nexcourse-pane__progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--nx-muted);
+  margin-bottom: 0.35rem;
+}
+
+.nexcourse-pane__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.nexcourse-pane__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.nexcourse-pane__marks {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.nexcourse-pane__marks-label {
+  color: var(--nx-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+}
+
+.nexcourse-pane__marks-value {
+  font-weight: 800;
+  color: var(--nx-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.nexcourse-pane__marks-value--empty {
+  font-weight: 600;
+  color: var(--nx-muted);
+  font-size: 0.8rem;
+}
+
+.nexcourse-pane__group-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--nx-muted);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.nexcourse-pane__body .nx-section__tabs {
+  margin-bottom: 0.85rem;
+}
+
+.nexcourse-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+.nexcourse-chip--submodule {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+/* Mobile hierarchical outline */
+.nexcourse-outline {
+  display: none;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.nexcourse-outline__hint {
+  margin: 0 0 0.35rem;
+  color: var(--nx-muted);
+  font-size: 0.86rem;
+  line-height: 1.4;
+}
+
+.nexcourse-outline__mod {
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.nexcourse-outline__summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.85rem 0.95rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.nexcourse-outline__summary::-webkit-details-marker,
+.nexcourse-outline__sub-summary::-webkit-details-marker {
+  display: none;
+}
+
+.nexcourse-outline__summary::marker,
+.nexcourse-outline__sub-summary::marker {
+  content: '';
+}
+
+.nexcourse-outline__badge {
+  display: inline-flex;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  background: var(--nx-blue-soft);
+  color: var(--nx-blue);
+  font-size: 0.68rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.nexcourse-outline__title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--nx-text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nexcourse-outline__pct {
+  font-size: 0.82rem;
+  font-weight: 750;
+  color: var(--nx-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nexcourse-outline__caret {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 2px solid #94a3b8;
+  border-bottom: 2px solid #94a3b8;
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+  margin-top: -0.12rem;
+}
+
+.nexcourse-outline__mod[open] > .nexcourse-outline__summary .nexcourse-outline__caret,
+.nexcourse-outline__sub[open] > .nexcourse-outline__sub-summary .nexcourse-outline__caret {
+  transform: rotate(-135deg);
+  margin-top: 0.12rem;
+}
+
+.nexcourse-outline__mod[open] > .nexcourse-outline__summary {
+  border-bottom: 1px solid var(--nx-border);
+  background: #f8fafc;
+}
+
+.nexcourse-outline__body {
+  padding: 0.85rem 0.95rem 1rem;
+}
+
+.nexcourse-outline__blurb {
+  margin: 0 0 0.75rem;
+  color: var(--nx-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.nexcourse-outline__progress { margin-bottom: 0.7rem; }
+
+.nexcourse-outline__progress-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--nx-muted);
+  margin-bottom: 0.3rem;
+}
+
+.nexcourse-outline__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.nexcourse-outline__sub {
+  border: 1px solid var(--nx-border);
+  border-radius: 12px;
+  background: #f8fafc;
+  margin-top: 0.55rem;
+  overflow: hidden;
+}
+
+.nexcourse-outline__sub-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.nexcourse-outline__sub-title {
+  font-size: 0.88rem;
+  font-weight: 750;
+  color: var(--nx-text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nexcourse-outline__sub-count {
+  font-size: 0.75rem;
+  color: var(--nx-muted);
+  font-weight: 650;
+}
+
+.nexcourse-outline__sub-body {
+  padding: 0.35rem 0.55rem 0.7rem;
+  background: #fff;
+}
+
+@media (max-width: 992px) {
+  .nexcourse-studio {
+    display: none !important;
+  }
+  .nexcourse-outline {
+    display: flex;
+  }
+}
+
+@media (min-width: 993px) {
+  .nexcourse-outline {
+    display: none !important;
+  }
+}
+
+/* Editing / section view — keep course editor DnD usable */
+.nexcourse-sectionview {
+  margin: 0.35rem 0 1.5rem;
+}
+.nexcourse-sectionview__bar { margin: 0 0 0.75rem; }
+.nexcourse-back {
+  color: var(--nx-blue);
+  font-weight: 700;
+  text-decoration: none;
+}
+.nexcourse-back:hover { text-decoration: underline; }
+.nexcourse-editing-note { margin-bottom: 1rem; }
+
+/* Editing controls lifted out of the theme banner before it is hidden. */
+.nx-edit-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.nx-edit-tools:empty {
+  display: none;
+}
+.nexcourse-empty { color: var(--nx-muted); }
+
+/* ------------------------------------------------------------------ */
+/* Module page — one composition: back + title + tabs + activities     */
+/* ------------------------------------------------------------------ */
+.nx-section {
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 18px;
+  padding: 1rem 1.15rem 1.15rem;
+  margin: 0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.nx-section__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0 0 0.85rem;
+  padding: 0.35rem 0.65rem 0.35rem 0.45rem;
+  border-radius: 999px;
+  color: var(--nx-blue);
+  font-weight: 600;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  text-decoration: none;
+  background: var(--nx-blue-soft);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nx-section__back:hover,
+.nx-section__back:focus {
+  background: var(--nx-blue-bar);
+  color: #1d4ed8;
+  text-decoration: none;
+}
+.nx-section__back-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.12);
+  position: relative;
+  flex: 0 0 auto;
+}
+.nx-section__back-icon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-left: 2px solid var(--nx-blue);
+  border-bottom: 2px solid var(--nx-blue);
+  transform: translate(-35%, -50%) rotate(45deg);
+}
+
+.nx-section__head {
+  margin: 0 0 0.95rem;
+  padding: 0 0 0.95rem;
+  border-bottom: 1px solid var(--nx-border);
+}
+.nx-section__eyebrow {
+  margin: 0 0 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nx-blue);
+}
+.nx-section__title {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--nx-text);
+  line-height: 1.25;
+}
+
+.nx-section__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0 0 0.95rem;
+  padding: 0.28rem;
+  background: #f1f5f9;
+  border-radius: 14px;
+}
+
+.nx-section__tab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #64748b;
+  font-family: var(--nx-font);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 11px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.nx-section__tab:hover {
+  color: var(--nx-blue);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.nx-section__tab.is-active {
+  color: var(--nx-blue);
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.nx-section__tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  padding: 0.05rem 0.38rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--nx-blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+.nx-section__tab.is-active .nx-section__tab-count {
+  background: var(--nx-blue);
+  color: #fff;
+}
+
+.nx-section__panel {
+  display: none;
+}
+.nx-section__panel.is-active,
+.nx-section__panel:not([hidden]) {
+  display: block;
+}
+.nx-section__panel[hidden] {
+  display: none !important;
+}
+
+.nx-section__empty {
+  margin: 0.35rem 0;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  color: var(--nx-muted);
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Stacked activity rows — one list surface, not nested white cards */
+.nx-activity-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--nx-border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.nx-activity {
+  margin: 0;
+  border-bottom: 1px solid var(--nx-border);
+  position: relative;
+}
+.nx-activity:last-child {
+  border-bottom: 0;
+}
+
+.nx-activity__link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 2.4rem 0.9rem 1rem;
+  text-decoration: none;
+  color: var(--nx-text);
+  background: #fff;
+  transition: background 0.15s ease, padding-left 0.15s ease;
+  position: relative;
+}
+.nx-activity__link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+
+.nx-activity__link:hover {
+  background: #f8fafc;
+  text-decoration: none;
+  color: var(--nx-text);
+  padding-left: 1.15rem;
+}
+.nx-activity__link:hover::before {
+  background: var(--nx-blue);
+}
+.nx-activity__link:hover .nx-activity__name {
+  color: #1d4ed8;
+}
+.nx-activity:hover .nx-activity__chevron {
+  border-color: var(--nx-blue);
+  transform: translateY(-50%) rotate(45deg) translate(1px, -1px);
+}
+
+.nx-activity__icon-wrap {
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #eff6ff;
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.08);
+}
+.nx-activity__icon-wrap--h5pactivity,
+.nx-activity__icon-wrap--h5p {
+  background: #eff6ff;
+}
+.nx-activity__icon-wrap--quiz {
+  background: #ecfdf5;
+  box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.1);
+}
+.nx-activity__icon-wrap--assign,
+.nx-activity__icon-wrap--workshop {
+  background: #fff7ed;
+  box-shadow: inset 0 0 0 1px rgba(234, 88, 12, 0.1);
+}
+.nx-activity__icon-wrap--forum,
+.nx-activity__icon-wrap--chat {
+  background: #f0f9ff;
+  box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.12);
+}
+.nx-activity__icon-wrap--resource,
+.nx-activity__icon-wrap--page,
+.nx-activity__icon-wrap--url,
+.nx-activity__icon-wrap--book,
+.nx-activity__icon-wrap--folder {
+  background: #f1f5f9;
+  box-shadow: inset 0 0 0 1px rgba(100, 116, 139, 0.12);
+}
+.nx-activity__icon-wrap--scorm,
+.nx-activity__icon-wrap--lti {
+  background: #f5f3ff;
+  box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.12);
+}
+
+.nx-activity__icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  /* Soften Moodle’s harsh black monochrome activity icons */
+  filter: opacity(0.85);
+}
+
+.nx-activity__icon-fallback {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: var(--nx-blue);
+  opacity: 0.55;
+}
+
+.nx-activity__body {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.nx-activity__name {
+  font-weight: 650;
+  font-size: 0.98rem;
+  line-height: 1.3;
+  transition: color 0.15s ease;
+}
+
+.nx-activity__type {
+  font-size: 0.74rem;
+  color: var(--nx-muted);
+  font-weight: 500;
+}
+
+.nx-activity__status {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: #e2e8f0;
+  flex: 0 0 auto;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+.nx-activity.is-complete .nx-activity__status,
+.nx-activity__status.is-done {
+  background: var(--nx-success);
+  box-shadow: none;
+}
+
+/* Moodle's real manual-completion button, moved into the custom quiz row. */
+.nx-activity__actions {
+  position: absolute;
+  top: 50%;
+  right: 2.5rem;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+.nx-activity__actions > * {
+  margin: 0 !important;
+}
+.nx-completion-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.4rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--nx-blue);
+  box-shadow: inset 0 0 0 1px #93c5fd;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.nx-completion-btn:hover {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.nx-completion-btn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
+}
+.nx-completion-btn.is-busy {
+  opacity: 0.65;
+  cursor: wait;
+}
+.nx-completion-btn.is-done {
+  background: var(--nx-success);
+  color: #fff;
+  box-shadow: none;
+}
+.nx-completion-btn.is-done:hover {
+  background: #15803d;
+  color: #fff;
+}
+.nx-completion-btn__icon {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+}
+.nx-completion-btn.is-done .nx-completion-btn__icon {
+  border-color: transparent;
+}
+.nx-completion-btn.is-done .nx-completion-btn__icon::after {
+  content: "";
+  width: 0.25rem;
+  height: 0.5rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+/* Reserve room so long names never run under the button. */
+.nx-activity--has-completion .nx-activity__link {
+  padding-right: 10.5rem;
+}
+/* Pinned to the row rather than the link so it stays in one column whether or
+   not the row carries a completion button. */
+.nx-activity__chevron {
+  position: absolute;
+  top: 50%;
+  right: 1.1rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid #94a3b8;
+  border-top: 2px solid #94a3b8;
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  pointer-events: none;
+}
+
+@media (max-width: 576px) {
+  .nx-activity__chevron {
+    right: 0.8rem;
+  }
+  .nx-activity__actions {
+    right: 2rem;
+  }
+  .nx-activity--has-completion .nx-activity__link {
+    padding-right: 9rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .nx-section {
+    padding: 0.9rem 0.85rem 1rem;
+    border-radius: 14px;
+  }
+  .nx-section__title {
+    font-size: 1.2rem;
+  }
+  .nx-section__tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nx-section__tab {
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+  .nx-activity__link {
+    padding: 0.8rem 0.75rem;
+    gap: 0.7rem;
+  }
+  .nx-activity__icon-wrap {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 10px;
+  }
+}
+
+/* Soft chrome only — never overflow/pointer-events that break dropzones */
+body.format-nexcourse.path-course-view.editing .nexcourse-core .course-section,
+body.format-nexcourse.path-course-view.editing .nexcourse-core .section {
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 14px;
+  padding: 0.75rem 1rem 1rem;
+  margin-bottom: 1rem;
+  overflow: visible;
+}
+body.format-nexcourse.path-course-view.editing .nexcourse-core,
+body.format-nexcourse.path-course-view.editing .nexcourse-core .course-content,
+body.format-nexcourse.path-course-view.editing .nexcourse-core [data-for="section"],
+body.format-nexcourse.path-course-view.editing .nexcourse-core [data-for="cmlist"],
+body.format-nexcourse.path-course-view.editing .nexcourse-core .activity-item {
+  overflow: visible !important;
+  pointer-events: auto !important;
+}
+body.format-nexcourse.path-course-view.editing .activity-item {
+  border-radius: 10px;
+}
+
+/* Non-editing section browse chrome */
+body.format-nexcourse:not(.editing) .nexcourse-core:not(.nexcourse-core--hidden) .course-section,
+body.format-nexcourse:not(.editing) .nexcourse-core:not(.nexcourse-core--hidden) .section {
+  background: var(--nx-card);
+  border: 1px solid var(--nx-border);
+  border-radius: 14px;
+  padding: 0.75rem 1rem 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Secondary tabs (Participants / Settings / Grades / Activities / …)  */
+/* Match Course-tab visual language when nx-course-chrome is applied.  */
+/* ------------------------------------------------------------------ */
+body.format-nexcourse.nx-course-chrome #page,
+body.format-nexcourse.nx-course-chrome #topofscroll,
+body.format-nexcourse.nx-course-chrome #page-content,
+body.format-nexcourse.nx-course-chrome #region-main-box,
+body.format-nexcourse.nx-course-chrome #region-main {
+  font-family: var(--nx-font);
+  color: var(--nx-text);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main {
+  background: transparent;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .page-header-headings h1,
+body.format-nexcourse.nx-course-chrome #region-main > h2:first-of-type,
+body.format-nexcourse.nx-course-chrome #region-main .main-content > h2:first-child {
+  font-family: var(--nx-font);
+  font-weight: 700;
+  color: var(--nx-text);
+  letter-spacing: -0.02em;
+}
+
+/* White content boxes — border + inner gap so titles/controls don't kiss the edge */
+body.format-nexcourse.nx-course-chrome #region-main .card,
+body.format-nexcourse.nx-course-chrome #region-main .generalbox,
+body.format-nexcourse.nx-course-chrome #region-main .box,
+body.format-nexcourse.nx-course-chrome #region-main .well,
+body.format-nexcourse.nx-course-chrome #region-main .fcontainer,
+body.format-nexcourse.nx-course-chrome #region-main .mform fieldset,
+body.format-nexcourse.nx-course-chrome #region-main .participantsfilter,
+body.format-nexcourse.nx-course-chrome #region-main [data-region="filter"],
+body.format-nexcourse.nx-course-chrome #region-main .tertiary-navigation {
+  border: 1px solid var(--nx-border) !important;
+  border-radius: 14px !important;
+  background: var(--nx-card) !important;
+  box-shadow: none !important;
+  font-family: var(--nx-font);
+  padding: 1.15rem 1.25rem !important;
+  margin-bottom: 1rem;
+}
+
+/* RemUI/Bootstrap often zero card-body padding (p-0); restore inset gap */
+body.format-nexcourse.nx-course-chrome #region-main .card:has(> .card-body) {
+  padding: 0 !important;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .card > .card-body {
+  padding: 1.15rem 1.25rem !important;
+}
+
+/* Nested tertiary bar inside an already-padded card: no second border box */
+body.format-nexcourse.nx-course-chrome #region-main .card .tertiary-navigation,
+body.format-nexcourse.nx-course-chrome #region-main .card-body .tertiary-navigation {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  padding: 0 0 1rem !important;
+  margin-bottom: 0.75rem;
+  box-shadow: none !important;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .mform fieldset {
+  margin-bottom: 1rem;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .mform legend {
+  font-family: var(--nx-font);
+  font-weight: 700;
+  color: var(--nx-text);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .generaltable,
+body.format-nexcourse.nx-course-chrome #region-main table.flexible,
+body.format-nexcourse.nx-course-chrome #region-main .userlist table {
+  width: 100%;
+  border: 1px solid var(--nx-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--nx-card);
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--nx-font);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .generaltable th,
+body.format-nexcourse.nx-course-chrome #region-main .generaltable td,
+body.format-nexcourse.nx-course-chrome #region-main .userlist th,
+body.format-nexcourse.nx-course-chrome #region-main .userlist td {
+  border-color: var(--nx-border) !important;
+  font-family: var(--nx-font);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .generaltable thead th,
+body.format-nexcourse.nx-course-chrome #region-main .userlist thead th {
+  background: var(--nx-blue-soft) !important;
+  color: var(--nx-text) !important;
+  font-weight: 600;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .btn-primary,
+body.format-nexcourse.nx-course-chrome #region-main .btn.btn-primary,
+body.format-nexcourse.nx-course-chrome #region-main input[type="submit"].btn-primary {
+  background: var(--nx-blue) !important;
+  border-color: var(--nx-blue) !important;
+  font-family: var(--nx-font);
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .btn-secondary,
+body.format-nexcourse.nx-course-chrome #region-main .btn.btn-secondary {
+  border-radius: 10px;
+  font-family: var(--nx-font);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .badge-success,
+body.format-nexcourse.nx-course-chrome #region-main .badge.bg-success,
+body.format-nexcourse.nx-course-chrome #region-main span.status-active {
+  background: var(--nx-success-soft) !important;
+  color: var(--nx-success) !important;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .pagination .page-item.active .page-link,
+body.format-nexcourse.nx-course-chrome #region-main .initialbar a.page-link.active,
+body.format-nexcourse.nx-course-chrome #region-main .initialbar .page-item.active .page-link {
+  background: var(--nx-blue) !important;
+  border-color: var(--nx-blue) !important;
+  color: #fff !important;
+}
+
+body.format-nexcourse.nx-course-chrome #region-main a:not(.btn):not(.dropdown-item):not(.page-link) {
+  color: var(--nx-blue);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .form-control,
+body.format-nexcourse.nx-course-chrome #region-main .custom-select,
+body.format-nexcourse.nx-course-chrome #region-main select.form-select {
+  border-radius: 10px;
+  border-color: var(--nx-border);
+  font-family: var(--nx-font);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .nav-tabs {
+  border-bottom-color: var(--nx-border);
+  font-family: var(--nx-font);
+}
+
+body.format-nexcourse.nx-course-chrome #region-main .nav-tabs .nav-link.active {
+  color: var(--nx-blue);
+  font-weight: 600;
+}
+
+/* Hide RemUI duplicate course title when our nx-header is present */
+body.format-nexcourse.nx-course-chrome:has(.nx-header) #page-header .page-header-headings,
+body.format-nexcourse.nx-course-chrome:has(.nx-header) #region-main .page-context-header {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  .nexcourse-outline__title {
+    white-space: normal;
+  }
+  .nexcourse-pane__title {
+    font-size: 1.15rem;
+  }
+}
+
+/* Course Modules header + Expand/Collapse */
+.nexcourse-sectionhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.85rem;
+}
+
+.nexcourse-sectionhead .nexcourse-sectiontitle {
+  margin: 0;
+}
+
+.nexcourse-acc-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.nexcourse-acc-tools__btn {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0.15rem 0.2rem;
+  margin: 0;
+  font-family: var(--nx-font);
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--nx-blue);
+  cursor: pointer;
+  line-height: 1.3;
+}
+
+.nexcourse-acc-tools__btn:hover {
+  text-decoration: underline;
+}
+
+.nexcourse-acc-tools__sep {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+/* -------------------------------------------------------------------------
+   RemUI / Moodle Course Menu (course index drawer) → Nex UI
+   ------------------------------------------------------------------------- */
+body.format-nexcourse #theme_boost-drawers-courseindex,
+body.format-nexcourse #theme_remui-drawers-courseindex,
+body.format-nexcourse [id$="-drawers-courseindex"],
+body.format-nexcourse .drawer.drawer-left.nexcourse-index-drawer {
+  font-family: var(--nx-font);
+  background: #fff !important;
+  color: var(--nx-text);
+  border-right: 1px solid var(--nx-border);
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.06);
+}
+
+body.format-nexcourse #theme_boost-drawers-courseindex .drawerheader,
+body.format-nexcourse #theme_remui-drawers-courseindex .drawerheader,
+body.format-nexcourse [id$="-drawers-courseindex"] .drawerheader,
+body.format-nexcourse .nexcourse-index-drawer .drawerheader,
+body.format-nexcourse #theme_boost-drawers-courseindex .drawer-header,
+body.format-nexcourse #theme_remui-drawers-courseindex .drawer-header,
+body.format-nexcourse [id$="-drawers-courseindex"] .drawer-header {
+  background: #fff !important;
+  border-bottom: 1px solid var(--nx-border);
+  color: var(--nx-text);
+  font-family: var(--nx-font);
+  font-weight: 750;
+  padding: 0.85rem 1rem;
+}
+
+body.format-nexcourse #theme_boost-drawers-courseindex .drawerheader *,
+body.format-nexcourse #theme_remui-drawers-courseindex .drawerheader *,
+body.format-nexcourse [id$="-drawers-courseindex"] .drawerheader * {
+  font-family: var(--nx-font);
+}
+
+body.format-nexcourse #course-index,
+body.format-nexcourse .courseindex {
+  padding: 0.75rem 0.75rem 1.25rem;
+  font-family: var(--nx-font);
+}
+
+/* Top-level section rows — white card, soft border (replace RemUI light-blue bars) */
+body.format-nexcourse #course-index .courseindex-section,
+body.format-nexcourse .courseindex .courseindex-section {
+  margin: 0 0 0.5rem;
+  border: 1px solid var(--nx-border);
+  border-radius: 12px;
+  background: var(--nx-card);
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+body.format-nexcourse #course-index .courseindex-section > .courseindex-item,
+body.format-nexcourse #course-index .courseindex-section-title,
+body.format-nexcourse .courseindex .courseindex-section > .courseindex-item,
+body.format-nexcourse .courseindex .courseindex-section-title {
+  background: #f8fafc !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0.7rem 0.75rem !important;
+  min-height: 0;
+  align-items: center;
+}
+
+body.format-nexcourse #course-index .courseindex-sectioncontent.show,
+body.format-nexcourse .courseindex .courseindex-sectioncontent.show {
+  background: #fff;
+  border-top: 1px solid var(--nx-border);
+  padding: 0.35rem 0.35rem 0.5rem;
+}
+
+body.format-nexcourse #course-index .courseindex-link,
+body.format-nexcourse .courseindex .courseindex-link,
+body.format-nexcourse #course-index [data-for="section_title"],
+body.format-nexcourse .courseindex [data-for="section_title"] {
+  color: var(--nx-text) !important;
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.35;
+  text-decoration: none !important;
+}
+
+body.format-nexcourse #course-index .courseindex-item:hover > .courseindex-link,
+body.format-nexcourse .courseindex .courseindex-item:hover > .courseindex-link,
+body.format-nexcourse #course-index a.courseindex-link:hover {
+  color: var(--nx-blue) !important;
+}
+
+/* Nested subsection / activity rows */
+body.format-nexcourse #course-index .courseindex-sectioncontent .courseindex-section,
+body.format-nexcourse .courseindex .courseindex-sectioncontent .courseindex-section {
+  margin: 0.35rem 0.25rem;
+  border-radius: 10px;
+  border-color: #e2e8f0;
+  box-shadow: none;
+}
+
+body.format-nexcourse #course-index .courseindex-sectioncontent .courseindex-section > .courseindex-item,
+body.format-nexcourse .courseindex .courseindex-sectioncontent .courseindex-section > .courseindex-item {
+  background: var(--nx-blue-soft) !important;
+  padding: 0.55rem 0.65rem !important;
+}
+
+body.format-nexcourse #course-index .courseindex-sectioncontent .courseindex-sectioncontent,
+body.format-nexcourse .courseindex .courseindex-sectioncontent .courseindex-sectioncontent {
+  background: #fff;
+  border-top: 1px solid #e8eef7;
+}
+
+body.format-nexcourse #course-index .courseindex-item[data-for="cm"],
+body.format-nexcourse .courseindex .courseindex-item[data-for="cm"],
+body.format-nexcourse #course-index li.courseindex-item,
+body.format-nexcourse .courseindex li.courseindex-item {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 8px;
+  margin: 0.1rem 0.15rem;
+  padding: 0.35rem 0.55rem !important;
+  box-shadow: none !important;
+}
+
+body.format-nexcourse #course-index .courseindex-item[data-for="cm"] .courseindex-link,
+body.format-nexcourse .courseindex .courseindex-item[data-for="cm"] .courseindex-link {
+  font-weight: 500;
+  font-size: 0.88rem;
+  color: #334155 !important;
+}
+
+body.format-nexcourse #course-index .courseindex-item.pageitem,
+body.format-nexcourse #course-index .courseindex-item.active,
+body.format-nexcourse .courseindex .courseindex-item.pageitem,
+body.format-nexcourse .courseindex .courseindex-item.active,
+body.format-nexcourse #course-index .courseindex-link.pageitem {
+  background: var(--nx-blue-soft) !important;
+  border-radius: 8px;
+}
+
+body.format-nexcourse #course-index .courseindex-item.pageitem .courseindex-link,
+body.format-nexcourse .courseindex .courseindex-item.pageitem .courseindex-link {
+  color: var(--nx-blue) !important;
+  font-weight: 650;
+}
+
+/* Chevron / collapse controls */
+body.format-nexcourse #course-index .icons-collapse-expand,
+body.format-nexcourse .courseindex .icons-collapse-expand,
+body.format-nexcourse #course-index [data-toggle="collapse"],
+body.format-nexcourse #course-index [data-bs-toggle="collapse"] {
+  color: #64748b !important;
+}
+
+body.format-nexcourse #course-index .icons-collapse-expand:hover,
+body.format-nexcourse .courseindex .icons-collapse-expand:hover {
+  color: var(--nx-blue) !important;
+}
+
+/* Soften RemUI light-blue accordion skins if still applied */
+body.format-nexcourse #course-index [style*="background"],
+body.format-nexcourse .courseindex .accordion-item,
+body.format-nexcourse .courseindex .accordion-button,
+body.format-nexcourse .courseindex .list-group-item {
+  background-image: none !important;
+}
+
+body.format-nexcourse #course-index .accordion-button,
+body.format-nexcourse .courseindex .accordion-button {
+  background: #f8fafc !important;
+  color: var(--nx-text) !important;
+  font-family: var(--nx-font);
+  font-weight: 700;
+  box-shadow: none !important;
+}
+
+body.format-nexcourse #course-index .accordion-button:not(.collapsed),
+body.format-nexcourse .courseindex .accordion-button:not(.collapsed) {
+  background: var(--nx-blue-soft) !important;
+  color: var(--nx-text) !important;
+}
+
+body.format-nexcourse #course-index .accordion-item,
+body.format-nexcourse .courseindex .accordion-item {
+  border: 1px solid var(--nx-border) !important;
+  border-radius: 12px !important;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  background: #fff !important;
+}
+
+/* Completion / locked icons stay muted */
+body.format-nexcourse #course-index .icon,
+body.format-nexcourse .courseindex .icon {
+  opacity: 0.85;
+}

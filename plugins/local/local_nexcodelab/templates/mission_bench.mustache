@@ -1,0 +1,149 @@
+{{!
+    @template local_nexcodelab/mission_bench
+
+    Mission lab: collapsible mission list | docs | steps rail | editor | console.
+}}
+<div class="ncl-bench ncl-bench--studio ncl-bench--sidebar-closed" data-region="ncl-bench" data-missionid="{{missionid}}" data-theme="light">
+    <div class="ncl-np__toasts" data-region="toasts" aria-live="polite" aria-atomic="true"></div>
+
+    <header class="ncl-bench__topbar">
+        <div class="ncl-bench__topbar-left">
+            <button type="button" class="ncl-bench__iconbtn" data-action="toggle-sidebar"
+                    title="{{#str}}allmissions, local_nexcodelab{{/str}}"
+                    aria-label="{{#str}}allmissions, local_nexcodelab{{/str}}"
+                    aria-expanded="false">☰</button>
+            <a class="ncl-bench__back" href="{{{listurl}}}" title="{{#str}}backtolist, local_nexcodelab{{/str}}">←</a>
+            <span class="ncl-bench__crumb" data-region="crumb">…</span>
+        </div>
+        <a class="ncl-bench__brand" href="{{{listurl}}}">
+            <span class="ncl-bench__brand-mark" aria-hidden="true"></span>
+            <span class="ncl-bench__brand-text">{{#str}}pluginname, local_nexcodelab{{/str}}</span>
+        </a>
+        <div class="ncl-bench__topbar-right">
+            <button type="button" class="ncl-bench__themebtn" data-action="toggle-theme" title="Toggle theme" aria-pressed="false">
+                <span class="ncl-np__theme-ico" aria-hidden="true"></span>
+                <span data-region="theme-label">{{#str}}editorlight, local_nexcodelab{{/str}}</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="ncl-bench__shell">
+        <aside class="ncl-bench__msidebar" data-region="mission-sidebar" aria-label="{{#str}}allmissions, local_nexcodelab{{/str}}">
+            <div class="ncl-bench__msidebar-head">
+                <div>
+                    <div class="ncl-bench__msidebar-title">{{#str}}allmissions, local_nexcodelab{{/str}}</div>
+                    <div class="ncl-bench__msidebar-sub" data-region="sidebar-count">—</div>
+                </div>
+                <button type="button" class="ncl-bench__iconbtn ncl-bench__iconbtn--sm" data-action="toggle-sidebar" title="Close" aria-label="Close">×</button>
+            </div>
+            <div class="ncl-bench__msidebar-filters">
+                <input type="search" class="ncl-bench__msidebar-search" data-region="sidebar-search"
+                       placeholder="{{#str}}searchmissions, local_nexcodelab{{/str}}"
+                       autocomplete="off" />
+                <div class="ncl-bench__trackchips" data-region="sidebar-tracks" role="group" aria-label="{{#str}}track, local_nexcodelab{{/str}}">
+                    <button type="button" class="ncl-bench__trackchip is-active" data-track="">{{#str}}all, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-bench__trackchip" data-track="wrangling">{{#str}}track_wrangling, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-bench__trackchip" data-track="eda">{{#str}}track_eda, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-bench__trackchip" data-track="ml">{{#str}}track_ml, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-bench__trackchip" data-track="nlp">{{#str}}track_nlp, local_nexcodelab{{/str}}</button>
+                </div>
+            </div>
+            <div class="ncl-bench__msidebar-list" data-region="sidebar-list"></div>
+        </aside>
+
+        <div class="ncl-bench__workspace">
+            <nav class="ncl-bench__steprow" data-region="steps" aria-label="{{#str}}steps, local_nexcodelab{{/str}}">
+                <div class="ncl-bench__steprow-meta">
+                    <span class="ncl-bench__steprow-label">{{#str}}steps, local_nexcodelab{{/str}}</span>
+                    <span class="ncl-bench__steprow-count" data-region="steps-sub">—</span>
+                </div>
+                <div class="ncl-bench__steprow-track" data-region="steps-list" role="list"></div>
+                <div class="ncl-bench__steprow-nav">
+                    <button type="button" class="ncl-bench__navbtn ncl-bench__navbtn--compact" data-action="prev-step" disabled>
+                        ←
+                    </button>
+                    <button type="button" class="ncl-bench__navbtn ncl-bench__navbtn--compact ncl-bench__navbtn--next" data-action="next-step" disabled>
+                        →
+                    </button>
+                </div>
+            </nav>
+
+            <div class="ncl-bench__body" data-region="split">
+                <aside class="ncl-bench__left ncl-bench__docs" data-region="left-pane">
+                    <div class="ncl-bench__docs-scroll">
+                        <p class="ncl-bench__docs-path" data-region="docs-path">Mission brief</p>
+                        <h1 class="ncl-bench__docs-title" data-region="title">…</h1>
+                        <div class="ncl-bench__brief" data-region="brief"></div>
+                        <div class="ncl-bench__stepcopy" data-region="stepcopy"></div>
+                        <button type="button" class="ncl-bench__hintbtn" data-action="hint" hidden>
+                            {{#str}}showhint, local_nexcodelab{{/str}}
+                        </button>
+                        <p class="ncl-bench__hint" data-region="hint" hidden></p>
+                    </div>
+                    <div class="ncl-bench__docs-nav">
+                        <button type="button" class="ncl-bench__navbtn" data-action="prev-step" disabled>
+                            ← {{#str}}prevstep, local_nexcodelab{{/str}}
+                        </button>
+                        <button type="button" class="ncl-bench__navbtn ncl-bench__navbtn--next" data-action="next-step" disabled>
+                            {{#str}}nextstep, local_nexcodelab{{/str}} →
+                        </button>
+                    </div>
+                </aside>
+
+                <div class="ncl-bench__vresizer" data-action="resize-col" role="separator" aria-orientation="vertical" tabindex="0" title="Resize panels"></div>
+
+                <div class="ncl-bench__right" data-region="right-pane">
+                    <section class="ncl-bench__editorcol" data-region="editor-pane">
+                        <div class="ncl-bench__filebar">
+                            <div class="ncl-bench__filetabs" data-region="filetabs" role="tablist" aria-label="{{#str}}fileexplorer, local_nexcodelab{{/str}}"></div>
+                            <div class="ncl-bench__filebar-actions">
+                                <span class="ncl-bench__langpill">python3</span>
+                                <span class="ncl-bench__cursor" data-region="cursor">Ln 1, Col 1</span>
+                                <button type="button" class="ncl-bench__ghostbtn ncl-bench__ghostbtn--sm" data-action="reset" title="{{#str}}resetfiles, local_nexcodelab{{/str}}">↺</button>
+                            </div>
+                        </div>
+                        <div class="ncl-bench__editorstage" data-pane="code">
+                            <div class="ncl-bench__ace-stage" data-region="editor-stage">
+                                <div class="ncl-bench__ace" data-region="ace"></div>
+                                <textarea class="ncl-bench__fallback" data-region="editor" hidden spellcheck="false"></textarea>
+                            </div>
+                        </div>
+                        <div class="ncl-bench__editorstage" data-pane="data" hidden>
+                            <div class="ncl-bench__datascroll">
+                                <div class="ncl-bench__datahead">
+                                    <span data-region="shape"></span>
+                                    <button type="button" class="ncl-bench__ghostbtn" data-action="toggle-csv">{{#str}}rawcsv, local_nexcodelab{{/str}}</button>
+                                </div>
+                                <div class="ncl-bench__gridwrap" data-region="csv-table"></div>
+                                <pre class="ncl-bench__raw" data-region="csv-raw" hidden></pre>
+                            </div>
+                        </div>
+                        <div class="ncl-bench__editorstage ncl-bench__editorstage--brief" data-pane="brief" hidden>
+                            <div class="ncl-bench__datascroll">
+                                <p class="ncl-bench__muted">{{#str}}briefinedocs, local_nexcodelab{{/str}}</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="ncl-bench__hresizer" data-action="resize-row" role="separator" aria-orientation="horizontal" tabindex="0" title="Resize panels"></div>
+
+                    <aside class="ncl-bench__console" data-region="results">
+                        <div class="ncl-bench__console-head">
+                            <div class="ncl-bench__console-tabs">
+                                <span class="ncl-bench__console-tab is-active">{{#str}}console, local_nexcodelab{{/str}}</span>
+                            </div>
+                            <button type="button" class="ncl-bench__runbtn" data-action="check">
+                                <span aria-hidden="true">▷</span>
+                                {{#str}}checkstep, local_nexcodelab{{/str}}
+                            </button>
+                        </div>
+                        <div class="ncl-bench__outcome" data-region="outcome">
+                            <p class="ncl-bench__status" data-region="status">{{#str}}checkprompt, local_nexcodelab{{/str}}</p>
+                        </div>
+                        <pre class="ncl-bench__out" data-region="output"></pre>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

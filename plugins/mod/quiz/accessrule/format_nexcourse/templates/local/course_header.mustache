@@ -1,0 +1,71 @@
+{{!
+    @template format_nexcourse/local/course_header
+    LL Assessment–styled course header: banner, content donut, staff, enrollment stats.
+}}
+<section class="nx-header" data-region="nx-header">
+    <div class="nx-header__banner{{#hasimage}} nx-header__banner--image{{/hasimage}}"
+         {{#hasimage}}style="--nx-header-image: url('{{{imageurl}}}');"{{/hasimage}}>
+        <div class="nx-header__veil"></div>
+        <div class="nx-header__content">
+            <div class="nx-header__row">
+                <div class="nx-header__main">
+                    {{#hascategory}}
+                        <span class="nx-header__cat">{{categoryname}}</span>
+                    {{/hascategory}}
+                    <h1 class="nx-header__title">{{coursename}}</h1>
+                    {{#hasstaff}}
+                        <ul class="nx-header__staff">
+                            {{#staff}}
+                                <li class="nx-header__person">
+                                    <a class="nx-header__person-link" href="{{{profileurl}}}">
+                                        <img class="nx-header__avatar" src="{{{avatarurl}}}" alt="" width="36" height="36">
+                                        <span class="nx-header__person-meta">
+                                            <span class="nx-header__person-name">{{fullname}}</span>
+                                            <span class="nx-header__person-role">{{role}}</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            {{/staff}}
+                        </ul>
+                    {{/hasstaff}}
+                </div>
+                <div class="nx-header__progress" aria-label="{{#str}}courseprogress, format_nexcourse{{/str}}">
+                    <div class="nx-header__progress-grid">
+                        <div class="nx-donut" style="--nx-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{#str}}courseprogress, format_nexcourse{{/str}} {{contentpct}}%">
+                            <span class="nx-donut__ring" aria-hidden="true"></span>
+                            <span class="nx-donut__hole" aria-hidden="true"></span>
+                            <strong class="nx-donut__value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="nx-header__breakdown">
+                            <div class="nx-header__progress-label">{{#str}}courseprogress, format_nexcourse{{/str}}</div>
+                            <ul class="nx-content-stats">
+                                {{#contentitems}}
+                                    <li class="nx-content-stat nx-content-stat--{{key}}">
+                                        <span class="nx-content-stat__label">{{label}}</span>
+                                        <strong class="nx-content-stat__value">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+        <div class="nx-header__stats">
+            {{#stats}}
+                <div class="nx-stat nx-stat--{{key}}">
+                    <span class="nx-stat__icon" aria-hidden="true"></span>
+                    <div class="nx-stat__body">
+                        <strong class="nx-stat__value">{{value}}</strong>
+                        <span class="nx-stat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

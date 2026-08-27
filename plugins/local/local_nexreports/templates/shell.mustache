@@ -1,0 +1,30 @@
+{{!
+    @template local_nexreports/shell
+    Shared chrome: title + period + tab navigation.
+}}
+<div class="nxr-top">
+    <div>
+        <h1 class="nxr-title">{{pluginname}}</h1>
+    </div>
+    {{#showperiod}}
+    <div class="nxr-period" role="group" aria-label="Period">
+        <button type="button" class="nxr-period__btn{{#period7}} is-active{{/period7}}" data-days="7">
+            {{#str}}period7, local_nexreports{{/str}}
+        </button>
+        <button type="button" class="nxr-period__btn{{#period30}} is-active{{/period30}}" data-days="30">
+            {{#str}}period30, local_nexreports{{/str}}
+        </button>
+    </div>
+    {{/showperiod}}
+</div>
+
+<nav class="nxr-tabs" aria-label="{{pluginname}}">
+    {{#tabs}}
+        {{#enabled}}
+        <a class="nxr-tabs__item{{#active}} is-active{{/active}}" href="{{url}}">{{label}}</a>
+        {{/enabled}}
+        {{^enabled}}
+        <span class="nxr-tabs__item is-disabled" title="{{#str}}comingsoon, local_nexreports{{/str}}">{{label}}</span>
+        {{/enabled}}
+    {{/tabs}}
+</nav>

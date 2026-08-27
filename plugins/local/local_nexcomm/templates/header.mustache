@@ -1,0 +1,53 @@
+{{!
+    @template local_nexcomm/header
+}}
+<section class="nc-header" data-region="nc-header">
+    <div class="nc-header__banner">
+        <div class="nc-header__veil"></div>
+        <div class="nc-header__content">
+            <div class="nc-header__row">
+                <div class="nc-header__main">
+                    <span class="nc-header__cat">{{eyebrow}}</span>
+                    <h1 class="nc-header__title">{{title}}</h1>
+                    <p class="nc-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="nc-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="nc-header__progress">
+                    <div class="nc-header__progress-grid">
+                        <div class="nc-donut" style="--nc-donut-pct: {{contentpct}};" data-region="donut">
+                            <span class="nc-donut__ring" aria-hidden="true"></span>
+                            <span class="nc-donut__hole" aria-hidden="true"></span>
+                            <strong class="nc-donut__value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="nc-header__breakdown">
+                            <div class="nc-header__progress-label">{{#str}}readiness, local_nexcomm{{/str}}</div>
+                            <ul class="nc-content-stats">
+                                {{#contentitems}}
+                                    <li class="nc-content-stat nc-content-stat--{{key}}">
+                                        <span class="nc-content-stat__label">{{label}}</span>
+                                        <strong class="nc-content-stat__value">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{#hasstats}}
+        <div class="nc-header__stats">
+            {{#stats}}
+                <div class="nc-hstat nc-hstat--{{key}}">
+                    <span class="nc-hstat__icon" aria-hidden="true"></span>
+                    <div class="nc-hstat__body">
+                        <strong class="nc-hstat__value">{{value}}</strong>
+                        <span class="nc-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

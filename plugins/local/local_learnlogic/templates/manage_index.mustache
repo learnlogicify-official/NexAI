@@ -1,0 +1,186 @@
+{{!
+    @template local_learnlogic/manage_index
+}}
+<div class="ll-app ll-manage ll-manage--modern" data-region="ll-manage">
+    <header class="ll-manage__hero">
+        <div class="ll-manage__hero-main">
+            <a class="ll-back" href="{{{listurl}}}">← {{#str}}backtolist, local_learnlogic{{/str}}</a>
+            <h1 class="ll-page-title">{{#str}}manage, local_learnlogic{{/str}}</h1>
+            <p class="ll-manage__lead">{{#str}}manage_desc, local_learnlogic{{/str}}</p>
+        </div>
+        <div class="ll-manage__hero-actions">
+            <a class="ll-btn ll-btn--primary" href="{{{createurl}}}">{{#str}}createproblem, local_learnlogic{{/str}}</a>
+            <a class="ll-btn ll-btn--secondary" href="{{{importurl}}}">{{#str}}importcoderunner, local_learnlogic{{/str}}</a>
+            <a class="ll-btn ll-btn--secondary" href="{{{tagsurl}}}">{{#str}}managetags, local_learnlogic{{/str}}</a>
+        </div>
+    </header>
+
+    {{#hasproblems}}
+        <form class="ll-manage-bulkform" method="post" action="{{{formaction}}}" data-region="bulk-companies-form">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="action" value="bulkcompanies">
+
+            <div class="ll-manage__toolbar">
+                <label class="ll-manage__search">
+                    <span class="ll-ico ll-ico--search" aria-hidden="true"></span>
+                    <input type="search" class="ll-input" data-action="filter-manage"
+                           placeholder="{{#str}}manage_search, local_learnlogic{{/str}}" autocomplete="off">
+                </label>
+                <span class="ll-manage__count" data-region="manage-count">{{problemcount}} {{#str}}manage_count, local_learnlogic{{/str}}</span>
+            </div>
+
+            {{#hastagsforfilter}}
+                <div class="ll-manage-tagfilter" data-region="tag-filter">
+                    <div class="ll-manage-tagfilter__head">
+                        <span class="ll-manage-tagfilter__label">{{#str}}filterbytags, local_learnlogic{{/str}}</span>
+                        <button type="button" class="ll-linkbtn ll-manage-tagfilter__clear" data-action="clear-filters" hidden>
+                            {{#str}}clearfilters, local_learnlogic{{/str}}
+                        </button>
+                    </div>
+                    <div class="ll-manage-tagfilter__chips">
+                        {{#filtertags}}
+                            <button type="button" class="ll-tagchip{{#iskindcompany}} ll-tagchip--company{{/iskindcompany}}"
+                                    data-action="toggle-tag-filter" data-tag="{{namesearch}}">
+                                {{displayname}}{{#hasproblems}} <span class="ll-tagchip__n">({{problemcount}})</span>{{/hasproblems}}
+                            </button>
+                        {{/filtertags}}
+                    </div>
+                </div>
+            {{/hastagsforfilter}}
+
+            {{#hascategoriesforfilter}}
+                <div class="ll-manage-tagfilter ll-manage-tagfilter--categories" data-region="category-filter">
+                    <div class="ll-manage-tagfilter__head">
+                        <span class="ll-manage-tagfilter__label">{{#str}}filterbycategory, local_learnlogic{{/str}}</span>
+                        {{^hastagsforfilter}}
+                            <button type="button" class="ll-linkbtn ll-manage-tagfilter__clear" data-action="clear-filters" hidden>
+                                {{#str}}clearfilters, local_learnlogic{{/str}}
+                            </button>
+                        {{/hastagsforfilter}}
+                    </div>
+                    <div class="ll-manage-tagfilter__chips">
+                        {{#filtercategories}}
+                            <button type="button" class="ll-tagchip ll-tagchip--category"
+                                    data-action="toggle-tag-filter" data-tag="{{namesearch}}">
+                                {{displayname}} <span class="ll-tagchip__n">({{problemcount}})</span>
+                            </button>
+                        {{/filtercategories}}
+                    </div>
+                </div>
+            {{/hascategoriesforfilter}}
+
+            <div class="ll-manage-bulkbar" data-region="bulk-companies-bar">
+                <div class="ll-manage-bulkbar__sel">
+                    <span data-region="bulk-selected">0 {{#str}}importselectedcount, local_learnlogic{{/str}}</span>
+                    <button type="button" class="ll-linkbtn" data-action="select-visible">{{#str}}bulkselectvisible, local_learnlogic{{/str}}</button>
+                    <button type="button" class="ll-linkbtn" data-action="select-none">{{#str}}importselectnone, local_learnlogic{{/str}}</button>
+                </div>
+                <div class="ll-manage-bulkbar__fields">
+                    <label class="ll-manage-bulkbar__field">
+                        <span>{{#str}}companies, local_learnlogic{{/str}}</span>
+                        <input type="text" class="ll-input" name="companies" data-region="bulk-companies-input"
+                               placeholder="{{#str}}bulkcompanies_placeholder, local_learnlogic{{/str}}"
+                               autocomplete="off">
+                    </label>
+                    <label class="ll-manage-bulkbar__field">
+                        <span>{{#str}}bulkcompaniesmode, local_learnlogic{{/str}}</span>
+                        <select class="ll-input" name="mode" data-region="bulk-companies-mode">
+                            <option value="add">{{#str}}bulkcompaniesmode_add, local_learnlogic{{/str}}</option>
+                            <option value="replace">{{#str}}bulkcompaniesmode_replace, local_learnlogic{{/str}}</option>
+                        </select>
+                    </label>
+                    <button type="submit" class="ll-btn ll-btn--primary" data-action="bulk-companies-submit" disabled>
+                        {{#str}}bulkcompaniesapply, local_learnlogic{{/str}}
+                    </button>
+                </div>
+                <p class="ll-manage-bulkbar__hint">{{#str}}bulkcompanies_hint, local_learnlogic{{/str}}</p>
+            </div>
+
+            <div class="ll-table-wrap" data-region="manage-list">
+                <table class="ll-table ll-manage-table">
+                    <thead>
+                        <tr>
+                            <th class="ll-manage-table__check">
+                                <input type="checkbox" data-action="check-all" title="{{#str}}bulkselectvisible, local_learnlogic{{/str}}">
+                            </th>
+                            <th>{{#str}}name, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}importcategory, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}difficulty, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}status, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}tags, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}companies, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}manage_source, local_learnlogic{{/str}}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#problems}}
+                            <tr class="ll-manage-tr" data-name="{{namesearch}}" data-tags="{{tagsearch}}" data-category="{{categorysearch}}">
+                                <td class="ll-manage-table__check">
+                                    <input type="checkbox" class="ll-manage-tr__cb" name="problemids[]" value="{{id}}">
+                                </td>
+                                <td>
+                                    <a class="ll-manage-table__name" href="{{{editurl}}}">{{name}}</a>
+                                </td>
+                                <td>
+                                    {{#hascategory}}
+                                        <span class="ll-manage-table__category" title="{{category}}">{{category}}</span>
+                                    {{/hascategory}}
+                                    {{^hascategory}}
+                                        <span class="ll-muted">—</span>
+                                    {{/hascategory}}
+                                </td>
+                                <td><span class="ll-mbadge ll-mbadge--{{difficulty}}">{{difficultylabel}}</span></td>
+                                <td><span class="ll-mbadge ll-mbadge--{{status}}">{{statuslabel}}</span></td>
+                                <td>
+                                    {{#hastags}}
+                                        <div class="ll-manage-table__chips">
+                                            {{#tags}}
+                                                <span class="ll-mtag">{{name}}</span>
+                                            {{/tags}}
+                                        </div>
+                                    {{/hastags}}
+                                    {{^hastags}}
+                                        <span class="ll-muted">—</span>
+                                    {{/hastags}}
+                                </td>
+                                <td>
+                                    {{#hascompanies}}
+                                        <div class="ll-manage-table__chips">
+                                            {{#companies}}
+                                                <span class="ll-mtag ll-mtag--company">{{name}}</span>
+                                            {{/companies}}
+                                        </div>
+                                    {{/hascompanies}}
+                                    {{^hascompanies}}
+                                        <span class="ll-muted">—</span>
+                                    {{/hascompanies}}
+                                </td>
+                                <td>
+                                    {{#islinked}}
+                                        <span class="ll-mbadge ll-mbadge--link">{{#str}}importlinked, local_learnlogic{{/str}} #{{sourcequestionid}}</span>
+                                    {{/islinked}}
+                                    {{^islinked}}
+                                        <span class="ll-muted">{{#str}}manage_manual, local_learnlogic{{/str}}</span>
+                                    {{/islinked}}
+                                </td>
+                                <td class="ll-manage-table__actions">
+                                    <a class="ll-link" href="{{{editurl}}}">{{#str}}editproblem, local_learnlogic{{/str}}</a>
+                                    <a class="ll-link" href="{{{viewurl}}}">{{#str}}manage_view, local_learnlogic{{/str}}</a>
+                                    <a class="ll-link ll-danger" href="{{{deleteurl}}}">{{#str}}delete, local_learnlogic{{/str}}</a>
+                                </td>
+                            </tr>
+                        {{/problems}}
+                    </tbody>
+                </table>
+            </div>
+            <nav class="ll-pager" data-region="pager" aria-label="{{#str}}managepagination, local_learnlogic{{/str}}" hidden></nav>
+        </form>
+    {{/hasproblems}}
+    {{^hasproblems}}
+        <div class="ll-manage__empty">
+            <p>{{#str}}noproblems, local_learnlogic{{/str}}</p>
+            <a class="ll-btn ll-btn--primary" href="{{{importurl}}}">{{#str}}importcoderunner, local_learnlogic{{/str}}</a>
+        </div>
+    {{/hasproblems}}
+</div>

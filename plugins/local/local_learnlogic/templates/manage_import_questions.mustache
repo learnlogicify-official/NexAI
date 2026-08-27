@@ -1,0 +1,150 @@
+{{!
+    @template local_learnlogic/manage_import_questions
+}}
+<div class="ll-app ll-manage ll-manage--modern" data-region="ll-import" data-bank="{{bankid}}">
+    <header class="ll-manage__hero">
+        <div class="ll-manage__hero-main">
+            <a class="ll-back" href="{{{banksurl}}}">← {{#str}}importbackbanks, local_learnlogic{{/str}}</a>
+            <h1 class="ll-page-title">{{importtitle}}</h1>
+            <p class="ll-manage__lead">{{#str}}importtags_hint, local_learnlogic{{/str}}</p>
+        </div>
+    </header>
+
+    <ol class="ll-steps" aria-label="{{#str}}importsteps, local_learnlogic{{/str}}">
+        <li class="ll-steps__item is-done"><span>✓</span> {{#str}}importstep1, local_learnlogic{{/str}}</li>
+        <li class="ll-steps__item is-active"><span>2</span> {{#str}}importstep2short, local_learnlogic{{/str}}</li>
+    </ol>
+
+    <form class="ll-import-filters" method="get" action="{{{formurl}}}">
+        <input type="hidden" name="bank" value="{{bankid}}">
+        {{#hascategories}}
+            <label class="ll-import-filters__field">
+                <span>{{#str}}importcategory, local_learnlogic{{/str}}</span>
+                <select name="category" class="ll-input">
+                    {{#categories}}
+                        <option value="{{id}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                    {{/categories}}
+                </select>
+            </label>
+        {{/hascategories}}
+        <label class="ll-import-filters__field ll-import-filters__field--grow">
+            <span>{{#str}}importsearch, local_learnlogic{{/str}}</span>
+            <input type="search" name="search" class="ll-input" value="{{search}}" autocomplete="off">
+        </label>
+        <button type="submit" class="ll-btn ll-btn--secondary">{{#str}}filter, moodle{{/str}}</button>
+    </form>
+
+    {{#hascandidates}}
+        <form method="post" action="{{{formurl}}}" class="ll-import-form" data-region="import-form">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="confirm" value="1">
+            <input type="hidden" name="bank" value="{{bankid}}">
+            {{#categoryid}}
+                <input type="hidden" name="category" value="{{categoryid}}">
+            {{/categoryid}}
+
+            <div class="ll-import-bar">
+                <div class="ll-import-bar__left">
+                    <p class="ll-import-bar__meta">{{foundlabel}}</p>
+                    <div class="ll-import-bar__bulk">
+                        <button type="button" class="ll-linkbtn" data-action="select-all">{{#str}}importselectall, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-linkbtn" data-action="select-new">{{#str}}importselectnew, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-linkbtn" data-action="select-none">{{#str}}importselectnone, local_learnlogic{{/str}}</button>
+                        <span class="ll-import-bar__sel" data-region="import-selected">0 {{#str}}importselectedcount, local_learnlogic{{/str}}</span>
+                    </div>
+                </div>
+                <div class="ll-import-bar__opts">
+                    <label>
+                        <span>{{#str}}difficulty, local_learnlogic{{/str}}</span>
+                        <select name="difficulty" class="ll-input">
+                            {{#difficulties}}
+                                <option value="{{key}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                            {{/difficulties}}
+                        </select>
+                    </label>
+                    <label>
+                        <span>{{#str}}status, local_learnlogic{{/str}}</span>
+                        <select name="status" class="ll-input">
+                            {{#statuses}}
+                                <option value="{{key}}" {{#selected}}selected{{/selected}}>{{label}}</option>
+                            {{/statuses}}
+                        </select>
+                    </label>
+                    <button type="submit" class="ll-btn ll-btn--primary" data-action="import-submit">
+                        {{#str}}importselected, local_learnlogic{{/str}}
+                    </button>
+                </div>
+            </div>
+
+            <label class="ll-import-live">
+                <span class="ll-ico ll-ico--search" aria-hidden="true"></span>
+                <input type="search" class="ll-input" data-action="filter-import"
+                       placeholder="{{#str}}importfilterlocal, local_learnlogic{{/str}}" autocomplete="off">
+            </label>
+
+            <div class="ll-table-wrap ll-import-table-wrap" data-region="import-list">
+                <table class="ll-table ll-import-table">
+                    <thead>
+                        <tr>
+                            <th class="ll-import-table__check">
+                                <input type="checkbox" id="ll-import-checkall" data-action="check-all" aria-label="{{#str}}importselectall, local_learnlogic{{/str}}">
+                            </th>
+                            <th>{{#str}}name, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}importcategory, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}language, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}importtags, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}importmultilang, local_learnlogic{{/str}}</th>
+                            <th>{{#str}}status, local_learnlogic{{/str}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#candidates}}
+                            <tr class="ll-import-tr {{#imported}}is-imported{{/imported}}"
+                                data-search="{{namesearch}} {{tagsearch}} {{category}} {{language}}">
+                                <td class="ll-import-table__check">
+                                    <input type="checkbox" class="ll-import-tr__cb" name="questionids[]"
+                                           value="{{id}}" {{#imported}}data-imported="1"{{/imported}}>
+                                </td>
+                                <td>
+                                    <strong class="ll-import-table__name">{{name}}</strong>
+                                    <span class="ll-import-table__sub">#{{id}}{{#version}} · v{{version}}{{/version}}</span>
+                                </td>
+                                <td>{{category}}</td>
+                                <td>{{typelabel}}</td>
+                                <td>
+                                    {{#hastags}}
+                                        <span class="ll-import-table__tags">{{tagslabel}}</span>
+                                    {{/hastags}}
+                                    {{^hastags}}
+                                        <span class="ll-muted">{{#str}}importnotags, local_learnlogic{{/str}}</span>
+                                    {{/hastags}}
+                                </td>
+                                <td>
+                                    {{#hasmultilang}}
+                                        {{multilanglabel}}
+                                    {{/hasmultilang}}
+                                    {{^hasmultilang}}
+                                        <span class="ll-muted">—</span>
+                                    {{/hasmultilang}}
+                                </td>
+                                <td>
+                                    {{#imported}}
+                                        <a href="{{{editurl}}}" class="ll-mbadge ll-mbadge--ready">{{#str}}importalready, local_learnlogic{{/str}}</a>
+                                    {{/imported}}
+                                    {{^imported}}
+                                        <span class="ll-mbadge ll-mbadge--new">{{#str}}importnew, local_learnlogic{{/str}}</span>
+                                    {{/imported}}
+                                </td>
+                            </tr>
+                        {{/candidates}}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    {{/hascandidates}}
+    {{^hascandidates}}
+        <div class="ll-manage__empty">
+            <p>{{#str}}importnoneinbank, local_learnlogic{{/str}}</p>
+        </div>
+    {{/hascandidates}}
+</div>

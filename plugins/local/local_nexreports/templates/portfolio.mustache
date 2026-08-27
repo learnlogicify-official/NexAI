@@ -1,0 +1,109 @@
+{{!
+    @template local_nexreports/portfolio
+    NexPortfolio connected learners report.
+}}
+<div class="nxr-app" data-region="nxr-portfolio"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-all-cohorts="{{#str}}allcohorts, local_nexreports{{/str}}"
+     data-label-all-platforms="{{#str}}allplatforms, local_nexreports{{/str}}"
+     data-label-all-colleges="{{#str}}allcolleges, local_nexreports{{/str}}"
+     data-label-all-years="{{#str}}allyears, local_nexreports{{/str}}"
+     data-label-all-departments="{{#str}}alldepartments, local_nexreports{{/str}}"
+     data-label-firstname="{{#str}}firstname, local_nexreports{{/str}}"
+     data-label-lastname="{{#str}}lastname, local_nexreports{{/str}}"
+     data-label-username="{{#str}}username, local_nexreports{{/str}}"
+     data-label-institution="{{#str}}college, local_nexreports{{/str}}"
+     data-label-yearofpassing="{{#str}}yearofpassing, local_nexreports{{/str}}"
+     data-label-department="{{#str}}department, local_nexreports{{/str}}"
+     data-export-url="{{exporturl}}">
+
+    {{> local_nexreports/shell }}
+    {{> local_nexreports/portfolio_subnav }}
+
+    <div class="nxr-kpis nxr-kpis--portfolio" data-region="portfolio-kpis">
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}portfolioconnected, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="connectedlearners">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}portfolioplatformlinks, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="platformlinks">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}portfoliototalsolved, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="totalsolved">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}portfoliototalcontests, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="totalcontests">—</strong>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <article class="nxr-card">
+        <header class="nxr-card__head">
+            <h2 class="nxr-card__title">{{#str}}portfolioconnectedlearners, local_nexreports{{/str}}</h2>
+            {{> local_nexreports/table_export }}
+        </header>
+        <p class="nxr-card__hint">{{#str}}portfolioconnectedlearners_help, local_nexreports{{/str}}</p>
+        <div class="nxr-report-filters">
+            {{#showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}college, local_nexreports{{/str}}</span>
+                <select data-filter="college" name="nxr_pf_college" autocomplete="off">
+                    <option value="" selected>{{#str}}allcolleges, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}yearofpassing, local_nexreports{{/str}}</span>
+                <select data-filter="year" name="nxr_pf_year" autocomplete="off">
+                    <option value="" selected>{{#str}}allyears, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{#showdepartment}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}department, local_nexreports{{/str}}</span>
+                <select data-filter="department" name="nxr_pf_department" autocomplete="off">
+                    <option value="" selected>{{#str}}alldepartments, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showdepartment}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}cohortfilter, local_nexreports{{/str}}</span>
+                <select data-filter="cohort">
+                    <option value="0">{{#str}}allcohorts, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}platformfilter, local_nexreports{{/str}}</span>
+                <select data-filter="platform">
+                    <option value="">{{#str}}allplatforms, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            <label class="nxr-search">
+                <span class="nxr-search__icon" aria-hidden="true"></span>
+                <input type="search" data-filter="search" placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}">
+            </label>
+        </div>
+        <div data-region="portfolio-table">
+            <div class="nxr-skeleton nxr-skeleton--table"></div>
+        </div>
+    </article>
+</div>

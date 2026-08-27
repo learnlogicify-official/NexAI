@@ -1,0 +1,75 @@
+{{!
+    @template local_nexreports/courses
+    All courses summary — Edwiser column/filter parity.
+}}
+<div class="nxr-app" data-region="nxr-courses"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-exclude="{{#str}}exclude, local_nexreports{{/str}}"
+     data-export-url="{{exporturl}}">
+
+    {{> local_nexreports/shell }}
+    {{> local_nexreports/courses_subnav }}
+
+    <article class="nxr-card nxr-card--acs">
+        <header class="nxr-acs-head">
+            <div class="nxr-acs-head__main">
+                <h2 class="nxr-card__title">{{#str}}allcoursessummary, local_nexreports{{/str}}</h2>
+                <p class="nxr-showing">
+                    {{#str}}showingdatafor, local_nexreports{{/str}}
+                    <span class="nxr-pill" data-region="enrolment-label">{{#str}}enrolmentalltime, local_nexreports{{/str}}</span>
+                </p>
+            </div>
+            <div class="nxr-acs-head__tools">
+                <label class="nxr-acs-date">
+                    <span class="nxr-acs-date__label">{{#str}}enrolmentdate, local_nexreports{{/str}}</span>
+                    <select data-filter="enrolment">
+                        <option value="all">{{#str}}enrolmentalltime, local_nexreports{{/str}}</option>
+                        <option value="last7days">{{#str}}enrolmentlast7days, local_nexreports{{/str}}</option>
+                        <option value="weekly">{{#str}}enrolmentlastweek, local_nexreports{{/str}}</option>
+                        <option value="monthly">{{#str}}enrolmentlastmonth, local_nexreports{{/str}}</option>
+                        <option value="yearly">{{#str}}enrolmentlastyear, local_nexreports{{/str}}</option>
+                    </select>
+                </label>
+                {{> local_nexreports/table_export }}
+            </div>
+        </header>
+
+        <div class="nxr-acs-filters">
+            <div class="nxr-acs-filter nxr-acs-filter--search">
+                <span class="nxr-acs-filter__label">{{#str}}search, local_nexreports{{/str}}</span>
+                <label class="nxr-search nxr-search--acs">
+                    <span class="nxr-search__icon" aria-hidden="true"></span>
+                    <input type="search" data-filter="search" placeholder="{{#str}}searchbycourse, local_nexreports{{/str}}">
+                </label>
+            </div>
+            <div class="nxr-acs-filter nxr-acs-filter--exclude" data-region="exclude-wrap">
+                <span class="nxr-acs-filter__label">{{#str}}exclude, local_nexreports{{/str}}</span>
+                <button type="button" class="nxr-exclude-toggle" data-region="exclude-toggle" aria-expanded="false">
+                    <span data-region="exclude-summary">{{#str}}exclude, local_nexreports{{/str}}</span>
+                    <span class="nxr-exclude-toggle__caret" aria-hidden="true"></span>
+                </button>
+                <div class="nxr-exclude-menu" data-region="exclude-menu" hidden>
+                    <label class="nxr-exclude-option">
+                        <input type="checkbox" data-exclude="suspended" value="suspended">
+                        <span>{{#str}}excludesuspended, local_nexreports{{/str}}</span>
+                    </label>
+                    <label class="nxr-exclude-option">
+                        <input type="checkbox" data-exclude="inactiveyear" value="inactiveyear">
+                        <span>{{#str}}excludeinactiveyear, local_nexreports{{/str}}</span>
+                    </label>
+                    <label class="nxr-exclude-option">
+                        <input type="checkbox" data-exclude="inactivemonth" value="inactivemonth">
+                        <span>{{#str}}excludeinactivemonth, local_nexreports{{/str}}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <p class="nxr-table-info" data-region="table-info" hidden></p>
+        <div data-region="courses-table">
+            <div class="nxr-skeleton nxr-skeleton--table"></div>
+        </div>
+        <div data-region="pager"></div>
+    </article>
+</div>

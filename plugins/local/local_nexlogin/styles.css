@@ -1,0 +1,783 @@
+/* Fonts load only on auth pages via fonts.css (not a site-wide @import). */
+
+/* NexLogin — centered light auth card (RemUI-safe) */
+
+body.nxl-active.pagelayout-login,
+body.nxl-active.path-login,
+body.nxl-active,
+body.pagelayout-login.nxl-shell-ready,
+body#page-login-index.nxl-shell-ready,
+body#page-login-signup.nxl-shell-ready,
+html.nxl-pending body {
+    --nxl-bg: #e7edf6;
+    --nxl-bg-deep: #d5e0ef;
+    --nxl-card: #ffffff;
+    --nxl-field: #f4f6f9;
+    --nxl-line: #d7dee8;
+    --nxl-accent: #2f6bff;
+    --nxl-accent-soft: rgba(47, 107, 255, 0.22);
+    --nxl-text: #111827;
+    --nxl-muted: #6b7280;
+    --nxl-radius: 14px;
+    --nxl-font: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+}
+
+body.nxl-active.pagelayout-login,
+body.nxl-active.path-login,
+body.nxl-shell-ready,
+html.nxl-pending body.pagelayout-login,
+html.nxl-pending body.path-login,
+html.nxl-pending body#page-login-index,
+html.nxl-pending body#page-login-signup {
+    background: var(--nxl-bg, #e3eaf5) !important;
+    color: var(--nxl-text, #111827);
+    font-family: var(--nxl-font, 'DM Sans', system-ui, sans-serif) !important;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Hide Moodle / RemUI chrome once shell mounts OR while pending */
+body.nxl-shell-ready #page-header,
+body.nxl-shell-ready .navbar,
+body.nxl-shell-ready .edw-header,
+body.nxl-shell-ready .edw-header-bar,
+body.nxl-shell-ready #nav-drawer,
+body.nxl-shell-ready .drawer,
+body.nxl-shell-ready #page-footer,
+body.nxl-shell-ready footer,
+body.nxl-shell-ready .login-logo,
+body.nxl-shell-ready .login-languagemenu,
+body.nxl-shell-ready .login-divider,
+body.nxl-shell-ready .login-identityproviders > h2,
+body.nxl-shell-ready .login-heading,
+body.nxl-shell-ready h1.login-heading,
+html.nxl-pending body.pagelayout-login #page-header,
+html.nxl-pending body.pagelayout-login .navbar,
+html.nxl-pending body.pagelayout-login .edw-header,
+html.nxl-pending body.pagelayout-login #page-footer,
+html.nxl-pending body.path-login #page-header,
+html.nxl-pending body.path-login .navbar,
+html.nxl-pending body.path-login .edw-header,
+html.nxl-pending body.path-login #page-footer {
+    display: none !important;
+}
+
+/* Suppress old Moodle login flash until our shell is ready */
+html.nxl-pending body.pagelayout-login #page,
+html.nxl-pending body.pagelayout-login #page-wrapper,
+html.nxl-pending body.pagelayout-login #region-main,
+html.nxl-pending body.pagelayout-login .login-wrapper,
+html.nxl-pending body.pagelayout-login .login-container,
+html.nxl-pending body.path-login #page,
+html.nxl-pending body.path-login #page-wrapper,
+html.nxl-pending body.path-login #region-main,
+html.nxl-pending body.path-login .login-wrapper,
+html.nxl-pending body.path-login .login-container,
+html.nxl-pending body#page-login-index #page,
+html.nxl-pending body#page-login-signup #page {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.nxl-shell-ready #page,
+body.nxl-shell-ready #page-wrapper,
+body.nxl-shell-ready #topofscroll,
+body.nxl-shell-ready #page-content,
+body.nxl-shell-ready #region-main-box,
+body.nxl-shell-ready #region-main,
+body.nxl-shell-ready .main-inner,
+body.nxl-shell-ready .login-wrapper,
+body.nxl-shell-ready .login-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    min-height: 0 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+body.nxl-shell-ready .login-container,
+body.nxl-shell-ready .card,
+body.nxl-shell-ready .card-body {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+#nxl-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 4500;
+    background:
+        radial-gradient(ellipse 70% 55% at 12% 18%, rgba(47, 107, 255, 0.16), transparent 58%),
+        radial-gradient(ellipse 55% 50% at 88% 82%, rgba(56, 189, 248, 0.12), transparent 55%),
+        linear-gradient(155deg, #e3eaf5 0%, #eef2f8 42%, #e6edf6 100%);
+    pointer-events: none;
+}
+body.nxl-shell-ready #nxl-splash {
+    display: none !important;
+}
+
+/* —— Full-page shell —— */
+.nxl-shell {
+    position: fixed;
+    inset: 0;
+    z-index: 4000;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    background:
+        linear-gradient(155deg, #e3eaf5 0%, #eef2f8 42%, #e6edf6 100%);
+    font-family: var(--nxl-font);
+    color: var(--nxl-text);
+    overflow: auto;
+}
+
+/* Signup forms are long — scroll from the top, wider card */
+.nxl-shell.nxl-mode-signup {
+    place-items: center;
+    padding: 1rem 1.25rem;
+    overflow: hidden;
+}
+.nxl-shell.nxl-mode-signup .nxl-card {
+    width: min(720px, 100%);
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    padding: 1.25rem 1.35rem 1.15rem;
+    margin: 0 auto;
+}
+.nxl-shell.nxl-mode-signup .nxl-card__logo {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.7rem;
+}
+.nxl-shell.nxl-mode-signup .nxl-card__logo--img {
+    width: auto;
+    max-width: min(200px, 70%);
+    height: auto;
+    min-height: 40px;
+}
+.nxl-shell.nxl-mode-signup .nxl-card__logo--img img {
+    max-height: 48px;
+}
+.nxl-shell.nxl-mode-signup .nxl-card__logo-ring {
+    width: 26px;
+    height: 26px;
+}
+.nxl-shell.nxl-mode-signup .nxl-card__title {
+    font-size: 1.35rem;
+    margin-bottom: 0.25rem;
+}
+.nxl-shell.nxl-mode-signup .nxl-card__sub {
+    margin-bottom: 0.9rem;
+    font-size: 0.86rem;
+}
+.nxl-shell.nxl-mode-signup .nxl-or,
+.nxl-shell.nxl-mode-signup .nxl-idp-host {
+    display: none !important;
+}
+
+/* Atmospheric background layers */
+.nxl-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+.nxl-bg__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    will-change: transform;
+}
+.nxl-bg__orb--a {
+    width: min(58vw, 560px);
+    height: min(58vw, 560px);
+    top: -14%;
+    left: -10%;
+    background: radial-gradient(circle at 40% 40%,
+        rgba(47, 107, 255, 0.28) 0%,
+        rgba(47, 107, 255, 0.08) 42%,
+        transparent 70%);
+    animation: nxl-drift-a 22s ease-in-out infinite alternate;
+}
+.nxl-bg__orb--b {
+    width: min(48vw, 480px);
+    height: min(48vw, 480px);
+    right: -8%;
+    bottom: -12%;
+    background: radial-gradient(circle at 55% 45%,
+        rgba(14, 165, 233, 0.2) 0%,
+        rgba(100, 116, 139, 0.08) 45%,
+        transparent 70%);
+    animation: nxl-drift-b 26s ease-in-out infinite alternate;
+}
+.nxl-bg__orb--c {
+    width: min(36vw, 340px);
+    height: min(36vw, 340px);
+    top: 42%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(47, 107, 255, 0.06) 45%,
+        transparent 70%);
+    animation: nxl-breathe 14s ease-in-out infinite;
+}
+.nxl-bg__mesh {
+    position: absolute;
+    inset: 0;
+    opacity: 0.45;
+    background-image:
+        linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 75% 70% at 50% 48%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 48%, #000 20%, transparent 75%);
+}
+.nxl-bg__wash {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 55% 48% at 50% 48%, rgba(255, 255, 255, 0.55) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(231, 237, 246, 0.15) 0%, transparent 35%, rgba(213, 224, 239, 0.35) 100%);
+}
+.nxl-bg__beam {
+    position: absolute;
+    width: 140%;
+    height: 42%;
+    top: -8%;
+    left: -20%;
+    background: linear-gradient(115deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.35) 48%,
+        rgba(47, 107, 255, 0.06) 52%,
+        transparent 68%);
+    transform: rotate(-8deg);
+    animation: nxl-beam 18s ease-in-out infinite alternate;
+    opacity: 0.85;
+}
+
+@keyframes nxl-drift-a {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(4%, 6%) scale(1.06); }
+}
+@keyframes nxl-drift-b {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-5%, -4%) scale(1.08); }
+}
+@keyframes nxl-breathe {
+    0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+    50%      { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.12); }
+}
+@keyframes nxl-beam {
+    from { transform: rotate(-8deg) translateX(0); opacity: 0.55; }
+    to   { transform: rotate(-8deg) translateX(4%); opacity: 0.9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nxl-bg__orb--a,
+    .nxl-bg__orb--b,
+    .nxl-bg__orb--c,
+    .nxl-bg__beam {
+        animation: none !important;
+    }
+}
+
+/* —— Card —— */
+.nxl-card {
+    position: relative;
+    z-index: 2;
+    width: min(400px, 100%);
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(229, 234, 242, 0.95);
+    border-radius: 18px;
+    padding: 2rem 1.75rem 1.75rem;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.8) inset,
+        0 18px 50px rgba(15, 23, 42, 0.1),
+        0 4px 14px rgba(47, 107, 255, 0.05);
+}
+
+.nxl-card__logo {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.35rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(circle at 50% 50%, transparent 54%, rgba(47, 107, 255, 0.08) 55%),
+        #f8fafc;
+    border: 1px solid #e5eaf2;
+    position: relative;
+    overflow: hidden;
+}
+.nxl-card__logo--img {
+    width: auto;
+    max-width: min(220px, 70%);
+    height: auto;
+    min-height: 48px;
+    border-radius: 12px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+.nxl-card__logo--img img {
+    display: block;
+    max-width: 100%;
+    max-height: 64px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+.nxl-card__logo-ring {
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 3px solid #cbd5e1;
+    border-bottom-color: var(--nxl-accent);
+    border-right-color: var(--nxl-accent);
+    transform: rotate(25deg);
+}
+
+.nxl-card__title {
+    margin: 0 0 0.45rem;
+    text-align: center;
+    font-size: 1.65rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--nxl-text);
+}
+
+.nxl-card__sub {
+    margin: 0 0 1.5rem;
+    text-align: center;
+    color: var(--nxl-muted);
+    font-size: 0.92rem;
+}
+.nxl-card__sub a {
+    color: var(--nxl-accent);
+    font-weight: 600;
+    text-decoration: none;
+}
+.nxl-card__sub a:hover {
+    text-decoration: underline;
+}
+
+.nxl-form-host {
+    width: 100%;
+}
+
+.nxl-form-host form {
+    margin: 0;
+}
+
+.nxl-form-host .form-group,
+.nxl-form-host .mb-3,
+.nxl-form-host .fitem,
+.nxl-form-host .row.fitem,
+.nxl-form-host .login-form-username,
+.nxl-form-host .login-form-password {
+    margin-bottom: 0.85rem !important;
+}
+
+/* Login only: hide labels (placeholders + icons carry the UI) */
+.nxl-mode-login .nxl-form-host label,
+.nxl-mode-login .nxl-form-host .col-form-label,
+.nxl-mode-login .nxl-form-host .fitemtitle,
+.nxl-mode-login .nxl-form-host .login-form-username label,
+.nxl-mode-login .nxl-form-host .login-form-password label {
+    display: none !important;
+}
+
+.nxl-mode-login .nxl-form-host .felement,
+.nxl-mode-login .nxl-form-host .col-md-9,
+.nxl-mode-login .nxl-form-host .col-md-3,
+.nxl-mode-login .nxl-form-host .col-12 {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 1 1 auto !important;
+    padding: 0 !important;
+}
+
+.nxl-form-host input[type="text"],
+.nxl-form-host input[type="email"],
+.nxl-form-host input[type="password"],
+.nxl-form-host input[type="tel"],
+.nxl-form-host select,
+.nxl-form-host textarea,
+.nxl-form-host .form-control {
+    width: 100% !important;
+    background: var(--nxl-field) !important;
+    border: 1px solid var(--nxl-line) !important;
+    border-radius: 12px !important;
+    color: var(--nxl-text) !important;
+    padding: 0.95rem 1rem !important;
+    min-height: 3.15rem;
+    box-shadow: none !important;
+    font-size: 0.95rem !important;
+}
+
+/* Extra left padding only when icon wrapper is present (login) */
+.nxl-mode-login .nxl-field input,
+.nxl-mode-login .nxl-form-host input[type="text"],
+.nxl-mode-login .nxl-form-host input[type="email"],
+.nxl-mode-login .nxl-form-host input[type="password"] {
+    padding-left: 2.75rem !important;
+}
+
+.nxl-form-host input::placeholder {
+    color: #6f6f6f !important;
+}
+
+.nxl-form-host input:focus,
+.nxl-form-host select:focus,
+.nxl-form-host textarea:focus,
+.nxl-form-host .form-control:focus {
+    border-color: var(--nxl-accent) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(47, 107, 255, 0.2) !important;
+}
+
+/* Icon wrappers injected by JS (login only) */
+.nxl-field {
+    position: relative;
+    margin-bottom: 0.85rem;
+}
+.nxl-field__icon {
+    position: absolute;
+    left: 0.95rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #64748b;
+    pointer-events: none;
+    z-index: 2;
+}
+.nxl-field input {
+    padding-left: 2.75rem !important;
+}
+
+/* —— Signup: readable Moodle mform in two columns —— */
+.nxl-mode-signup .nxl-form-host .fcontainer,
+.nxl-mode-signup .nxl-form-host fieldset,
+.nxl-mode-signup .nxl-form-host .mform {
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+.nxl-mode-signup .nxl-form-host #fgroup_id_buttonar,
+.nxl-mode-signup .nxl-form-host .fitem_actionbuttons,
+.nxl-mode-signup .nxl-form-host .form-group.fitem_actionbuttons {
+    grid-column: 1 / -1;
+}
+.nxl-mode-signup .nxl-form-host form.mform > .fcontainer,
+.nxl-mode-signup .nxl-form-host form.mform,
+.nxl-mode-signup .nxl-form-host form > .fcontainer,
+.nxl-mode-signup .nxl-form-host .nxl-signup-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem 0.85rem;
+    align-items: start;
+}
+.nxl-mode-signup .nxl-form-host legend,
+.nxl-mode-signup .nxl-form-host .collapsible-actions,
+.nxl-mode-signup .nxl-form-host .ftoggler {
+    display: none !important;
+}
+.nxl-mode-signup .nxl-form-host .fdescription {
+    grid-column: 1 / -1;
+    color: var(--nxl-muted) !important;
+    font-size: 0.75rem;
+    margin: 0 !important;
+}
+.nxl-mode-signup .nxl-form-host .fitem,
+.nxl-mode-signup .nxl-form-host .form-group,
+.nxl-mode-signup .nxl-form-host .mb-3,
+.nxl-mode-signup .nxl-form-host .row.mb-3 {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    min-width: 0;
+}
+/* Hide city / country (and common profile variants) */
+.nxl-mode-signup .nxl-form-host #fitem_id_city,
+.nxl-mode-signup .nxl-form-host #fitem_id_country,
+.nxl-mode-signup .nxl-form-host .fitem_id_city,
+.nxl-mode-signup .nxl-form-host .fitem_id_country,
+.nxl-mode-signup .nxl-form-host [data-field-name="city"],
+.nxl-mode-signup .nxl-form-host [data-field-name="country"],
+.nxl-mode-signup .nxl-form-host .nxl-hide-geo {
+    display: none !important;
+}
+.nxl-mode-signup .nxl-form-host label,
+.nxl-mode-signup .nxl-form-host .col-form-label,
+.nxl-mode-signup .nxl-form-host .fitemtitle {
+    display: block !important;
+    float: none !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 0 0.28rem !important;
+    padding: 0 !important;
+    color: var(--nxl-muted) !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    text-align: left !important;
+}
+.nxl-mode-signup .nxl-form-host .felement,
+.nxl-mode-signup .nxl-form-host .col-md-9,
+.nxl-mode-signup .nxl-form-host .col-md-3,
+.nxl-mode-signup .nxl-form-host .col-form-label,
+.nxl-mode-signup .nxl-form-host [class*="col-"] {
+    width: 100% !important;
+    max-width: none !important;
+    flex: 0 0 auto !important;
+    padding: 0 !important;
+}
+.nxl-mode-signup .nxl-form-host input[type="text"],
+.nxl-mode-signup .nxl-form-host input[type="email"],
+.nxl-mode-signup .nxl-form-host input[type="password"],
+.nxl-mode-signup .nxl-form-host input[type="tel"],
+.nxl-mode-signup .nxl-form-host select,
+.nxl-mode-signup .nxl-form-host textarea,
+.nxl-mode-signup .nxl-form-host .form-control {
+    min-height: 2.55rem !important;
+    padding: 0.55rem 0.75rem !important;
+    font-size: 0.88rem !important;
+    border-radius: 10px !important;
+}
+.nxl-mode-signup .nxl-form-host .form-control-static,
+.nxl-mode-signup .nxl-form-host .form-text,
+.nxl-mode-signup .nxl-form-host .text-muted,
+.nxl-mode-signup .nxl-form-host .fstatic,
+.nxl-mode-signup .nxl-form-host .password-strength-meter,
+.nxl-mode-signup .nxl-form-host .form-control-feedback {
+    color: var(--nxl-muted) !important;
+    font-size: 0.72rem;
+    line-height: 1.3;
+}
+.nxl-mode-signup .nxl-form-host .fdescription.required,
+.nxl-mode-signup .nxl-form-host .required .fitemtitle label::after {
+    color: #f87171;
+}
+.nxl-mode-signup .nxl-form-host .btn-primary,
+.nxl-mode-signup .nxl-form-host button[type="submit"],
+.nxl-mode-signup .nxl-form-host input[type="submit"] {
+    min-height: 2.7rem !important;
+    margin-top: 0.15rem !important;
+    border-radius: 10px !important;
+}
+.nxl-mode-signup .nxl-form-host .btn-cancel,
+.nxl-mode-signup .nxl-form-host a.btn {
+    background: #e8edf5 !important;
+    border: 0 !important;
+    color: var(--nxl-text) !important;
+    border-radius: 10px !important;
+}
+.nxl-mode-signup .nxl-form-host select.form-control,
+.nxl-mode-signup .nxl-form-host select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #888 50%),
+        linear-gradient(135deg, #888 50%, transparent 50%);
+    background-position: calc(100% - 18px) 55%, calc(100% - 12px) 55%;
+    background-size: 6px 6px, 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: 2rem !important;
+}
+/* Full-width rows: policy, password notes, actions, email confirmation */
+.nxl-mode-signup .nxl-form-host .nxl-span-2,
+.nxl-mode-signup .nxl-form-host #fitem_id_passwordpolicy,
+.nxl-mode-signup .nxl-form-host #fitem_id_supplypassword,
+.nxl-mode-signup .nxl-form-host #fitem_id_policyagreed,
+.nxl-mode-signup .nxl-form-host #fitem_id_email2,
+.nxl-mode-signup .nxl-form-host .fitem_id_policyagreed,
+.nxl-mode-signup .nxl-form-host .checkbox,
+.nxl-mode-signup .nxl-form-host .form-check,
+.nxl-mode-signup .nxl-form-host .fstatic,
+.nxl-mode-signup .nxl-form-host .fitem_actionbuttons {
+    grid-column: 1 / -1;
+}
+.nxl-mode-signup .nxl-form-host .nxl-name-row {
+    display: contents;
+}
+
+@media (max-width: 640px) {
+    .nxl-mode-signup .nxl-form-host form.mform > .fcontainer,
+    .nxl-mode-signup .nxl-form-host form.mform,
+    .nxl-mode-signup .nxl-form-host form > .fcontainer,
+    .nxl-mode-signup .nxl-form-host .nxl-signup-grid {
+        grid-template-columns: 1fr !important;
+    }
+    .nxl-shell.nxl-mode-signup {
+        overflow: auto;
+        place-items: start center;
+    }
+    .nxl-shell.nxl-mode-signup .nxl-card {
+        max-height: none;
+    }
+}
+
+.nxl-form-host .rememberpass,
+.nxl-form-host .login-form-forgotpassword,
+.nxl-form-host .forgetpass,
+.nxl-form-host .login-signup,
+.nxl-form-host .checkbox,
+.nxl-form-host .form-check {
+    color: var(--nxl-muted) !important;
+    font-size: 0.85rem;
+    margin: 0.35rem 0 0.9rem !important;
+}
+.nxl-form-host a {
+    color: var(--nxl-accent) !important;
+    text-decoration: none;
+}
+.nxl-form-host a:hover {
+    text-decoration: underline !important;
+}
+
+.nxl-form-host .btn-primary,
+.nxl-form-host button[type="submit"],
+.nxl-form-host input[type="submit"],
+.nxl-form-host .btn-login,
+.nxl-form-host .login-form-submit .btn {
+    display: block !important;
+    width: 100% !important;
+    background: var(--nxl-accent) !important;
+    border: 0 !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    padding: 0.9rem 1.25rem !important;
+    min-height: 3.15rem;
+    box-shadow: none !important;
+    margin-top: 0.35rem !important;
+}
+.nxl-form-host .btn-primary:hover,
+.nxl-form-host button[type="submit"]:hover {
+    filter: brightness(1.08);
+}
+
+.nxl-form-host .alert {
+    border-radius: 12px !important;
+    margin-bottom: 1rem !important;
+    font-size: 0.88rem;
+}
+
+/* Hide RemUI extras that clutter the card */
+.nxl-form-host .login-form-forgotpassword + .login-signup,
+.nxl-form-host .potentialidps h2,
+.nxl-form-host .login-instructions,
+.nxl-form-host .login-extra {
+    display: none !important;
+}
+
+.nxl-or {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 1.15rem 0 1rem;
+    color: var(--nxl-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.nxl-or::before,
+.nxl-or::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--nxl-line);
+}
+
+.nxl-social {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+}
+.nxl-social a,
+.nxl-social button {
+    display: grid;
+    place-items: center;
+    height: 46px;
+    border-radius: 10px;
+    border: 1px solid var(--nxl-line);
+    background: #fff;
+    color: var(--nxl-text);
+    text-decoration: none;
+    transition: border-color .15s ease, background .15s ease;
+}
+.nxl-social a:hover,
+.nxl-social button:hover {
+    border-color: #c5cedb;
+    background: #f8fafc;
+}
+.nxl-social svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+/* Moodle OAuth / identity providers — restyle into social row if present */
+.nxl-form-host .potentialidps,
+.nxl-form-host .login-identityproviders {
+    margin-top: 0.5rem;
+}
+.nxl-form-host .potentialidps ul,
+.nxl-form-host .login-identityproviders .list-unstyled {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.nxl-form-host .potentialidps li,
+.nxl-form-host .login-identityproviders li {
+    margin: 0 !important;
+}
+.nxl-form-host .potentialidps a,
+.nxl-form-host .login-identityproviders a {
+    display: grid !important;
+    place-items: center;
+    height: 46px;
+    border-radius: 10px !important;
+    border: 1px solid var(--nxl-line) !important;
+    background: #fff !important;
+    padding: 0 !important;
+}
+
+.nxl-idp-host:empty,
+.nxl-social:empty {
+    display: none;
+}
+
+@media (max-width: 720px) {
+    .nxl-bg__orb--c,
+    .nxl-bg__beam {
+        display: none;
+    }
+    .nxl-bg__mesh {
+        opacity: 0.28;
+        background-size: 36px 36px;
+    }
+    .nxl-card {
+        padding: 1.65rem 1.25rem 1.35rem;
+        background: rgba(255, 255, 255, 0.96);
+    }
+}

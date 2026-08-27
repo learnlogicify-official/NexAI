@@ -1,0 +1,77 @@
+{{!
+    @template local_nexreports/course_completion
+    Course Completion.
+}}
+<div class="nxr-app" data-region="nxr-course-completion"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-all-years="{{#str}}allyears, local_nexreports{{/str}}"
+     data-label-all-departments="{{#str}}alldepartments, local_nexreports{{/str}}"
+     data-label-all-colleges="{{#str}}allcolleges, local_nexreports{{/str}}"
+     data-label-select-year-first="{{#str}}selectyearfirst, local_nexreports{{/str}}"
+     data-label-firstname="{{#str}}firstname, local_nexreports{{/str}}"
+     data-label-lastname="{{#str}}lastname, local_nexreports{{/str}}"
+     data-label-username="{{#str}}username, local_nexreports{{/str}}"
+     data-label-email="{{#str}}email, local_nexreports{{/str}}"
+     data-label-institution="{{#str}}institution, local_nexreports{{/str}}"
+     data-label-department="{{#str}}department, local_nexreports{{/str}}"
+     data-label-yearofpassing="{{#str}}yearofpassing, local_nexreports{{/str}}"
+     data-label-enrolledon="{{#str}}enrolledon, local_nexreports{{/str}}"
+     data-label-lastaccess="{{#str}}lastaccess, local_nexreports{{/str}}"
+     data-label-progress="{{#str}}progress, local_nexreports{{/str}}"
+     data-label-status="{{#str}}status, local_nexreports{{/str}}"
+     data-label-completedon="{{#str}}completedon, local_nexreports{{/str}}"
+     data-label-completedactivities="{{#str}}completedactivitiescol, local_nexreports{{/str}}"
+     data-label-totalactivities="{{#str}}totalactivities, local_nexreports{{/str}}"
+     data-label-codingsolved="{{#str}}codingsolved, local_nexreports{{/str}}"
+     data-label-codingtotal="{{#str}}codingtotal, local_nexreports{{/str}}"
+     data-label-visits="{{#str}}visits, local_nexreports{{/str}}"
+     data-label-timespent="{{#str}}timespent, local_nexreports{{/str}}"
+     data-export-url="{{exporturl}}">
+
+    {{> local_nexreports/shell }}
+    {{> local_nexreports/courses_subnav }}
+
+    <article class="nxr-card">
+        <header class="nxr-card__head">
+            <h2 class="nxr-card__title">{{#str}}coursecompletion, local_nexreports{{/str}}</h2>
+            {{> local_nexreports/table_export }}
+        </header>
+        <div class="nxr-report-filters">
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}coursefilter, local_nexreports{{/str}}</span>
+                <select data-filter="course"></select>
+            </div>
+            {{#showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}college, local_nexreports{{/str}}</span>
+                <select data-filter="college">
+                    <option value="">{{#str}}allcolleges, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}yearofpassing, local_nexreports{{/str}}</span>
+                <select data-filter="year">
+                    <option value="">{{#str}}allyears, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{#showdepartment}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}department, local_nexreports{{/str}}</span>
+                <select data-filter="department">
+                    <option value="">{{#str}}alldepartments, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showdepartment}}
+            <label class="nxr-search">
+                <span class="nxr-search__icon" aria-hidden="true"></span>
+                <input type="search" data-filter="search" placeholder="{{#str}}searchbylearner, local_nexreports{{/str}}">
+            </label>
+        </div>
+        <div data-region="report-table">
+            <div class="nxr-skeleton nxr-skeleton--table"></div>
+        </div>
+        <div data-region="pager"></div>
+    </article>
+</div>

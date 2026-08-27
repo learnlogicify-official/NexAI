@@ -1,0 +1,172 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+/**
+ * English strings for local_nexdashboard.
+ *
+ * @package    local_nexdashboard
+ * @copyright  2026 Nex Academy
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+defined('MOODLE_INTERNAL') || die();
+
+$string['pluginname'] = 'NexDashboard';
+$string['menuname'] = 'Dashboard';
+$string['nexdashboard:view'] = 'View student dashboard';
+
+$string['replacemyhome'] = 'Replace Moodle Dashboard (/my/)';
+$string['replacemyhome_desc'] = 'When enabled, the site’s single Dashboard / My home item opens NexDashboard. Leaderboard is added as its own top-navbar link.';
+
+$string['greetingmorning'] = 'Good morning';
+$string['greetingafternoon'] = 'Good afternoon';
+$string['greetingevening'] = 'Good evening';
+$string['welcomeback'] = 'Welcome back, {$a}!';
+$string['unlockachievements'] = 'Time to unlock new achievements!';
+$string['todaysfocus'] = 'Today’s focus';
+
+$string['nextaction'] = 'Next best action';
+$string['continuelearning'] = 'Continue learning';
+$string['progress'] = 'Progress';
+$string['viewall'] = 'View all';
+$string['start'] = 'Start';
+$string['continue'] = 'Continue';
+$string['courses'] = 'Courses';
+$string['practice'] = 'NexPractice';
+$string['codelab'] = 'CodeLab';
+$string['learninganalytics'] = 'Learning Analytics';
+$string['weekly'] = 'Weekly';
+$string['daily'] = 'Daily';
+$string['monthly'] = 'Monthly';
+$string['period'] = 'Period';
+$string['metric'] = 'Metric';
+$string['xpearned'] = 'XP Earned';
+$string['problemssolved'] = 'Problems Solved';
+$string['timespent'] = 'Time Spent';
+$string['totalxp'] = 'Total XP';
+$string['totalxpearned'] = 'Total XP Earned';
+$string['totalproblemssolved'] = 'Total Problems Solved';
+$string['totaltimespent'] = 'Total Time Spent';
+$string['alltime'] = 'Grades + Practice + CodeLab + Battle';
+$string['alltimelabel'] = 'All time';
+$string['xphint'] = 'Course grades {$a->grades} · Practice {$a->practice} · CodeLab {$a->codelab}';
+$string['average'] = 'Average';
+$string['perweek'] = 'Per week (chart)';
+$string['perday'] = 'Per day (chart)';
+$string['permonth'] = 'Per month (chart)';
+$string['trend'] = 'Trend';
+$string['trendhint'] = 'vs average of previous periods';
+$string['weekof'] = 'Week of {$a}';
+$string['minutesunit'] = '{$a} min';
+$string['chartempty'] = 'No data for this period yet.';
+$string['dailystreak'] = 'Daily streak';
+$string['days'] = 'Days';
+$string['higheststreak'] = 'Highest streak: {$a} days';
+$string['keepstreak'] = 'Keep your streak going!';
+$string['streakhint'] = 'Counts Practice, CodeLab, course tests, battles, and interviews — not visits or time on site.';
+$string['playerstats'] = 'Player stats';
+$string['totalsolved'] = 'Total solved';
+$string['rank'] = 'Rank';
+$string['accuracy'] = 'Accuracy';
+$string['currentstreak'] = 'Current streak';
+$string['learningtime'] = 'Learning time';
+$string['learningtimehint'] = 'Tracked time on site + estimated time before tracking started';
+$string['nocourses'] = 'No courses yet — enrol to see them here.';
+$string['nothingtodo'] = 'You are all caught up. Pick a challenge to keep going.';
+$string['loading'] = 'Loading dashboard…';
+$string['loaderror'] = 'Could not load the dashboard. Check your connection and try again.';
+
+$string['stepof'] = 'Step {$a->step} of {$a->total}';
+$string['resumemission'] = 'Resume your CodeLab mission';
+$string['resumestepdetail'] = 'Step {$a->step} of {$a->total} · {$a->xp} XP';
+$string['finishpractice'] = 'Finish this NexPractice challenge';
+$string['retry'] = 'Retry';
+$string['practicebtn'] = 'Practice';
+$string['strengthen'] = 'Strengthen: {$a}';
+$string['strengthen_detail'] = 'Your acceptance rate here is {$a}% — one more solve helps.';
+$string['stuckpractice'] = '{$a} failed attempts — worth another try';
+$string['stuckcodelab'] = 'Stuck on “{$a->step}” ({$a->fails} fails)';
+$string['skillmap'] = 'Skill focus';
+$string['skillmap_empty'] = 'Solve a few tagged Practice problems to see weak spots.';
+$string['skillmap_hint'] = 'Weakest Practice tags by acceptance';
+$string['tracks'] = 'Mission tracks';
+$string['tracks_empty'] = 'No CodeLab missions yet.';
+$string['tracks_hint'] = 'Completed / total missions per track';
+$string['needsattention'] = 'Needs attention';
+$string['needsattention_empty'] = 'Nothing stuck — nice work.';
+$string['weeklygoal'] = 'This week';
+$string['goalpractice'] = 'Complete {$a} Practice solves or mission steps';
+$string['goalmixed'] = 'Complete {$a} Practice solves or mission steps';
+$string['goaldone'] = 'Weekly goal done — keep the streak going!';
+$string['peers'] = 'Peer context';
+$string['onlineusers'] = 'Online users';
+$string['onlineperiod'] = 'last {$a} minutes';
+$string['onlineperioddefault'] = 'recently active';
+$string['onlineempty'] = 'No one online right now.';
+$string['browseusers'] = 'Browse users';
+$string['peers_global'] = 'Overall leaderboard';
+$string['peers_college'] = '{$a} leaderboard';
+$string['yourrank'] = 'Your rank';
+$string['viewleaderboard'] = 'Full board';
+$string['navleaderboard'] = 'Leaderboard';
+$string['overallleaderboard'] = 'Overall leaderboard';
+$string['overallleaderboardhint'] = 'Ranked by course grades + NexPractice XP + CodeLab XP + BattleGround XP.';
+$string['leaderboarduser'] = 'Student';
+$string['institution'] = 'College';
+$string['collegefilter'] = 'College';
+$string['allcolleges'] = 'All colleges';
+$string['colcoursegrades'] = 'Course grades';
+$string['colpracticexp'] = 'NexPractice XP';
+$string['colcodelabxp'] = 'CodeLab XP';
+$string['colbattlexp'] = 'BattleGround XP';
+$string['coltotal'] = 'Total';
+$string['you'] = 'You';
+$string['notranked'] = 'Earn grades or XP to appear on the leaderboard.';
+$string['notrankedincollege'] = 'Not ranked in this college.';
+$string['noleaderboard'] = 'No leaderboard data yet.';
+$string['podiumtitle'] = 'Top 3 across all colleges';
+$string['podiumhint'] = 'Highest overall scores on the site';
+$string['medalgold'] = 'Gold';
+$string['medalsilver'] = 'Silver';
+$string['medalbronze'] = 'Bronze';
+$string['pagination'] = 'Leaderboard pagination';
+$string['prevpage'] = 'Prev';
+$string['nextpage'] = 'Next';
+$string['showrange'] = 'Showing {from}–{to} of {total}';
+$string['askforhelp'] = 'Ask for help';
+$string['deadlines'] = 'Upcoming deadlines';
+$string['deadlines_empty'] = 'No deadlines in the next 2 weeks.';
+$string['recentactivity'] = 'Recent activity';
+$string['recentactivity_empty'] = 'No recent Practice or CodeLab activity.';
+$string['activityok'] = 'Accepted';
+$string['activityfail'] = 'Incomplete';
+$string['practicelabel'] = 'Practice';
+$string['monthsummary'] = 'This month';
+$string['copysummary'] = 'Copy summary';
+$string['copied'] = 'Copied';
+$string['monthsharetext'] = '{$a->month}: {$a->coursecoding} course problems, {$a->coursemcq} MCQs, {$a->practice} Practice solves, {$a->battles} battle wins, {$a->interviews} interviews, {$a->xp} XP.';
+$string['inhours'] = 'in {$a}h';
+$string['justnow'] = 'just now';
+$string['minutesago'] = '{$a}m ago';
+$string['hoursago'] = '{$a}h ago';
+$string['activityaccepted'] = 'Accepted';
+$string['activityfailed'] = '{$a}';
+$string['activitysteppass'] = 'Passed “{$a}”';
+$string['activitystepfail'] = 'Failed “{$a}”';
+$string['goaltarget'] = 'Goal';
+$string['practicesolved'] = 'Practice';
+$string['practicesolvedlabel'] = 'NexPractice solved';
+$string['practicesolvedhint'] = 'Includes BattleGround wins and completed interviews';
+$string['coursecodingsolved'] = 'NexCourse problems';
+$string['coursemcqcorrect'] = 'NexCourse MCQs';
+$string['battleswon'] = 'Battles won';
+$string['interviewscompleted'] = 'Interviews completed';
+$string['interviewstaken'] = 'NexInterview taken';
+$string['platformsconnected'] = 'Platforms connected';
+$string['githubconnected'] = 'GitHub';
+$string['githubyes'] = 'Connected';
+$string['githubno'] = 'Not connected';
+$string['missionsdone'] = 'Missions';
+$string['stepspassed'] = 'Steps';
+
+$string['privacy:metadata'] = 'NexDashboard aggregates progress from courses and practice plugins; weekly goal preference is stored as a user preference.';
+$string['privacy:metadata:preference:weeklygoal'] = 'Preferred weekly learning goal target.';

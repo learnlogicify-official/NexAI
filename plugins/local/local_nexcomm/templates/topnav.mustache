@@ -1,0 +1,12 @@
+{{!
+    @template local_nexcomm/topnav
+}}
+<nav class="nc-topnav" aria-label="NexComm">
+    <a class="nc-topnav__item{{#navhome}} is-active{{/navhome}}" href="{{{homeurl}}}">{{#str}}home, local_nexcomm{{/str}}</a>
+    <a class="nc-topnav__item{{#navvideos}} is-active{{/navvideos}}" href="{{{videosurl}}}">{{#str}}videolab, local_nexcomm{{/str}}</a>
+    <a class="nc-topnav__item{{#navcatalog}} is-active{{/navcatalog}}" href="{{{catalogurl}}}">{{#str}}catalog, local_nexcomm{{/str}}</a>
+    <a class="nc-topnav__item{{#navleaderboard}} is-active{{/navleaderboard}}" href="{{{leaderboardurl}}}">{{#str}}leaderboard, local_nexcomm{{/str}}</a>
+    {{#canmanage}}
+        <a class="nc-topnav__item nc-topnav__item--right{{#navmanage}} is-active{{/navmanage}}" href="{{{manageurl}}}">{{#str}}manage, local_nexcomm{{/str}}</a>
+    {{/canmanage}}
+</nav>

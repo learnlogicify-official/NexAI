@@ -1,0 +1,29 @@
+{{!
+    @template format_nexcourse/local/continue_card
+    Continue learning hero — next incomplete activity.
+}}
+{{#hascontinue}}
+<section class="nexcourse-continue{{#iscomplete}} is-complete{{/iscomplete}}">
+    <div class="nexcourse-continue__copy">
+        <p class="nexcourse-continue__eyebrow">{{eyebrow}}</p>
+        <h3 class="nexcourse-continue__title">{{title}}</h3>
+        <p class="nexcourse-continue__path">
+            <span class="nexcourse-continue__badge">{{modulenolabel}}</span>
+            <span class="nexcourse-continue__mod">{{modulename}}</span>
+            {{#hasgroupname}}
+                <span class="nexcourse-continue__sep" aria-hidden="true">/</span>
+                <span class="nexcourse-continue__group">{{groupname}}</span>
+            {{/hasgroupname}}
+            {{#modnamelabel}}
+                <span class="nexcourse-continue__type">{{modnamelabel}}</span>
+            {{/modnamelabel}}
+        </p>
+    </div>
+    <a class="nexcourse-continue__cta" href="{{{url}}}"{{#paneid}} data-nx-jump="{{paneid}}"{{/paneid}}>
+        {{#hasicon}}
+            <img class="nexcourse-continue__icon" src="{{{iconurl}}}" alt="" width="22" height="22">
+        {{/hasicon}}
+        <span>{{ctalabel}}</span>
+    </a>
+</section>
+{{/hascontinue}}

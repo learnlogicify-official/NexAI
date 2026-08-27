@@ -1,0 +1,4711 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nexcodelab-missions>
+  <mission>
+    <name>Retail shelf pulse</name>
+    <slug>retail-shelf-pulse</slug>
+    <scenario>A mid-market retailer needs SKU revenue before reallocating floor space this weekend.</scenario>
+    <track>wrangling</track>
+    <coverkey>sales</coverkey>
+    <estimateminutes>30</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Retail shelf pulse
+
+## Situation
+Merchandising wants a clean revenue view by SKU and category before the weekend reset.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `sku` | text | Stock-keeping unit code |
+| `category` | text | Merchandising category |
+| `units` | integer | Units sold in the period |
+| `unit_price` | number | Price per unit in USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add a revenue column as units × unit price
+2. Summarize total revenue by category
+3. Report the single highest SKU revenue
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[sku,category,units,unit_price
+A1,apparel,12,24.0
+A2,apparel,5,40.0
+B1,home,3,55.0
+B2,home,8,30.0
+C1,beauty,20,12.0
+C2,beauty,2,80.0
+A3,apparel,15,18.0
+B3,home,6,45.0
+]]></data>
+    <steps>
+      <step>
+        <title>Build revenue</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Finance needs line-level revenue on every SKU.</p><p>Create a <code>revenue</code> column equal to units sold times unit price. Keep all existing columns.</p><p>Implement <code>add_revenue(df)</code>.</p><p><strong>Check:</strong> Returned frame includes <code>revenue</code> with correct product values.</p>]]></instructions>
+        <hint>Line revenue is quantity sold multiplied by the listed price.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_revenue</fn>
+        <signature><![CDATA[def add_revenue(df: pd.DataFrame) -> pd.DataFrame:
+    """Add revenue = units * unit_price."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[sku,category,units,unit_price,revenue
+A1,apparel,12,24.0,288.0
+A2,apparel,5,40.0,200.0
+B1,home,3,55.0,165.0
+B2,home,8,30.0,240.0
+C1,beauty,20,12.0,240.0
+C2,beauty,2,80.0,160.0
+A3,apparel,15,18.0,270.0
+B3,home,6,45.0,270.0
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Category totals</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Category managers want rolled-up revenue.</p><p>After revenue exists, return a two-column table <code>category,total_revenue</code> with sums, sorted by category name.</p><p>Implement <code>category_revenue(df)</code>.</p><p><strong>Check:</strong> Category totals match the period extract.</p>]]></instructions>
+        <hint>Roll revenue up to each category label, then order those labels alphabetically.</hint>
+        <checkkind>frame</checkkind>
+        <fn>category_revenue</fn>
+        <signature><![CDATA[def category_revenue(df: pd.DataFrame) -> pd.DataFrame:
+    """Return category,total_revenue sorted by category."""
+    return df
+]]></signature>
+        <preprocess>add_revenue</preprocess>
+        <expect_csv><![CDATA[category,total_revenue
+apparel,758.0
+beauty,400.0
+home,675.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Top SKU revenue</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Ops wants the peak line revenue as a single number.</p><p>On the revenue-enriched frame, return the maximum <code>revenue</code> as a float.</p><p>Implement <code>peak_revenue(df)</code>.</p><p><strong>Check:</strong> Float matches the highest SKU revenue to 4 decimals.</p>]]></instructions>
+        <hint>Find the largest revenue value among all SKUs.</hint>
+        <checkkind>metric</checkkind>
+        <fn>peak_revenue</fn>
+        <signature><![CDATA[def peak_revenue(df: pd.DataFrame) -> float:
+    """Max revenue after add_revenue."""
+    return 0.0
+]]></signature>
+        <preprocess>add_revenue</preprocess>
+        <expect>288.0000</expect>
+        <floor>285.12</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>HR tenure pay desk</name>
+    <slug>hr-tenure-pay-desk</slug>
+    <scenario>People Ops is auditing pay for employees with at least two years tenure ahead of compensation planning.</scenario>
+    <track>wrangling</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# HR tenure pay desk
+
+## Situation
+Compensation planning needs a tenure-filtered payroll slice and department averages.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `emp_id` | integer | Employee identifier |
+| `dept` | text | Department code |
+| `salary` | integer | Annual salary in USD |
+| `tenure_yrs` | number | Years with the company |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep only employees with tenure of 2+ years
+2. Average salary by department on that slice
+3. Report overall average salary on the filtered roster
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[emp_id,dept,salary,tenure_yrs
+101,Eng,92000,3.0
+102,Eng,88000,1.5
+103,Sales,72000,4.0
+104,Sales,69000,0.5
+105,HR,64000,6.0
+106,Eng,110000,8.0
+107,Sales,75000,2.0
+108,HR,61000,1.0
+]]></data>
+    <steps>
+      <step>
+        <title>Tenure filter</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Exclude short-tenure staff from this audit.</p><p>Keep rows where <code>tenure_yrs</code> is at least 2. Preserve column order.</p><p>Implement <code>tenured_staff(df)</code>.</p><p><strong>Check:</strong> Only 2+ year employees remain.</p>]]></instructions>
+        <hint>Drop anyone below the two-year tenure threshold.</hint>
+        <checkkind>frame</checkkind>
+        <fn>tenured_staff</fn>
+        <signature><![CDATA[def tenured_staff(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep tenure_yrs >= 2."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[emp_id,dept,salary,tenure_yrs
+101,Eng,92000,3.0
+103,Sales,72000,4.0
+105,HR,64000,6.0
+106,Eng,110000,8.0
+107,Sales,75000,2.0
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Dept averages</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Leaders want department average pay on the filtered roster.</p><p>Return <code>dept,avg_salary</code> sorted by department. The grader applies the tenure filter first.</p><p>Implement <code>dept_avg_salary(df)</code>.</p><p><strong>Check:</strong> Department averages match the filtered extract.</p>]]></instructions>
+        <hint>Average salary within each department label, then sort department names.</hint>
+        <checkkind>frame</checkkind>
+        <fn>dept_avg_salary</fn>
+        <signature><![CDATA[def dept_avg_salary(df: pd.DataFrame) -> pd.DataFrame:
+    """Return dept,avg_salary sorted by dept."""
+    return df
+]]></signature>
+        <preprocess>tenured_staff</preprocess>
+        <expect_csv><![CDATA[dept,avg_salary
+Eng,101000.0
+HR,64000.0
+Sales,73500.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Overall average</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Finance wants one number for the filtered cohort.</p><p>Return the mean salary on the tenure-filtered frame as a float.</p><p>Implement <code>overall_avg_salary(df)</code>.</p><p><strong>Check:</strong> Mean salary to 4 decimals.</p>]]></instructions>
+        <hint>Average all remaining salaries into one figure.</hint>
+        <checkkind>metric</checkkind>
+        <fn>overall_avg_salary</fn>
+        <signature><![CDATA[def overall_avg_salary(df: pd.DataFrame) -> float:
+    """Mean salary after tenure filter."""
+    return 0.0
+]]></signature>
+        <preprocess>tenured_staff</preprocess>
+        <expect>82600.0000</expect>
+        <floor>78470.0</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Hotel booking ledger</name>
+    <slug>hotel-booking-ledger</slug>
+    <scenario>A regional hotel group needs stay value on confirmed bookings and a cancellation rate for ops standup.</scenario>
+    <track>wrangling</track>
+    <coverkey>house</coverkey>
+    <estimateminutes>32</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Hotel booking ledger
+
+## Situation
+Revenue management is cleaning last week's bookings before the Monday forecast.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `booking_id` | integer | Booking identifier |
+| `city` | text | Property city |
+| `nights` | integer | Length of stay |
+| `nightly_rate` | integer | Rate charged per night |
+| `status` | text | `ok` confirmed or `cancel` cancelled |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep confirmed bookings and add stay_value
+2. Sum stay value by city
+3. Report overall cancellation rate on the raw extract
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[booking_id,city,nights,nightly_rate,status
+1,Austin,2,140,ok
+2,Austin,3,160,ok
+3,Denver,1,110,cancel
+4,Denver,4,125,ok
+5,Miami,2,200,ok
+6,Miami,5,180,ok
+7,Austin,1,150,cancel
+8,Denver,2,130,ok
+]]></data>
+    <steps>
+      <step>
+        <title>Confirmed stay value</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Only confirmed stays should drive revenue tables.</p><p>Keep rows with status <code>ok</code>, then add <code>stay_value</code> = nights × nightly_rate.</p><p>Implement <code>confirmed_value(df)</code>.</p><p><strong>Check:</strong> Cancelled rows removed; stay_value present.</p>]]></instructions>
+        <hint>Remove cancelled bookings, then multiply nights by the nightly rate.</hint>
+        <checkkind>frame</checkkind>
+        <fn>confirmed_value</fn>
+        <signature><![CDATA[def confirmed_value(df: pd.DataFrame) -> pd.DataFrame:
+    """Filter status==ok; add stay_value."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[booking_id,city,nights,nightly_rate,status,stay_value
+1,Austin,2,140,ok,280
+2,Austin,3,160,ok,480
+4,Denver,4,125,ok,500
+5,Miami,2,200,ok,400
+6,Miami,5,180,ok,900
+8,Denver,2,130,ok,260
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>City rollup</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> City GMs want total confirmed stay value.</p><p>Return <code>city,city_value</code> sorted by city. Grader applies confirmed_value first.</p><p>Implement <code>city_totals(df)</code>.</p><p><strong>Check:</strong> City sums match confirmed stays.</p>]]></instructions>
+        <hint>Add stay values within each city, then sort city names.</hint>
+        <checkkind>frame</checkkind>
+        <fn>city_totals</fn>
+        <signature><![CDATA[def city_totals(df: pd.DataFrame) -> pd.DataFrame:
+    """Return city,city_value sorted by city."""
+    return df
+]]></signature>
+        <preprocess>confirmed_value</preprocess>
+        <expect_csv><![CDATA[city,city_value
+Austin,760
+Denver,760
+Miami,1300
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Cancel rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Ops wants the share of bookings that cancelled.</p><p>On the raw frame, return the fraction of rows with status <code>cancel</code> as a float between 0 and 1.</p><p>Implement <code>cancel_rate(df)</code>.</p><p><strong>Check:</strong> Cancellation share to 4 decimals.</p>]]></instructions>
+        <hint>Count cancelled bookings as a share of all bookings.</hint>
+        <checkkind>metric</checkkind>
+        <fn>cancel_rate</fn>
+        <signature><![CDATA[def cancel_rate(df: pd.DataFrame) -> float:
+    """Fraction status==cancel."""
+    return 0.0
+]]></signature>
+        <expect>0.2500</expect>
+        <floor>0.2</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Bike share triage</name>
+    <slug>bike-share-triage</slug>
+    <scenario>A city bike-share desk wants short-trip quality metrics before adjusting dock inventory.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Bike share triage
+
+## Situation
+Ops is reviewing trips of 30 minutes or less for dock planning.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `trip_id` | integer | Trip identifier |
+| `member_type` | text | `member` or `casual` rider |
+| `duration_min` | integer | Trip length in minutes |
+| `distance_km` | number | Distance ridden in kilometers |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep trips lasting 30 minutes or less
+2. Average distance by member type on short trips
+3. Report the share of all trips taken by members
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[trip_id,member_type,duration_min,distance_km
+1,member,12,2.1
+2,casual,45,5.0
+3,member,8,1.4
+4,member,22,3.2
+5,casual,60,7.5
+6,casual,15,2.0
+7,member,18,2.8
+8,casual,90,9.0
+]]></data>
+    <steps>
+      <step>
+        <title>Short trips</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on trips that fit a commute-style window.</p><p>Keep rows where <code>duration_min</code> is at most 30.</p><p>Implement <code>short_trips(df)</code>.</p><p><strong>Check:</strong> Only ≤30 minute trips remain.</p>]]></instructions>
+        <hint>Exclude longer recreational rides above the 30-minute cutoff.</hint>
+        <checkkind>frame</checkkind>
+        <fn>short_trips</fn>
+        <signature><![CDATA[def short_trips(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep duration_min <= 30."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[trip_id,member_type,duration_min,distance_km
+1,member,12,2.1
+3,member,8,1.4
+4,member,22,3.2
+6,casual,15,2.0
+7,member,18,2.8
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Distance by type</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare member vs casual short-trip distances.</p><p>Return <code>member_type,avg_km</code> sorted by member_type. Grader applies short_trips first.</p><p>Implement <code>avg_distance_by_type(df)</code>.</p><p><strong>Check:</strong> Average kilometers per rider type.</p>]]></instructions>
+        <hint>Average distance within each rider type label.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_distance_by_type</fn>
+        <signature><![CDATA[def avg_distance_by_type(df: pd.DataFrame) -> pd.DataFrame:
+    """Return member_type,avg_km sorted."""
+    return df
+]]></signature>
+        <preprocess>short_trips</preprocess>
+        <expect_csv><![CDATA[member_type,avg_km
+casual,2.0
+member,2.375
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Member share</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Leadership wants member mix on the full extract.</p><p>Return the fraction of rows with member_type <code>member</code>.</p><p>Implement <code>member_share(df)</code>.</p><p><strong>Check:</strong> Member share to 4 decimals.</p>]]></instructions>
+        <hint>Members as a share of every trip in the extract.</hint>
+        <checkkind>metric</checkkind>
+        <fn>member_share</fn>
+        <signature><![CDATA[def member_share(df: pd.DataFrame) -> float:
+    """Fraction member_type==member."""
+    return 0.0
+]]></signature>
+        <expect>0.5000</expect>
+        <floor>0.4</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Delivery SLA desk</name>
+    <slug>delivery-sla-desk</slug>
+    <scenario>A last-mile delivery ops lead needs late flags and courier late volume before the SLA review.</scenario>
+    <track>wrangling</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>30</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Delivery SLA desk
+
+## Situation
+Promise times vs actual delivery times need a clear late flag for Friday's SLA review.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `order_id` | integer | Order identifier |
+| `courier` | text | Courier name |
+| `promised_min` | integer | Promised minutes from dispatch |
+| `actual_min` | integer | Actual minutes until delivery |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Flag late deliveries where actual exceeds promised
+2. List only late rows
+3. Report overall late rate
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[order_id,courier,promised_min,actual_min
+11,Lee,30,28
+12,Pat,35,42
+13,Lee,25,24
+14,Sam,40,39
+15,Pat,30,31
+16,Sam,45,50
+17,Lee,28,35
+18,Pat,32,29
+]]></data>
+    <steps>
+      <step>
+        <title>Late flag</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Mark each order as late or on time.</p><p>Add integer column <code>late</code>: 1 when actual_min is greater than promised_min, else 0.</p><p>Implement <code>flag_late(df)</code>.</p><p><strong>Check:</strong> late column matches the SLA rule.</p>]]></instructions>
+        <hint>A delivery is late only when actual time exceeds the promise.</hint>
+        <checkkind>frame</checkkind>
+        <fn>flag_late</fn>
+        <signature><![CDATA[def flag_late(df: pd.DataFrame) -> pd.DataFrame:
+    """Add late = 1 if actual_min > promised_min else 0."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[order_id,courier,promised_min,actual_min,late
+11,Lee,30,28,0
+12,Pat,35,42,1
+13,Lee,25,24,0
+14,Sam,40,39,0
+15,Pat,30,31,1
+16,Sam,45,50,1
+17,Lee,28,35,1
+18,Pat,32,29,0
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Late orders only</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Dispatchers need the late queue.</p><p>After flagging, keep only rows where late is 1.</p><p>Implement <code>late_orders(df)</code>.</p><p><strong>Check:</strong> Only late deliveries remain.</p>]]></instructions>
+        <hint>Filter to the late-flagged rows.</hint>
+        <checkkind>frame</checkkind>
+        <fn>late_orders</fn>
+        <signature><![CDATA[def late_orders(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep late==1."""
+    return df
+]]></signature>
+        <preprocess>flag_late</preprocess>
+        <expect_csv><![CDATA[order_id,courier,promised_min,actual_min,late
+12,Pat,35,42,1
+15,Pat,30,31,1
+16,Sam,45,50,1
+17,Lee,28,35,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Late rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Leadership wants the late share.</p><p>On the flagged frame, return the mean of <code>late</code> as a float.</p><p>Implement <code>late_rate(df)</code>.</p><p><strong>Check:</strong> Late rate to 4 decimals.</p>]]></instructions>
+        <hint>Average the late flags to get the late fraction.</hint>
+        <checkkind>metric</checkkind>
+        <fn>late_rate</fn>
+        <signature><![CDATA[def late_rate(df: pd.DataFrame) -> float:
+    """Mean of late after flag_late."""
+    return 0.0
+]]></signature>
+        <preprocess>flag_late</preprocess>
+        <expect>0.5000</expect>
+        <floor>0.3</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Returns reason audit</name>
+    <slug>returns-reason-audit</slug>
+    <scenario>Customer care is digging into size-related returns before adjusting the sizing chart.</scenario>
+    <track>wrangling</track>
+    <coverkey>sales</coverkey>
+    <estimateminutes>26</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Returns reason audit
+
+## Situation
+Product wants refund exposure for size-related returns by channel.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `return_id` | integer | Return identifier |
+| `channel` | text | `web` or `store` origin |
+| `reason` | text | Return reason code |
+| `refund_usd` | number | Refund amount in USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Isolate size-related returns
+2. Sum refunds by channel for those returns
+3. Report size-return share of all returns
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[return_id,channel,reason,refund_usd
+1,web,size,40
+2,store,damaged,120
+3,web,size,55
+4,web,other,30
+5,store,damaged,90
+6,web,size,48
+7,store,other,25
+8,web,damaged,110
+]]></data>
+    <steps>
+      <step>
+        <title>Size returns</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus the audit on sizing issues.</p><p>Keep rows where reason is <code>size</code>.</p><p>Implement <code>size_returns(df)</code>.</p><p><strong>Check:</strong> Only size-reason rows remain.</p>]]></instructions>
+        <hint>Exclude returns that are not about size.</hint>
+        <checkkind>frame</checkkind>
+        <fn>size_returns</fn>
+        <signature><![CDATA[def size_returns(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep reason==size."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[return_id,channel,reason,refund_usd
+1,web,size,40
+3,web,size,55
+6,web,size,48
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Channel refunds</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare size refunds by channel.</p><p>Return <code>channel,refund_total</code> sorted by channel. Grader applies size_returns first.</p><p>Implement <code>size_refunds_by_channel(df)</code>.</p><p><strong>Check:</strong> Channel refund totals match.</p>]]></instructions>
+        <hint>Add refunds within each channel for the filtered returns.</hint>
+        <checkkind>frame</checkkind>
+        <fn>size_refunds_by_channel</fn>
+        <signature><![CDATA[def size_refunds_by_channel(df: pd.DataFrame) -> pd.DataFrame:
+    """Return channel,refund_total sorted."""
+    return df
+]]></signature>
+        <preprocess>size_returns</preprocess>
+        <expect_csv><![CDATA[channel,refund_total
+web,143
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Size share</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How common are size returns overall?</p><p>Return the fraction of all returns with reason <code>size</code>.</p><p>Implement <code>size_share(df)</code>.</p><p><strong>Check:</strong> Share to 4 decimals.</p>]]></instructions>
+        <hint>Size reasons as a share of every return.</hint>
+        <checkkind>metric</checkkind>
+        <fn>size_share</fn>
+        <signature><![CDATA[def size_share(df: pd.DataFrame) -> float:
+    """Fraction reason==size."""
+    return 0.0
+]]></signature>
+        <expect>0.3750</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Energy spike watch</name>
+    <slug>energy-spike-watch</slug>
+    <scenario>Facilities flagged a meter spike. Confirm with Tukey fences before dispatching an engineer.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>22</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Energy spike watch
+
+## Situation
+A warehouse meter looks extreme. Leadership wants an IQR-cleaned view and kept count.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `meter_id` | text | Meter identifier |
+| `site` | text | Building type |
+| `kwh` | number | Kilowatt-hours in the window |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep meters within 1.5×IQR fences on kwh
+2. Report how many meters remain after filtering
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[meter_id,site,kwh
+M1,plant,1200
+M2,plant,980
+M3,office,210
+M4,office,180
+M5,plant,4500
+M6,warehouse,400
+M7,warehouse,380
+M8,office,195
+]]></data>
+    <steps>
+      <step>
+        <title>IQR filter</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Remove extreme kWh readings with Tukey fences.</p><p>Keep rows whose <code>kwh</code> lies in [Q1 − 1.5·IQR, Q3 + 1.5·IQR] using the sample quartiles.</p><p>Implement <code>iqr_clean_kwh(df)</code>.</p><p><strong>Check:</strong> Outlier meter(s) removed; others unchanged.</p>]]></instructions>
+        <hint>Use the standard 1.5 times interquartile range fences on consumption.</hint>
+        <checkkind>frame</checkkind>
+        <fn>iqr_clean_kwh</fn>
+        <signature><![CDATA[def iqr_clean_kwh(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep kwh within Tukey fences."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[meter_id,site,kwh
+M1,plant,1200
+M2,plant,980
+M3,office,210
+M4,office,180
+M6,warehouse,400
+M7,warehouse,380
+M8,office,195
+]]></expect_csv>
+        <xp>35</xp>
+      </step>
+      <step>
+        <title>Kept meters</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How many meters survive the fence?</p><p>Return the number of remaining rows as a float. Grader applies iqr_clean_kwh first.</p><p>Implement <code>kept_meters(df)</code>.</p><p><strong>Check:</strong> Count of cleaned meters.</p>]]></instructions>
+        <hint>Count the rows that remain after the fence.</hint>
+        <checkkind>metric</checkkind>
+        <fn>kept_meters</fn>
+        <signature><![CDATA[def kept_meters(df: pd.DataFrame) -> float:
+    """len(df) after IQR filter."""
+    return 0.0
+]]></signature>
+        <preprocess>iqr_clean_kwh</preprocess>
+        <expect>7.0000</expect>
+        <floor>6.9</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Hospital length-of-stay desk</name>
+    <slug>hospital-los-desk</slug>
+    <scenario>Quality nursing wants readmit rates for longer stays before the monthly case review.</scenario>
+    <track>eda</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Hospital length-of-stay desk
+
+## Situation
+Focus on patients with length of stay of 4+ days and their 30-day readmit flags.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `patient_id` | integer | Patient identifier |
+| `ward` | text | Ward code |
+| `los_days` | integer | Length of stay in days |
+| `readmit_30d` | 0 / 1 | 1 if readmitted within 30 days |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep stays of 4+ days
+2. Average readmit flag by ward on that cohort
+3. Report overall readmit rate for the cohort
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[patient_id,ward,los_days,readmit_30d
+1,A,3,0
+2,A,5,1
+3,B,2,0
+4,B,8,1
+5,C,4,0
+6,C,1,0
+7,A,6,1
+8,B,3,0
+]]></data>
+    <steps>
+      <step>
+        <title>Longer stays</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Limit the review to longer admissions.</p><p>Keep rows where <code>los_days</code> is at least 4.</p><p>Implement <code>long_stays(df)</code>.</p><p><strong>Check:</strong> Only 4+ day stays remain.</p>]]></instructions>
+        <hint>Drop short stays below four days.</hint>
+        <checkkind>frame</checkkind>
+        <fn>long_stays</fn>
+        <signature><![CDATA[def long_stays(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep los_days >= 4."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[patient_id,ward,los_days,readmit_30d
+2,A,5,1
+4,B,8,1
+5,C,4,0
+7,A,6,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Ward readmit rates</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare wards on the long-stay cohort.</p><p>Return <code>ward,readmit_rate</code> sorted by ward. Grader applies long_stays first.</p><p>Implement <code>ward_readmit_rate(df)</code>.</p><p><strong>Check:</strong> Ward rates match the filtered patients.</p>]]></instructions>
+        <hint>Average the readmit flag within each ward.</hint>
+        <checkkind>frame</checkkind>
+        <fn>ward_readmit_rate</fn>
+        <signature><![CDATA[def ward_readmit_rate(df: pd.DataFrame) -> pd.DataFrame:
+    """Return ward,readmit_rate sorted."""
+    return df
+]]></signature>
+        <preprocess>long_stays</preprocess>
+        <expect_csv><![CDATA[ward,readmit_rate
+A,1.0
+B,1.0
+C,0.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Cohort readmit rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One number for the case review slide.</p><p>Return the mean of <code>readmit_30d</code> on the long-stay frame.</p><p>Implement <code>cohort_readmit_rate(df)</code>.</p><p><strong>Check:</strong> Overall rate to 4 decimals.</p>]]></instructions>
+        <hint>Average readmit flags across the filtered cohort.</hint>
+        <checkkind>metric</checkkind>
+        <fn>cohort_readmit_rate</fn>
+        <signature><![CDATA[def cohort_readmit_rate(df: pd.DataFrame) -> float:
+    """Mean readmit_30d after long_stays."""
+    return 0.0
+]]></signature>
+        <preprocess>long_stays</preprocess>
+        <expect>0.7500</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Marketing copy sentiment</name>
+    <slug>marketing-copy-sentiment</slug>
+    <scenario>Growth marketing wants a cheap lexicon score on ad copy before A/B tests.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>30</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Marketing copy sentiment
+
+## Situation
+Score ad copy with POS={good,great,love} and NEG={bad,hate,terrible}, then measure vocabulary size.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `ad_id` | integer | Ad identifier |
+| `channel` | text | Channel name |
+| `copy` | text | Ad copy text |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return ad_id,score from the lexicon net
+2. Fit CountVectorizer on copy; return vocabulary size
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[ad_id,channel,copy
+1,email,great deal love this offer
+2,social,bad spam hate inbox
+3,email,good savings love
+4,social,terrible clickbait hate
+5,email,great value good
+6,social,bad timing hate
+7,email,love exclusive good perk
+8,social,terrible waste hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG word hits in each copy line.</p><p>Tokenize lowercase on whitespace. Return <code>ad_id,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon rule.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them per ad.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return ad_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[ad_id,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Vocabulary size</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How wide is the copy vocabulary?</p><p>Fit CountVectorizer on copy; return vocabulary size as a float.</p><p>Implement <code>vocab_size(df)</code>.</p><p><strong>Check:</strong> Vocabulary size matches.</p>]]></instructions>
+        <hint>Build a bag-of-words vocabulary over all copy lines and count unique tokens.</hint>
+        <checkkind>metric</checkkind>
+        <fn>vocab_size</fn>
+        <signature><![CDATA[from sklearn.feature_extraction.text import CountVectorizer
+
+def vocab_size(df: pd.DataFrame) -> float:
+    """CountVectorizer vocabulary size."""
+    return 0.0
+]]></signature>
+        <expect>18.0000</expect>
+        <floor>17.0</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Inventory reorder desk</name>
+    <slug>inventory-reorder-desk</slug>
+    <scenario>Warehouse planning needs a reorder flag list before the weekly purchase order.</scenario>
+    <track>wrangling</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Inventory reorder desk
+
+## Situation
+Flag items below reorder point and count how many need purchasing.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `item` | text | Part name |
+| `on_hand` | integer | Units currently in stock |
+| `reorder_point` | integer | Minimum stock before reorder |
+| `unit_cost` | number | Cost per unit |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Flag items where on_hand is below reorder_point
+2. List only items that need reorder
+3. Report how many items need reorder
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[item,on_hand,reorder_point,unit_cost
+bolt,40,20,0.5
+nut,12,15,0.2
+washer,5,10,0.1
+bracket,8,10,4.0
+screw,60,30,0.15
+hinge,3,5,6.0
+clip,25,20,0.8
+pin,2,5,1.5
+]]></data>
+    <steps>
+      <step>
+        <title>Reorder flag</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Mark stockouts risk clearly.</p><p>Add <code>needs_reorder</code> as 1 when on_hand is strictly below reorder_point, else 0.</p><p>Implement <code>flag_reorder(df)</code>.</p><p><strong>Check:</strong> Flag column matches the reorder rule.</p>]]></instructions>
+        <hint>An item needs reorder only when stock is below the reorder point.</hint>
+        <checkkind>frame</checkkind>
+        <fn>flag_reorder</fn>
+        <signature><![CDATA[def flag_reorder(df: pd.DataFrame) -> pd.DataFrame:
+    """Add needs_reorder flag."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[item,on_hand,reorder_point,unit_cost,needs_reorder
+bolt,40,20,0.5,0
+nut,12,15,0.2,1
+washer,5,10,0.1,1
+bracket,8,10,4.0,1
+screw,60,30,0.15,0
+hinge,3,5,6.0,1
+clip,25,20,0.8,0
+pin,2,5,1.5,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Reorder list</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Buyers need the action list.</p><p>Keep rows where needs_reorder is 1. Grader applies flag_reorder first.</p><p>Implement <code>reorder_list(df)</code>.</p><p><strong>Check:</strong> Only flagged items remain.</p>]]></instructions>
+        <hint>Keep the rows marked as needing reorder.</hint>
+        <checkkind>frame</checkkind>
+        <fn>reorder_list</fn>
+        <signature><![CDATA[def reorder_list(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep needs_reorder==1."""
+    return df
+]]></signature>
+        <preprocess>flag_reorder</preprocess>
+        <expect_csv><![CDATA[item,on_hand,reorder_point,unit_cost,needs_reorder
+nut,12,15,0.2,1
+washer,5,10,0.1,1
+bracket,8,10,4.0,1
+hinge,3,5,6.0,1
+pin,2,5,1.5,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Reorder count</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How many SKUs need action?</p><p>Return the sum of <code>needs_reorder</code> as a float on the flagged frame.</p><p>Implement <code>reorder_count(df)</code>.</p><p><strong>Check:</strong> Count of items needing reorder.</p>]]></instructions>
+        <hint>Add up the reorder flags.</hint>
+        <checkkind>metric</checkkind>
+        <fn>reorder_count</fn>
+        <signature><![CDATA[def reorder_count(df: pd.DataFrame) -> float:
+    """Sum needs_reorder."""
+    return 0.0
+]]></signature>
+        <preprocess>flag_reorder</preprocess>
+        <expect>5.0000</expect>
+        <floor>4.9</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Weather week digest</name>
+    <slug>weather-week-digest</slug>
+    <scenario>A local news desk wants warm-day stats and rainy-day counts for the weekend segment.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>20</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Weather week digest
+
+## Situation
+Editors need warm days (≥20°C) and how many days saw any rain.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `day` | integer | Day number in the week |
+| `temp_c` | number | High temperature in Celsius |
+| `rain_mm` | number | Rainfall in millimeters |
+| `city` | text | City label |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep days with temperature at least 20°C
+2. Average temperature on those warm days
+3. Count days with any rain on the full week
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[day,temp_c,rain_mm,city
+1,18,0,Port
+2,21,2,Port
+3,19,5,Port
+4,35,0,Port
+5,17,12,Port
+6,16,0,Port
+7,22,1,Port
+8,20,3,Port
+]]></data>
+    <steps>
+      <step>
+        <title>Warm days</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus the segment on warmer days.</p><p>Keep rows where <code>temp_c</code> is at least 20.</p><p>Implement <code>warm_days(df)</code>.</p><p><strong>Check:</strong> Only warm days remain.</p>]]></instructions>
+        <hint>Drop cooler days below twenty degrees.</hint>
+        <checkkind>frame</checkkind>
+        <fn>warm_days</fn>
+        <signature><![CDATA[def warm_days(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep temp_c >= 20."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[day,temp_c,rain_mm,city
+2,21,2,Port
+4,35,0,Port
+7,22,1,Port
+8,20,3,Port
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Warm average</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What was the average warm-day high?</p><p>Return the mean of <code>temp_c</code> on the warm-day frame.</p><p>Implement <code>avg_warm_temp(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average temperatures among the remaining warm days.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_warm_temp</fn>
+        <signature><![CDATA[def avg_warm_temp(df: pd.DataFrame) -> float:
+    """Mean temp_c after warm_days."""
+    return 0.0
+]]></signature>
+        <preprocess>warm_days</preprocess>
+        <expect>24.5000</expect>
+        <floor>23.5</floor>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Rainy day count</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How many days had rain?</p><p>On the raw frame, return the count of days with rain_mm greater than 0 as a float.</p><p>Implement <code>rainy_day_count(df)</code>.</p><p><strong>Check:</strong> Count of rainy days.</p>]]></instructions>
+        <hint>Count days where rainfall is positive.</hint>
+        <checkkind>metric</checkkind>
+        <fn>rainy_day_count</fn>
+        <signature><![CDATA[def rainy_day_count(df: pd.DataFrame) -> float:
+    """Count rain_mm > 0."""
+    return 0.0
+]]></signature>
+        <expect>5.0000</expect>
+        <floor>4.9</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Sports scoring desk</name>
+    <slug>sports-scoring-desk</slug>
+    <scenario>A league analytics intern must pace-adjust scoring before the coach film session.</scenario>
+    <track>wrangling</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Sports scoring desk
+
+## Situation
+Coaches want points per 30 minutes, then Fox team averages.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `player` | text | Player name |
+| `team` | text | Team name |
+| `points` | integer | Points scored |
+| `minutes` | integer | Minutes played |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add points-per-30-minutes pace
+2. Keep Fox players
+3. Average Fox pace
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[player,team,points,minutes
+Ada,Fox,12,28
+Ben,Fox,8,22
+Cara,Owl,15,30
+Dan,Owl,10,25
+Eve,Fox,20,32
+Finn,Owl,7,18
+Gia,Fox,14,27
+Hank,Owl,18,31
+]]></data>
+    <steps>
+      <step>
+        <title>Pace column</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Normalize scoring to a 30-minute pace.</p><p>Add <code>pp30</code> = points / minutes × 30.</p><p>Implement <code>add_pp30(df)</code>.</p><p><strong>Check:</strong> pp30 values match the pace formula.</p>]]></instructions>
+        <hint>Scale each player's scoring to a thirty-minute equivalent.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_pp30</fn>
+        <signature><![CDATA[def add_pp30(df: pd.DataFrame) -> pd.DataFrame:
+    """Add pp30 = points/minutes*30."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[player,team,points,minutes,pp30
+Ada,Fox,12,28,12.857142857142856
+Ben,Fox,8,22,10.90909090909091
+Cara,Owl,15,30,15.0
+Dan,Owl,10,25,12.0
+Eve,Fox,20,32,18.75
+Finn,Owl,7,18,11.666666666666666
+Gia,Fox,14,27,15.555555555555555
+Hank,Owl,18,31,17.41935483870968
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Fox roster</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Film session is Fox-only tonight.</p><p>Keep rows where team is <code>Fox</code>. Grader applies add_pp30 first.</p><p>Implement <code>fox_players(df)</code>.</p><p><strong>Check:</strong> Only Fox players remain.</p>]]></instructions>
+        <hint>Filter to the Fox team.</hint>
+        <checkkind>frame</checkkind>
+        <fn>fox_players</fn>
+        <signature><![CDATA[def fox_players(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep team==Fox."""
+    return df
+]]></signature>
+        <preprocess>add_pp30</preprocess>
+        <expect_csv><![CDATA[player,team,points,minutes,pp30
+Ada,Fox,12,28,12.857142857142856
+Ben,Fox,8,22,10.90909090909091
+Eve,Fox,20,32,18.75
+Gia,Fox,14,27,15.555555555555555
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Fox average pace</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One number for the coaching slide.</p><p>Return the mean of <code>pp30</code> on the Fox frame.</p><p>Implement <code>fox_avg_pp30(df)</code>.</p><p><strong>Check:</strong> Average pace to 4 decimals.</p>]]></instructions>
+        <hint>Average the pace values for remaining Fox players.</hint>
+        <checkkind>metric</checkkind>
+        <fn>fox_avg_pp30</fn>
+        <signature><![CDATA[def fox_avg_pp30(df: pd.DataFrame) -> float:
+    """Mean pp30 for Fox."""
+    return 0.0
+]]></signature>
+        <preprocess>fox_players</preprocess>
+        <expect>14.5179</expect>
+        <floor>13.0661525974026</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Course grades desk</name>
+    <slug>course-grades-desk</slug>
+    <scenario>An academic coordinator needs passing averages before advising week.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>26</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Course grades desk
+
+## Situation
+Build a simple average of midterm and final, then review who passed (≥70).
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `student_id` | integer | Student identifier |
+| `course` | text | Course code |
+| `midterm` | integer | Midterm score |
+| `final` | integer | Final score |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add average of midterm and final
+2. Keep students with average at least 70
+3. Report pass rate on all students
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[student_id,course,midterm,final
+1,DS101,72,78
+2,DS101,88,85
+3,DS101,65,60
+4,ML200,90,92
+5,ML200,70,74
+6,ML200,55,58
+7,DS101,94,90
+8,ML200,80,83
+]]></data>
+    <steps>
+      <step>
+        <title>Average score</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Create a single average grade per student.</p><p>Add <code>avg</code> as the mean of midterm and final.</p><p>Implement <code>add_avg(df)</code>.</p><p><strong>Check:</strong> avg equals (midterm+final)/2.</p>]]></instructions>
+        <hint>Blend midterm and final with equal weight.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_avg</fn>
+        <signature><![CDATA[def add_avg(df: pd.DataFrame) -> pd.DataFrame:
+    """Add avg = (midterm+final)/2."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[student_id,course,midterm,final,avg
+1,DS101,72,78,75.0
+2,DS101,88,85,86.5
+3,DS101,65,60,62.5
+4,ML200,90,92,91.0
+5,ML200,70,74,72.0
+6,ML200,55,58,56.5
+7,DS101,94,90,92.0
+8,ML200,80,83,81.5
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Passing students</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Advising wants the passing roster.</p><p>Keep rows where avg is at least 70. Grader applies add_avg first.</p><p>Implement <code>passing_students(df)</code>.</p><p><strong>Check:</strong> Only averages ≥70 remain.</p>]]></instructions>
+        <hint>Keep students at or above the seventy threshold.</hint>
+        <checkkind>frame</checkkind>
+        <fn>passing_students</fn>
+        <signature><![CDATA[def passing_students(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep avg >= 70."""
+    return df
+]]></signature>
+        <preprocess>add_avg</preprocess>
+        <expect_csv><![CDATA[student_id,course,midterm,final,avg
+1,DS101,72,78,75.0
+2,DS101,88,85,86.5
+4,ML200,90,92,91.0
+5,ML200,70,74,72.0
+7,DS101,94,90,92.0
+8,ML200,80,83,81.5
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Pass rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What share of students passed?</p><p>On the avg-enriched full frame, return the fraction with avg ≥ 70.</p><p>Implement <code>pass_rate(df)</code>.</p><p><strong>Check:</strong> Pass rate to 4 decimals.</p>]]></instructions>
+        <hint>Passing students as a share of everyone.</hint>
+        <checkkind>metric</checkkind>
+        <fn>pass_rate</fn>
+        <signature><![CDATA[def pass_rate(df: pd.DataFrame) -> float:
+    """Fraction avg >= 70 after add_avg."""
+    return 0.0
+]]></signature>
+        <preprocess>add_avg</preprocess>
+        <expect>0.7500</expect>
+        <floor>0.5</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Banking fee watch</name>
+    <slug>banking-fee-watch</slug>
+    <scenario>Retail banking compliance needs fee-flagged accounts and product average balances.</scenario>
+    <track>eda</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>27</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Banking fee watch
+
+## Situation
+Review accounts that incurred a fee and overall product balances.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `acct_id` | integer | Account identifier |
+| `product` | text | Product type |
+| `balance` | number | Current balance |
+| `fee_flag` | 0 / 1 | 1 if a fee was charged this period |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. List fee-flagged accounts
+2. Average balance by product
+3. Report fee incidence rate
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[acct_id,product,balance,fee_flag
+201,checking,1200,0
+202,savings,5000,0
+203,checking,80,1
+204,savings,15000,0
+205,checking,450,1
+206,savings,2200,0
+207,checking,3000,0
+208,savings,900,1
+]]></data>
+    <steps>
+      <step>
+        <title>Fee accounts</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Pull the fee-flagged list.</p><p>Keep rows where fee_flag is 1.</p><p>Implement <code>fee_accounts(df)</code>.</p><p><strong>Check:</strong> Only fee-flagged accounts remain.</p>]]></instructions>
+        <hint>Exclude accounts without a fee this period.</hint>
+        <checkkind>frame</checkkind>
+        <fn>fee_accounts</fn>
+        <signature><![CDATA[def fee_accounts(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep fee_flag==1."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[acct_id,product,balance,fee_flag
+203,checking,80,1
+205,checking,450,1
+208,savings,900,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Product averages</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Product managers want average balances.</p><p>Return <code>product,avg_balance</code> sorted by product on the full extract.</p><p>Implement <code>avg_balance_by_product(df)</code>.</p><p><strong>Check:</strong> Product averages match.</p>]]></instructions>
+        <hint>Average balances within each product type.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_balance_by_product</fn>
+        <signature><![CDATA[def avg_balance_by_product(df: pd.DataFrame) -> pd.DataFrame:
+    """Return product,avg_balance sorted."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[product,avg_balance
+checking,1182.5
+savings,5775.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Fee rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What share of accounts saw a fee?</p><p>Return the mean of fee_flag as a float.</p><p>Implement <code>fee_rate(df)</code>.</p><p><strong>Check:</strong> Fee incidence to 4 decimals.</p>]]></instructions>
+        <hint>Average the fee flags across accounts.</hint>
+        <checkkind>metric</checkkind>
+        <fn>fee_rate</fn>
+        <signature><![CDATA[def fee_rate(df: pd.DataFrame) -> float:
+    """Mean fee_flag."""
+    return 0.0
+]]></signature>
+        <expect>0.3750</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Telecom churn clinic</name>
+    <slug>telecom-churn-clinic</slug>
+    <scenario>A telecom analyst must rebuild an honest train/test split and logistic baseline on a tiny churn sample.</scenario>
+    <track>ml</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>40</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Telecom churn clinic
+
+## Situation
+Predict churn from data usage with a proper split and logistic baseline.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `customer_id` | integer | Customer identifier |
+| `plan` | text | Plan name |
+| `data_gb` | number | Data used in GB |
+| `churn` | 0 / 1 | 1 if customer churned |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Report train/test sizes for a 25% holdout
+2. Fit logistic regression and report test accuracy
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[customer_id,plan,data_gb,churn
+1,basic,2.0,1
+2,plus,8.0,0
+3,basic,1.5,1
+4,plus,12.0,0
+5,basic,3.0,0
+6,plus,9.5,0
+7,basic,0.8,1
+8,plus,11.0,0
+]]></data>
+    <steps>
+      <step>
+        <title>Split shapes</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Prove the holdout sizes before modeling.</p><p>Using feature <code>data_gb</code> and target <code>churn</code>, split with test_size=0.25 and random_state=0. Return a one-row frame <code>n_train,n_test</code>.</p><p>Implement <code>split_shapes(df)</code>.</p><p><strong>Check:</strong> Train/test counts match the fixed split.</p>]]></instructions>
+        <hint>Reserve one quarter of rows for testing with a fixed seed so sizes are reproducible.</hint>
+        <checkkind>frame</checkkind>
+        <fn>split_shapes</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+
+def split_shapes(df: pd.DataFrame) -> pd.DataFrame:
+    """test_size=0.25, random_state=0 → n_train,n_test."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[n_train,n_test
+6,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Logistic accuracy</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Hit a logistic baseline on the same split.</p><p>Train LogisticRegression on the train split of data_gb→churn (test_size=0.25, random_state=0). Return test accuracy as a float.</p><p>Implement <code>logistic_accuracy(df)</code>.</p><p><strong>Check:</strong> Test accuracy meets the floor and expected value.</p>]]></instructions>
+        <hint>Fit a logistic model on the training rows and score it on the held-out rows.</hint>
+        <checkkind>metric</checkkind>
+        <fn>logistic_accuracy</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+def logistic_accuracy(df: pd.DataFrame) -> float:
+    """Test accuracy of LogisticRegression."""
+    return 0.0
+]]></signature>
+        <expect>1.0000</expect>
+        <floor>0.5</floor>
+        <xp>40</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Logistics cost intensity</name>
+    <slug>logistics-cost-intensity</slug>
+    <scenario>A freight desk needs cost-per-kg by lane before renegotiating carrier rates.</scenario>
+    <track>wrangling</track>
+    <coverkey>ship</coverkey>
+    <estimateminutes>29</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Logistics cost intensity
+
+## Situation
+Normalize shipment cost by weight, then review east-lane intensity.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `shipment_id` | integer | Shipment identifier |
+| `lane` | text | Lane name |
+| `weight_kg` | number | Shipment weight |
+| `cost_usd` | number | Total shipping cost |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add cost per kilogram
+2. Keep east-lane shipments
+3. Average east cost-per-kg
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[shipment_id,lane,weight_kg,cost_usd
+1,east,10,40
+2,east,25,90
+3,west,12,50
+4,west,40,130
+5,east,8,35
+6,west,30,110
+7,east,15,55
+8,west,22,80
+]]></data>
+    <steps>
+      <step>
+        <title>Cost per kg</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Normalize cost by weight.</p><p>Add <code>cost_per_kg</code> = cost_usd / weight_kg.</p><p>Implement <code>add_cost_per_kg(df)</code>.</p><p><strong>Check:</strong> cost_per_kg matches the ratio.</p>]]></instructions>
+        <hint>Divide total cost by weight for each shipment.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_cost_per_kg</fn>
+        <signature><![CDATA[def add_cost_per_kg(df: pd.DataFrame) -> pd.DataFrame:
+    """Add cost_per_kg."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[shipment_id,lane,weight_kg,cost_usd,cost_per_kg
+1,east,10,40,4.0
+2,east,25,90,3.6
+3,west,12,50,4.166666666666667
+4,west,40,130,3.25
+5,east,8,35,4.375
+6,west,30,110,3.6666666666666665
+7,east,15,55,3.6666666666666665
+8,west,22,80,3.6363636363636362
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>East lane</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Today's negotiation is east-only.</p><p>Keep lane <code>east</code> rows. Grader applies add_cost_per_kg first.</p><p>Implement <code>east_shipments(df)</code>.</p><p><strong>Check:</strong> Only east shipments remain.</p>]]></instructions>
+        <hint>Filter to the east lane.</hint>
+        <checkkind>frame</checkkind>
+        <fn>east_shipments</fn>
+        <signature><![CDATA[def east_shipments(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep lane==east."""
+    return df
+]]></signature>
+        <preprocess>add_cost_per_kg</preprocess>
+        <expect_csv><![CDATA[shipment_id,lane,weight_kg,cost_usd,cost_per_kg
+1,east,10,40,4.0
+2,east,25,90,3.6
+5,east,8,35,4.375
+7,east,15,55,3.6666666666666665
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>East average intensity</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One intensity number for east.</p><p>Return the mean of cost_per_kg on the east frame.</p><p>Implement <code>east_avg_cpk(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average cost-per-kg among remaining east shipments.</hint>
+        <checkkind>metric</checkkind>
+        <fn>east_avg_cpk</fn>
+        <signature><![CDATA[def east_avg_cpk(df: pd.DataFrame) -> float:
+    """Mean cost_per_kg for east."""
+    return 0.0
+]]></signature>
+        <preprocess>east_shipments</preprocess>
+        <expect>3.9104</expect>
+        <floor>3.5193749999999997</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Streaming blurb sentiment</name>
+    <slug>streaming-blurb-sentiment</slug>
+    <scenario>Content ops wants lexicon scores on title blurbs before renewing licenses.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Streaming blurb sentiment
+
+## Situation
+Score blurbs with POS={good,great,love} and NEG={bad,hate,terrible}.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `title_id` | integer | Title identifier |
+| `genre` | text | Genre label |
+| `blurb` | text | Short viewer blurb |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return title_id,score
+2. Keep positive scores
+3. Average score overall
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[title_id,genre,blurb
+1,drama,good drama love story
+2,comedy,bad comedy hate jokes
+3,drama,great acting love
+4,comedy,terrible pacing hate
+5,action,good action great
+6,action,bad CGI hate
+7,drama,love ending good
+8,comedy,terrible plot hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG hits per blurb.</p><p>Tokenize lowercase on whitespace. Return <code>title_id,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return title_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[title_id,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Positive blurbs</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Renewals care about positive titles first.</p><p>Keep score > 0. Grader applies lexicon_scores first.</p><p>Implement <code>positive_scores(df)</code>.</p><p><strong>Check:</strong> Only positive scores remain.</p>]]></instructions>
+        <hint>Keep blurbs whose net score is above zero.</hint>
+        <checkkind>frame</checkkind>
+        <fn>positive_scores</fn>
+        <signature><![CDATA[def positive_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep score > 0."""
+    return df
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect_csv><![CDATA[title_id,score
+1,2
+3,2
+5,2
+7,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average score</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Overall blurb sentiment.</p><p>Return mean score on the scored frame.</p><p>Implement <code>avg_score(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average net scores across all blurbs.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_score</fn>
+        <signature><![CDATA[def avg_score(df: pd.DataFrame) -> float:
+    """Mean score after lexicon_scores."""
+    return 0.0
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect>0.0000</expect>
+        <floor>-0.5</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Agriculture yield desk</name>
+    <slug>agriculture-yield-desk</slug>
+    <scenario>An agronomy analyst needs wet-plot yields and rainfall–yield correlation for a co-op briefing.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Agriculture yield desk
+
+## Situation
+Review plots with rainfall ≥40mm and the absolute correlation of rainfall vs yield.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `plot_id` | integer | Plot identifier |
+| `crop` | text | Crop type |
+| `rainfall_mm` | number | Season rainfall |
+| `yield_t` | number | Yield in tonnes |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep wetter plots (≥40mm)
+2. Report absolute Pearson correlation of rainfall and yield on all plots
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[plot_id,crop,rainfall_mm,yield_t
+1,corn,40,4.2
+2,corn,55,5.1
+3,wheat,30,2.8
+4,wheat,70,3.9
+5,corn,20,3.0
+6,wheat,45,3.2
+7,corn,60,5.5
+8,wheat,25,2.5
+]]></data>
+    <steps>
+      <step>
+        <title>Wet plots</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on wetter plots for the briefing.</p><p>Keep rows where rainfall_mm is at least 40.</p><p>Implement <code>wet_plots(df)</code>.</p><p><strong>Check:</strong> Only wetter plots remain.</p>]]></instructions>
+        <hint>Exclude drier plots below forty millimeters.</hint>
+        <checkkind>frame</checkkind>
+        <fn>wet_plots</fn>
+        <signature><![CDATA[def wet_plots(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep rainfall_mm >= 40."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[plot_id,crop,rainfall_mm,yield_t
+1,corn,40,4.2
+2,corn,55,5.1
+4,wheat,70,3.9
+6,wheat,45,3.2
+7,corn,60,5.5
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Rain–yield link</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How tightly do rainfall and yield move together?</p><p>Return the absolute Pearson correlation of rainfall_mm and yield_t on the full extract as a float.</p><p>Implement <code>abs_rain_yield_corr(df)</code>.</p><p><strong>Check:</strong> Absolute correlation to 4 decimals.</p>]]></instructions>
+        <hint>Measure the strength of association between rainfall and yield, ignoring sign.</hint>
+        <checkkind>metric</checkkind>
+        <fn>abs_rain_yield_corr</fn>
+        <signature><![CDATA[def abs_rain_yield_corr(df: pd.DataFrame) -> float:
+    """abs(corr(rainfall_mm, yield_t))."""
+    return 0.0
+]]></signature>
+        <expect>0.7319</expect>
+        <floor>0.5318517532688567</floor>
+        <xp>30</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Airline delay desk</name>
+    <slug>airline-delay-desk</slug>
+    <scenario>An airline ops center needs delayed-flight stats before the evening irregular-ops huddle.</scenario>
+    <track>eda</track>
+    <coverkey>ship</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Airline delay desk
+
+## Situation
+Treat 15+ minute delays as delayed and summarize that set.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `flight_id` | integer | Flight identifier |
+| `route` | text | Origin-destination route |
+| `delay_min` | integer | Arrival delay in minutes |
+| `seats_sold` | integer | Seats sold |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep flights delayed 15+ minutes
+2. Average delay on that set
+3. Report delay incidence on all flights
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[flight_id,route,delay_min,seats_sold
+1,SFO-LAX,0,140
+2,SFO-LAX,25,160
+3,DEN-ORD,5,120
+4,DEN-ORD,40,150
+5,SFO-LAX,12,155
+6,DEN-ORD,0,130
+7,SFO-LAX,55,170
+8,DEN-ORD,8,125
+]]></data>
+    <steps>
+      <step>
+        <title>Delayed flights</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Isolate delayed flights.</p><p>Keep rows where delay_min is at least 15.</p><p>Implement <code>delayed_flights(df)</code>.</p><p><strong>Check:</strong> Only 15+ minute delays remain.</p>]]></instructions>
+        <hint>Drop on-time and lightly delayed flights under fifteen minutes.</hint>
+        <checkkind>frame</checkkind>
+        <fn>delayed_flights</fn>
+        <signature><![CDATA[def delayed_flights(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep delay_min >= 15."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[flight_id,route,delay_min,seats_sold
+2,SFO-LAX,25,160
+4,DEN-ORD,40,150
+7,SFO-LAX,55,170
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average delay</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How bad were the delayed flights?</p><p>Return mean delay_min on the delayed frame.</p><p>Implement <code>avg_delay(df)</code>.</p><p><strong>Check:</strong> Average delay to 4 decimals.</p>]]></instructions>
+        <hint>Average minutes among the delayed flights.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_delay</fn>
+        <signature><![CDATA[def avg_delay(df: pd.DataFrame) -> float:
+    """Mean delay_min after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>delayed_flights</preprocess>
+        <expect>40.0000</expect>
+        <floor>35.0</floor>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Delay rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What share of flights delayed?</p><p>On the raw frame, return the fraction with delay_min ≥ 15.</p><p>Implement <code>delay_rate(df)</code>.</p><p><strong>Check:</strong> Delay rate to 4 decimals.</p>]]></instructions>
+        <hint>Delayed flights as a share of all flights.</hint>
+        <checkkind>metric</checkkind>
+        <fn>delay_rate</fn>
+        <signature><![CDATA[def delay_rate(df: pd.DataFrame) -> float:
+    """Fraction delay_min >= 15."""
+    return 0.0
+]]></signature>
+        <expect>0.3750</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Real estate sqft desk</name>
+    <slug>real-estate-sqft-desk</slug>
+    <scenario>A brokerage wants a quick sqft→price sanity check before buying a larger valuation model.</scenario>
+    <track>ml</track>
+    <coverkey>house</coverkey>
+    <estimateminutes>30</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Real estate sqft desk
+
+## Situation
+Measure sqft–price association, then fit a linear model and report R².
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `listing_id` | integer | Listing identifier |
+| `sqft` | integer | Interior square footage |
+| `beds` | integer | Bedroom count |
+| `price_k` | number | List price in thousands of USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Absolute correlation of sqft vs price_k
+2. Train LinearRegression of price_k on sqft; report training R²
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[listing_id,sqft,beds,price_k
+1,900,2,220
+2,1200,3,310
+3,1500,3,360
+4,1800,4,450
+5,1100,2,260
+6,2000,4,520
+7,1600,3,390
+8,1400,3,340
+]]></data>
+    <steps>
+      <step>
+        <title>Correlation check</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Confirm sqft tracks price.</p><p>Return the absolute Pearson correlation of sqft and price_k as a float.</p><p>Implement <code>abs_sqft_price_corr(df)</code>.</p><p><strong>Check:</strong> Absolute correlation to 4 decimals.</p>]]></instructions>
+        <hint>Measure how strongly size and price move together, ignoring sign.</hint>
+        <checkkind>metric</checkkind>
+        <fn>abs_sqft_price_corr</fn>
+        <signature><![CDATA[def abs_sqft_price_corr(df: pd.DataFrame) -> float:
+    """abs(corr(sqft, price_k))."""
+    return 0.0
+]]></signature>
+        <expect>0.9934</expect>
+        <floor>0.9</floor>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Linear R²</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Fit a simple linear valuation.</p><p>Train LinearRegression predicting price_k from sqft on all rows. Return training R² as a float.</p><p>Implement <code>sqft_price_r2(df)</code>.</p><p><strong>Check:</strong> Training R² meets expect and floor.</p>]]></instructions>
+        <hint>Fit a straight-line model of price from square footage and report how much variance it explains on the training rows.</hint>
+        <checkkind>metric</checkkind>
+        <fn>sqft_price_r2</fn>
+        <signature><![CDATA[from sklearn.linear_model import LinearRegression
+
+def sqft_price_r2(df: pd.DataFrame) -> float:
+    """Train R² of LinearRegression(sqft→price_k)."""
+    return 0.0
+]]></signature>
+        <expect>0.9869</expect>
+        <floor>0.9</floor>
+        <xp>35</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>NPS classification desk</name>
+    <slug>nps-classification-desk</slug>
+    <scenario>Customer success needs classic NPS labels and an overall NPS figure before the QBR.</scenario>
+    <track>wrangling</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>32</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# NPS classification desk
+
+## Situation
+Map scores to promoter/passive/detractor and compute NPS = %promoters − %detractors (×100).
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `resp_id` | integer | Response identifier |
+| `score` | integer | 0–10 likelihood-to-recommend score |
+| `segment` | text | Customer segment |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add nps_class labels (9–10 promoter, 7–8 passive, ≤6 detractor)
+2. Keep pro segment rows
+3. Report overall NPS on all responses
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[resp_id,score,segment
+1,9,pro
+2,10,pro
+3,7,free
+4,6,free
+5,8,pro
+6,3,free
+7,9,pro
+8,4,free
+9,10,pro
+10,5,free
+]]></data>
+    <steps>
+      <step>
+        <title>Label classes</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Classify each score the classic way.</p><p>Add <code>nps_class</code>: promoter if score ≥ 9, detractor if score ≤ 6, else passive.</p><p>Implement <code>add_nps_class(df)</code>.</p><p><strong>Check:</strong> Labels match the classic bands.</p>]]></instructions>
+        <hint>High scores are promoters, low scores detractors, and the middle band is passive.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_nps_class</fn>
+        <signature><![CDATA[def add_nps_class(df: pd.DataFrame) -> pd.DataFrame:
+    """Add nps_class from score bands."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[resp_id,score,segment,nps_class
+1,9,pro,promoter
+2,10,pro,promoter
+3,7,free,passive
+4,6,free,detractor
+5,8,pro,passive
+6,3,free,detractor
+7,9,pro,promoter
+8,4,free,detractor
+9,10,pro,promoter
+10,5,free,detractor
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Pro segment</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> QBR deep-dive is pro customers only.</p><p>Keep segment <code>pro</code>. Grader applies add_nps_class first.</p><p>Implement <code>pro_responses(df)</code>.</p><p><strong>Check:</strong> Only pro rows remain.</p>]]></instructions>
+        <hint>Filter to the pro segment.</hint>
+        <checkkind>frame</checkkind>
+        <fn>pro_responses</fn>
+        <signature><![CDATA[def pro_responses(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep segment==pro."""
+    return df
+]]></signature>
+        <preprocess>add_nps_class</preprocess>
+        <expect_csv><![CDATA[resp_id,score,segment,nps_class
+1,9,pro,promoter
+2,10,pro,promoter
+5,8,pro,passive
+7,9,pro,promoter
+9,10,pro,promoter
+]]></expect_csv>
+        <xp>20</xp>
+      </step>
+      <step>
+        <title>Overall NPS</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compute classic NPS on all labeled responses.</p><p>On the labeled full frame, return (%promoters − %detractors) × 100 as a float.</p><p>Implement <code>overall_nps(df)</code>.</p><p><strong>Check:</strong> NPS figure to 4 decimals.</p>]]></instructions>
+        <hint>Subtract the detractor share from the promoter share, then scale to a percentage-point score.</hint>
+        <checkkind>metric</checkkind>
+        <fn>overall_nps</fn>
+        <signature><![CDATA[def overall_nps(df: pd.DataFrame) -> float:
+    """(%promoter - %detractor) * 100."""
+    return 0.0
+]]></signature>
+        <preprocess>add_nps_class</preprocess>
+        <expect>0.0000</expect>
+        <floor>-5.0</floor>
+        <xp>30</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Support ticket sentiment</name>
+    <slug>support-ticket-sentiment</slug>
+    <scenario>A support lead wants lexicon sentiment on ticket subjects before the on-call handoff.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Support ticket sentiment
+
+## Situation
+Score subjects with POS={good,great,love} and NEG={bad,hate,terrible}.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `ticket_id` | integer | Ticket identifier |
+| `priority` | text | Priority code |
+| `subject` | text | Ticket subject text |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return ticket_id,score
+2. CountVectorizer vocabulary size on subject
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[ticket_id,priority,subject
+1,P1,great support love help
+2,P2,bad delay hate wait
+3,P1,good fix love
+4,P3,terrible bug hate
+5,P2,great response good
+6,P1,bad tone hate
+7,P3,love quick good help
+8,P2,terrible silence hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG hits per subject.</p><p>Tokenize lowercase on whitespace. Return <code>ticket_id,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return ticket_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[ticket_id,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Vocabulary size</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How wide is the subject vocabulary?</p><p>Fit CountVectorizer on subject; return vocabulary size as a float.</p><p>Implement <code>vocab_size(df)</code>.</p><p><strong>Check:</strong> Vocabulary size matches.</p>]]></instructions>
+        <hint>Build a bag-of-words vocabulary over all subjects and count unique tokens.</hint>
+        <checkkind>metric</checkkind>
+        <fn>vocab_size</fn>
+        <signature><![CDATA[from sklearn.feature_extraction.text import CountVectorizer
+
+def vocab_size(df: pd.DataFrame) -> float:
+    """CountVectorizer vocabulary size."""
+    return 0.0
+]]></signature>
+        <expect>16.0000</expect>
+        <floor>15.0</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Manufacturing defect desk</name>
+    <slug>manufacturing-defect-desk</slug>
+    <scenario>Plant quality needs high-defect batches before holding a line for inspection.</scenario>
+    <track>eda</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Manufacturing defect desk
+
+## Situation
+Flag batches with defect_rate ≥ 0.03 and compare lines.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `batch_id` | integer | Batch identifier |
+| `line` | text | Production line |
+| `defect_rate` | number | Fraction defective |
+| `units` | integer | Units in batch |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep high-defect batches
+2. Average defect rate by line
+3. Share of batches that are high-defect
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[batch_id,line,defect_rate,units
+1,L1,0.01,1000
+2,L1,0.04,800
+3,L2,0.02,900
+4,L2,0.08,700
+5,L1,0.015,1100
+6,L2,0.03,950
+7,L1,0.05,850
+8,L2,0.02,1000
+]]></data>
+    <steps>
+      <step>
+        <title>High defect batches</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Hold batches above the defect threshold.</p><p>Keep rows where defect_rate is at least 0.03.</p><p>Implement <code>high_defect_batches(df)</code>.</p><p><strong>Check:</strong> Only high-defect batches remain.</p>]]></instructions>
+        <hint>Exclude batches below the three-percent defect threshold.</hint>
+        <checkkind>frame</checkkind>
+        <fn>high_defect_batches</fn>
+        <signature><![CDATA[def high_defect_batches(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep defect_rate >= 0.03."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[batch_id,line,defect_rate,units
+2,L1,0.04,800
+4,L2,0.08,700
+6,L2,0.03,950
+7,L1,0.05,850
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Line averages</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare lines on the full extract.</p><p>Return <code>line,avg_defect</code> sorted by line.</p><p>Implement <code>avg_defect_by_line(df)</code>.</p><p><strong>Check:</strong> Line averages match.</p>]]></instructions>
+        <hint>Average defect rates within each line.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_defect_by_line</fn>
+        <signature><![CDATA[def avg_defect_by_line(df: pd.DataFrame) -> pd.DataFrame:
+    """Return line,avg_defect sorted."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[line,avg_defect
+L1,0.02875
+L2,0.0375
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>High-defect share</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How common are high-defect batches?</p><p>Return the fraction of batches with defect_rate ≥ 0.03.</p><p>Implement <code>high_defect_share(df)</code>.</p><p><strong>Check:</strong> Share to 4 decimals.</p>]]></instructions>
+        <hint>High-defect batches as a share of all batches.</hint>
+        <checkkind>metric</checkkind>
+        <fn>high_defect_share</fn>
+        <signature><![CDATA[def high_defect_share(df: pd.DataFrame) -> float:
+    """Fraction defect_rate >= 0.03."""
+    return 0.0
+]]></signature>
+        <expect>0.5000</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Pharmacy refill desk</name>
+    <slug>pharmacy-refill-desk</slug>
+    <scenario>A pharmacy benefit team is reviewing 30-day fills and average copays by drug.</scenario>
+    <track>wrangling</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Pharmacy refill desk
+
+## Situation
+Focus on 30-day supplies and copay patterns.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `rx_id` | integer | Prescription identifier |
+| `drug` | text | Drug code |
+| `days_supply` | integer | Days supplied |
+| `copay` | number | Patient copay in USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep 30-day (or longer) fills
+2. Average copay by drug on that set
+3. Overall average copay on that set
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[rx_id,drug,days_supply,copay
+1,A,30,10
+2,B,7,25
+3,A,30,10
+4,C,14,40
+5,B,30,20
+6,A,7,25
+7,C,30,35
+8,B,14,15
+]]></data>
+    <steps>
+      <step>
+        <title>Month fills</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Limit to 30-day supplies.</p><p>Keep rows where days_supply is at least 30.</p><p>Implement <code>month_fills(df)</code>.</p><p><strong>Check:</strong> Only ≥30 day fills remain.</p>]]></instructions>
+        <hint>Exclude shorter supply fills.</hint>
+        <checkkind>frame</checkkind>
+        <fn>month_fills</fn>
+        <signature><![CDATA[def month_fills(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep days_supply >= 30."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[rx_id,drug,days_supply,copay
+1,A,30,10
+3,A,30,10
+5,B,30,20
+7,C,30,35
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Copay by drug</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare drugs on the filtered fills.</p><p>Return <code>drug,avg_copay</code> sorted by drug. Grader applies month_fills first.</p><p>Implement <code>avg_copay_by_drug(df)</code>.</p><p><strong>Check:</strong> Averages match.</p>]]></instructions>
+        <hint>Average copays within each drug code.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_copay_by_drug</fn>
+        <signature><![CDATA[def avg_copay_by_drug(df: pd.DataFrame) -> pd.DataFrame:
+    """Return drug,avg_copay sorted."""
+    return df
+]]></signature>
+        <preprocess>month_fills</preprocess>
+        <expect_csv><![CDATA[drug,avg_copay
+A,10.0
+B,20.0
+C,35.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Overall average copay</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One number for the PBM call.</p><p>Return mean copay on the filtered frame.</p><p>Implement <code>avg_month_copay(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average copays across remaining fills.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_month_copay</fn>
+        <signature><![CDATA[def avg_month_copay(df: pd.DataFrame) -> float:
+    """Mean copay after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>month_fills</preprocess>
+        <expect>18.7500</expect>
+        <floor>13.75</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Museum comment sentiment</name>
+    <slug>museum-comment-sentiment</slug>
+    <scenario>A museum curator wants lexicon scores on visitor comments before reallocating gallery space.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>27</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Museum comment sentiment
+
+## Situation
+Score comments with POS={good,great,love} and NEG={bad,hate,terrible}.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `exhibit_id` | integer | Exhibit identifier |
+| `wing` | text | Museum wing |
+| `comment` | text | Visitor comment |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return exhibit_id,score
+2. Keep positive scores
+3. Average score overall
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[exhibit_id,wing,comment
+1,north,great exhibit love art
+2,north,bad lighting hate
+3,south,good curation love
+4,south,terrible crowd hate
+5,north,great pieces good
+6,south,bad signage hate
+7,north,love gallery good
+8,south,terrible noise hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG hits per comment.</p><p>Tokenize lowercase on whitespace. Return <code>exhibit_id,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return exhibit_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[exhibit_id,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Positive comments</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Curators want positive-scoring exhibits.</p><p>Keep score > 0. Grader applies lexicon_scores first.</p><p>Implement <code>positive_scores(df)</code>.</p><p><strong>Check:</strong> Only positive scores remain.</p>]]></instructions>
+        <hint>Keep comments whose net score is above zero.</hint>
+        <checkkind>frame</checkkind>
+        <fn>positive_scores</fn>
+        <signature><![CDATA[def positive_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep score > 0."""
+    return df
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect_csv><![CDATA[exhibit_id,score
+1,2
+3,2
+5,2
+7,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average score</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Overall comment sentiment.</p><p>Return mean score on the scored frame.</p><p>Implement <code>avg_score(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average net scores across all comments.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_score</fn>
+        <signature><![CDATA[def avg_score(df: pd.DataFrame) -> float:
+    """Mean score after lexicon_scores."""
+    return 0.0
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect>0.0000</expect>
+        <floor>-0.5</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Rideshare surge desk</name>
+    <slug>rideshare-surge-desk</slug>
+    <scenario>A rideshare marketplace ops lead needs base fares and surge incidence before a pricing review.</scenario>
+    <track>wrangling</track>
+    <coverkey>sales</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Rideshare surge desk
+
+## Situation
+Recover base fare as fare ÷ surge, then inspect surged trips.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `ride_id` | integer | Ride identifier |
+| `city` | text | City code |
+| `fare` | number | Amount charged |
+| `surge` | number | Surge multiplier (≥1) |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add base_fare = fare / surge
+2. Keep trips with surge > 1
+3. Report share of surged trips
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[ride_id,city,fare,surge
+1,SF,12.5,1.0
+2,SF,28.0,1.5
+3,LA,15.0,1.0
+4,LA,40.0,2.0
+5,SF,9.0,1.0
+6,LA,22.0,1.2
+7,SF,33.0,1.8
+8,LA,18.5,1.0
+]]></data>
+    <steps>
+      <step>
+        <title>Base fare</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Recover the pre-surge amount.</p><p>Add <code>base_fare</code> = fare divided by surge.</p><p>Implement <code>add_base_fare(df)</code>.</p><p><strong>Check:</strong> base_fare matches fare/surge.</p>]]></instructions>
+        <hint>Undo the surge multiplier to recover the base amount.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_base_fare</fn>
+        <signature><![CDATA[def add_base_fare(df: pd.DataFrame) -> pd.DataFrame:
+    """Add base_fare = fare / surge."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[ride_id,city,fare,surge,base_fare
+1,SF,12.5,1.0,12.5
+2,SF,28.0,1.5,18.666666666666668
+3,LA,15.0,1.0,15.0
+4,LA,40.0,2.0,20.0
+5,SF,9.0,1.0,9.0
+6,LA,22.0,1.2,18.333333333333336
+7,SF,33.0,1.8,18.333333333333332
+8,LA,18.5,1.0,18.5
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Surged trips</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> List trips that had surge pricing.</p><p>Keep rows where surge is greater than 1. Grader applies add_base_fare first.</p><p>Implement <code>surged_trips(df)</code>.</p><p><strong>Check:</strong> Only surged trips remain.</p>]]></instructions>
+        <hint>Exclude trips that rode at the base multiplier of one.</hint>
+        <checkkind>frame</checkkind>
+        <fn>surged_trips</fn>
+        <signature><![CDATA[def surged_trips(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep surge > 1."""
+    return df
+]]></signature>
+        <preprocess>add_base_fare</preprocess>
+        <expect_csv><![CDATA[ride_id,city,fare,surge,base_fare
+2,SF,28.0,1.5,18.666666666666668
+4,LA,40.0,2.0,20.0
+6,LA,22.0,1.2,18.333333333333336
+7,SF,33.0,1.8,18.333333333333332
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Surge share</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How often does surge occur?</p><p>On the raw frame, return the fraction of trips with surge > 1.</p><p>Implement <code>surge_share(df)</code>.</p><p><strong>Check:</strong> Share to 4 decimals.</p>]]></instructions>
+        <hint>Surged trips as a share of all rides.</hint>
+        <checkkind>metric</checkkind>
+        <fn>surge_share</fn>
+        <signature><![CDATA[def surge_share(df: pd.DataFrame) -> float:
+    """Fraction surge > 1."""
+    return 0.0
+]]></signature>
+        <expect>0.5000</expect>
+        <floor>0.4</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>SaaS churn baseline</name>
+    <slug>saas-churn-baseline</slug>
+    <scenario>A SaaS analytics engineer must rebuild a logistic churn baseline from MRR and seats.</scenario>
+    <track>ml</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>42</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# SaaS churn baseline
+
+## Situation
+Split accounts, then train logistic churn from MRR and seat count.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `account_id` | integer | Account identifier |
+| `plan` | text | Plan name |
+| `mrr` | number | Monthly recurring revenue |
+| `seats` | integer | Licensed seats |
+| `churned` | 0 / 1 | 1 if churned |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Report train/test sizes (25% holdout, seed 0)
+2. Logistic test accuracy on mrr+seats → churned
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[account_id,plan,mrr,seats,churned
+1,starter,49,3,0
+2,pro,199,12,0
+3,starter,49,2,1
+4,pro,199,20,0
+5,starter,49,5,1
+6,pro,399,40,1
+7,starter,49,4,1
+8,pro,199,15,0
+]]></data>
+    <steps>
+      <step>
+        <title>Split sizes</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Document the holdout before modeling.</p><p>Features mrr and seats, target churned, test_size=0.25, random_state=0. Return one-row <code>n_train,n_test</code>.</p><p>Implement <code>split_shapes(df)</code>.</p><p><strong>Check:</strong> Counts match the fixed split.</p>]]></instructions>
+        <hint>Hold out one quarter of accounts with a fixed seed.</hint>
+        <checkkind>frame</checkkind>
+        <fn>split_shapes</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+
+def split_shapes(df: pd.DataFrame) -> pd.DataFrame:
+    """n_train,n_test for 0.25 split seed 0."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[n_train,n_test
+6,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Logistic accuracy</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Train a logistic churn baseline.</p><p>Fit LogisticRegression on the same split; return test accuracy.</p><p>Implement <code>logistic_accuracy(df)</code>.</p><p><strong>Check:</strong> Accuracy matches expect/floor.</p>]]></instructions>
+        <hint>Train on the training accounts and score accuracy on the held-out accounts.</hint>
+        <checkkind>metric</checkkind>
+        <fn>logistic_accuracy</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+def logistic_accuracy(df: pd.DataFrame) -> float:
+    """Test accuracy."""
+    return 0.0
+]]></signature>
+        <expect>0.0000</expect>
+        <floor>0.0</floor>
+        <xp>40</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Library circulation desk</name>
+    <slug>library-circulation-desk</slug>
+    <scenario>A public library needs overdue items and branch checkout totals before late-notice mailing.</scenario>
+    <track>wrangling</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Library circulation desk
+
+## Situation
+Items out more than 21 days are overdue; also roll up checkouts by branch.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `item_id` | integer | Item identifier |
+| `branch` | text | Branch name |
+| `checkouts` | integer | Lifetime checkouts |
+| `days_out` | integer | Days currently borrowed |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. List overdue items (days_out > 21)
+2. Sum checkouts by branch
+3. Report overdue share
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[item_id,branch,checkouts,days_out
+1,central,40,10
+2,central,5,40
+3,west,22,14
+4,west,3,50
+5,central,35,12
+6,west,18,20
+7,central,8,35
+8,west,27,15
+]]></data>
+    <steps>
+      <step>
+        <title>Overdue items</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Build the late-notice list.</p><p>Keep rows where days_out is greater than 21.</p><p>Implement <code>overdue_items(df)</code>.</p><p><strong>Check:</strong> Only overdue items remain.</p>]]></instructions>
+        <hint>Exclude items still within the three-week window.</hint>
+        <checkkind>frame</checkkind>
+        <fn>overdue_items</fn>
+        <signature><![CDATA[def overdue_items(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep days_out > 21."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[item_id,branch,checkouts,days_out
+2,central,5,40
+4,west,3,50
+7,central,8,35
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Branch checkouts</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Branch managers want volume.</p><p>Return <code>branch,total_checkouts</code> sorted by branch.</p><p>Implement <code>checkouts_by_branch(df)</code>.</p><p><strong>Check:</strong> Totals match.</p>]]></instructions>
+        <hint>Add checkouts within each branch.</hint>
+        <checkkind>frame</checkkind>
+        <fn>checkouts_by_branch</fn>
+        <signature><![CDATA[def checkouts_by_branch(df: pd.DataFrame) -> pd.DataFrame:
+    """Return branch,total_checkouts sorted."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[branch,total_checkouts
+central,88
+west,70
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Overdue share</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What share of items are overdue?</p><p>Return the fraction with days_out > 21.</p><p>Implement <code>overdue_share(df)</code>.</p><p><strong>Check:</strong> Share to 4 decimals.</p>]]></instructions>
+        <hint>Overdue items as a share of all items.</hint>
+        <checkkind>metric</checkkind>
+        <fn>overdue_share</fn>
+        <signature><![CDATA[def overdue_share(df: pd.DataFrame) -> float:
+    """Fraction days_out > 21."""
+    return 0.0
+]]></signature>
+        <expect>0.3750</expect>
+        <floor>0.2</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Parking session desk</name>
+    <slug>parking-session-desk</slug>
+    <scenario>City parking ops wants revenue on hour-plus sessions before adjusting meter rates.</scenario>
+    <track>wrangling</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Parking session desk
+
+## Situation
+Focus on sessions of 60+ minutes and lot revenue.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `session_id` | integer | Session identifier |
+| `lot` | text | Lot code |
+| `minutes` | integer | Minutes parked |
+| `paid_usd` | number | Amount paid |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep sessions ≥ 60 minutes
+2. Sum paid_usd by lot on that set
+3. Average minutes on that set
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[session_id,lot,minutes,paid_usd
+1,A,45,3
+2,A,120,8
+3,B,30,2
+4,B,200,12
+5,A,60,4
+6,B,90,6
+7,A,15,1
+8,B,150,10
+]]></data>
+    <steps>
+      <step>
+        <title>Long sessions</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Ignore short stops for this rate study.</p><p>Keep rows where minutes is at least 60.</p><p>Implement <code>long_sessions(df)</code>.</p><p><strong>Check:</strong> Only hour-plus sessions remain.</p>]]></instructions>
+        <hint>Drop sessions shorter than one hour.</hint>
+        <checkkind>frame</checkkind>
+        <fn>long_sessions</fn>
+        <signature><![CDATA[def long_sessions(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep minutes >= 60."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[session_id,lot,minutes,paid_usd
+2,A,120,8
+4,B,200,12
+5,A,60,4
+6,B,90,6
+8,B,150,10
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Lot revenue</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare lots on long sessions.</p><p>Return <code>lot,revenue</code> sorted by lot. Grader applies long_sessions first.</p><p>Implement <code>lot_revenue(df)</code>.</p><p><strong>Check:</strong> Revenue totals match.</p>]]></instructions>
+        <hint>Add payments within each lot.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lot_revenue</fn>
+        <signature><![CDATA[def lot_revenue(df: pd.DataFrame) -> pd.DataFrame:
+    """Return lot,revenue sorted."""
+    return df
+]]></signature>
+        <preprocess>long_sessions</preprocess>
+        <expect_csv><![CDATA[lot,revenue
+A,12
+B,28
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Average duration</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How long do long sessions last on average?</p><p>Return mean minutes on the filtered frame.</p><p>Implement <code>avg_long_minutes(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average minutes among remaining sessions.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_long_minutes</fn>
+        <signature><![CDATA[def avg_long_minutes(df: pd.DataFrame) -> float:
+    """Mean minutes after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>long_sessions</preprocess>
+        <expect>124.0000</expect>
+        <floor>114.0</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Coffee shop peak desk</name>
+    <slug>coffee-shop-peak-desk</slug>
+    <scenario>A café manager wants peak-hour drink mix and revenue before staffing the morning rush.</scenario>
+    <track>wrangling</track>
+    <coverkey>sales</coverkey>
+    <estimateminutes>22</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Coffee shop peak desk
+
+## Situation
+Peak flag marks morning-rush orders; summarize those sales.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `order_id` | integer | Order identifier |
+| `drink` | text | Drink name |
+| `size` | text | Cup size |
+| `price` | number | Price paid |
+| `peak` | 0 / 1 | 1 if ordered in peak window |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep peak orders
+2. Average price by drink on peak orders
+3. Total peak revenue
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[order_id,drink,size,price,peak
+1,latte,M,4.5,1
+2,espresso,S,2.5,0
+3,latte,L,5.5,1
+4,mocha,M,5.0,1
+5,espresso,S,2.5,0
+6,latte,L,5.5,1
+7,mocha,L,6.0,0
+8,espresso,S,2.5,0
+]]></data>
+    <steps>
+      <step>
+        <title>Peak orders</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on the rush window.</p><p>Keep rows where peak is 1.</p><p>Implement <code>peak_orders(df)</code>.</p><p><strong>Check:</strong> Only peak orders remain.</p>]]></instructions>
+        <hint>Exclude off-peak tickets.</hint>
+        <checkkind>frame</checkkind>
+        <fn>peak_orders</fn>
+        <signature><![CDATA[def peak_orders(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep peak==1."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[order_id,drink,size,price,peak
+1,latte,M,4.5,1
+3,latte,L,5.5,1
+4,mocha,M,5.0,1
+6,latte,L,5.5,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Drink averages</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What do peak drinks sell for?</p><p>Return <code>drink,avg_price</code> sorted by drink. Grader applies peak_orders first.</p><p>Implement <code>avg_price_by_drink(df)</code>.</p><p><strong>Check:</strong> Averages match.</p>]]></instructions>
+        <hint>Average prices within each drink name.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_price_by_drink</fn>
+        <signature><![CDATA[def avg_price_by_drink(df: pd.DataFrame) -> pd.DataFrame:
+    """Return drink,avg_price sorted."""
+    return df
+]]></signature>
+        <preprocess>peak_orders</preprocess>
+        <expect_csv><![CDATA[drink,avg_price
+latte,5.166666666666667
+mocha,5.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Peak revenue</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How much did the peak window ring?</p><p>Return the sum of price on the peak frame as a float.</p><p>Implement <code>peak_revenue(df)</code>.</p><p><strong>Check:</strong> Total to 4 decimals.</p>]]></instructions>
+        <hint>Add all peak-order prices together.</hint>
+        <checkkind>metric</checkkind>
+        <fn>peak_revenue</fn>
+        <signature><![CDATA[def peak_revenue(df: pd.DataFrame) -> float:
+    """Sum price after peak filter."""
+    return 0.0
+]]></signature>
+        <preprocess>peak_orders</preprocess>
+        <expect>20.5000</expect>
+        <floor>19.5</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Gym attendance churn</name>
+    <slug>gym-attendance-churn</slug>
+    <scenario>A fitness chain wants a logistic cancel baseline from visit counts.</scenario>
+    <track>ml</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>38</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Gym attendance churn
+
+## Situation
+Predict membership cancel from monthly visits with an honest split.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `member_id` | integer | Member identifier |
+| `plan` | text | Membership plan |
+| `visits` | integer | Visits in the last month |
+| `canceled` | 0 / 1 | 1 if membership canceled |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Train/test sizes for 25% holdout
+2. Logistic test accuracy visits→canceled
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[member_id,plan,visits,canceled
+1,basic,4,0
+2,plus,12,0
+3,basic,2,1
+4,plus,15,0
+5,basic,8,1
+6,plus,10,1
+7,basic,1,1
+8,plus,14,0
+]]></data>
+    <steps>
+      <step>
+        <title>Split sizes</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Document holdout sizes.</p><p>Feature visits, target canceled, test_size=0.25, random_state=0. Return <code>n_train,n_test</code>.</p><p>Implement <code>split_shapes(df)</code>.</p><p><strong>Check:</strong> Counts match.</p>]]></instructions>
+        <hint>Hold out one quarter of members with a fixed seed.</hint>
+        <checkkind>frame</checkkind>
+        <fn>split_shapes</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+
+def split_shapes(df: pd.DataFrame) -> pd.DataFrame:
+    """n_train,n_test."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[n_train,n_test
+6,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Logistic accuracy</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Fit logistic cancel baseline.</p><p>Train LogisticRegression on the same split; return test accuracy.</p><p>Implement <code>logistic_accuracy(df)</code>.</p><p><strong>Check:</strong> Accuracy matches expect/floor.</p>]]></instructions>
+        <hint>Train on training members and score the held-out members.</hint>
+        <checkkind>metric</checkkind>
+        <fn>logistic_accuracy</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+def logistic_accuracy(df: pd.DataFrame) -> float:
+    """Test accuracy."""
+    return 0.0
+]]></signature>
+        <expect>1.0000</expect>
+        <floor>0.5</floor>
+        <xp>40</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Insurance claim triage</name>
+    <slug>insurance-claim-triage</slug>
+    <scenario>SIU analysts need fraud rates on larger claims before escalating cases.</scenario>
+    <track>eda</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>26</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Insurance claim triage
+
+## Situation
+Review claims of $2000+ and fraud flags by type.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `claim_id` | integer | Claim identifier |
+| `type` | text | Claim type |
+| `amount` | number | Claim amount USD |
+| `fraud_flag` | 0 / 1 | 1 if flagged for review |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep large claims
+2. Fraud rate by type
+3. Overall fraud rate on large claims
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[claim_id,type,amount,fraud_flag
+1,auto,1200,0
+2,auto,8000,1
+3,home,500,0
+4,home,15000,1
+5,auto,2200,0
+6,home,900,0
+7,auto,4500,1
+8,home,300,0
+]]></data>
+    <steps>
+      <step>
+        <title>Large claims</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on larger exposures.</p><p>Keep rows where amount is at least 2000.</p><p>Implement <code>large_claims(df)</code>.</p><p><strong>Check:</strong> Only large claims remain.</p>]]></instructions>
+        <hint>Exclude smaller claims under two thousand.</hint>
+        <checkkind>frame</checkkind>
+        <fn>large_claims</fn>
+        <signature><![CDATA[def large_claims(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep amount >= 2000."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[claim_id,type,amount,fraud_flag
+2,auto,8000,1
+4,home,15000,1
+5,auto,2200,0
+7,auto,4500,1
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Fraud by type</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare claim types.</p><p>Return <code>type,fraud_rate</code> sorted by type. Grader applies large_claims first.</p><p>Implement <code>fraud_rate_by_type(df)</code>.</p><p><strong>Check:</strong> Rates match.</p>]]></instructions>
+        <hint>Average fraud flags within each claim type.</hint>
+        <checkkind>frame</checkkind>
+        <fn>fraud_rate_by_type</fn>
+        <signature><![CDATA[def fraud_rate_by_type(df: pd.DataFrame) -> pd.DataFrame:
+    """Return type,fraud_rate sorted."""
+    return df
+]]></signature>
+        <preprocess>large_claims</preprocess>
+        <expect_csv><![CDATA[type,fraud_rate
+auto,0.6666666666666666
+home,1.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Overall fraud rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One rate for the SIU standup.</p><p>Return mean fraud_flag on the filtered frame.</p><p>Implement <code>large_fraud_rate(df)</code>.</p><p><strong>Check:</strong> Rate to 4 decimals.</p>]]></instructions>
+        <hint>Average fraud flags across remaining claims.</hint>
+        <checkkind>metric</checkkind>
+        <fn>large_fraud_rate</fn>
+        <signature><![CDATA[def large_fraud_rate(df: pd.DataFrame) -> float:
+    """Mean fraud_flag after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>large_claims</preprocess>
+        <expect>0.7500</expect>
+        <floor>0.4</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Restaurant note sentiment</name>
+    <slug>restaurant-note-sentiment</slug>
+    <scenario>A restaurant GM wants lexicon scores on guest notes before coaching the floor team.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>26</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Restaurant note sentiment
+
+## Situation
+Score guest notes with POS={good,great,love} and NEG={bad,hate,terrible}.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `ticket_id` | integer | Ticket identifier |
+| `server` | text | Server name |
+| `note` | text | Guest comment |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return ticket_id,score
+2. CountVectorizer vocabulary size on note
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[ticket_id,server,note
+1,Amy,great food love service
+2,Ben,bad wait hate
+3,Amy,good pasta love
+4,Cara,terrible cold hate
+5,Ben,great dessert good
+6,Amy,bad noise hate
+7,Cara,love ambiance good
+8,Ben,terrible bill hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG hits per note.</p><p>Tokenize lowercase on whitespace. Return <code>ticket_id,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return ticket_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[ticket_id,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Vocabulary size</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How wide is the guest-note vocabulary?</p><p>Fit CountVectorizer on note; return vocabulary size as a float.</p><p>Implement <code>vocab_size(df)</code>.</p><p><strong>Check:</strong> Vocabulary size matches.</p>]]></instructions>
+        <hint>Build a bag-of-words vocabulary over all notes and count unique tokens.</hint>
+        <checkkind>metric</checkkind>
+        <fn>vocab_size</fn>
+        <signature><![CDATA[from sklearn.feature_extraction.text import CountVectorizer
+
+def vocab_size(df: pd.DataFrame) -> float:
+    """CountVectorizer vocabulary size."""
+    return 0.0
+]]></signature>
+        <expect>15.0000</expect>
+        <floor>14.0</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Ecommerce review sentiment</name>
+    <slug>ecommerce-review-sentiment</slug>
+    <scenario>A digital retail team needs lexicon scores on post-purchase reviews before a checkout redesign.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>27</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Ecommerce review sentiment
+
+## Situation
+Score reviews with POS={good,great,love} and NEG={bad,hate,terrible}.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `order_id` | integer | Order identifier |
+| `device` | text | Device class |
+| `review` | text | Post-purchase review |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return order_id,score
+2. Keep positive scores
+3. Average score overall
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[order_id,device,review
+1,mobile,great checkout love app
+2,desktop,bad lag hate
+3,mobile,good deal love
+4,desktop,terrible shipping hate
+5,mobile,great packaging good
+6,desktop,bad sizing hate
+7,mobile,love speed good
+8,desktop,terrible support hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG hits per review.</p><p>Tokenize lowercase on whitespace. Return <code>order_id,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return order_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[order_id,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Positive reviews</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Product wants positive-scoring orders.</p><p>Keep score > 0. Grader applies lexicon_scores first.</p><p>Implement <code>positive_scores(df)</code>.</p><p><strong>Check:</strong> Only positive scores remain.</p>]]></instructions>
+        <hint>Keep reviews whose net score is above zero.</hint>
+        <checkkind>frame</checkkind>
+        <fn>positive_scores</fn>
+        <signature><![CDATA[def positive_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep score > 0."""
+    return df
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect_csv><![CDATA[order_id,score
+1,2
+3,2
+5,2
+7,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average score</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Overall review sentiment.</p><p>Return mean score on the scored frame.</p><p>Implement <code>avg_score(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average net scores across all reviews.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_score</fn>
+        <signature><![CDATA[def avg_score(df: pd.DataFrame) -> float:
+    """Mean score after lexicon_scores."""
+    return 0.0
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect>0.0000</expect>
+        <floor>-0.5</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Freight rate-per-mile</name>
+    <slug>freight-rate-per-mile</slug>
+    <scenario>A broker desk needs rate-per-mile on longer loads before quoting shippers.</scenario>
+    <track>wrangling</track>
+    <coverkey>ship</coverkey>
+    <estimateminutes>23</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Freight rate-per-mile
+
+## Situation
+Compute RPM and focus on loads of 200+ miles.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `load_id` | integer | Load identifier |
+| `miles` | number | Loaded miles |
+| `rate_usd` | number | Total rate |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add rpm = rate/miles
+2. Keep long-haul loads
+3. Average RPM on long-haul
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[load_id,miles,rate_usd
+1,100,200
+2,250,600
+3,80,150
+4,400,1000
+5,150,320
+6,300,700
+7,120,240
+8,220,500
+]]></data>
+    <steps>
+      <step>
+        <title>Add RPM</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Normalize rates by distance.</p><p>Add <code>rpm</code> = rate_usd / miles.</p><p>Implement <code>add_rpm(df)</code>.</p><p><strong>Check:</strong> rpm matches the ratio.</p>]]></instructions>
+        <hint>Divide total rate by miles for each load.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_rpm</fn>
+        <signature><![CDATA[def add_rpm(df: pd.DataFrame) -> pd.DataFrame:
+    """Add rpm = rate_usd/miles."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[load_id,miles,rate_usd,rpm
+1,100,200,2.0
+2,250,600,2.4
+3,80,150,1.875
+4,400,1000,2.5
+5,150,320,2.1333333333333333
+6,300,700,2.3333333333333335
+7,120,240,2.0
+8,220,500,2.272727272727273
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Long haul</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Quote review is 200+ miles.</p><p>Keep miles ≥ 200. Grader applies add_rpm first.</p><p>Implement <code>long_haul(df)</code>.</p><p><strong>Check:</strong> Only long-haul loads remain.</p>]]></instructions>
+        <hint>Exclude shorter loads under two hundred miles.</hint>
+        <checkkind>frame</checkkind>
+        <fn>long_haul</fn>
+        <signature><![CDATA[def long_haul(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep miles >= 200."""
+    return df
+]]></signature>
+        <preprocess>add_rpm</preprocess>
+        <expect_csv><![CDATA[load_id,miles,rate_usd,rpm
+2,250,600,2.4
+4,400,1000,2.5
+6,300,700,2.3333333333333335
+8,220,500,2.272727272727273
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average RPM</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One RPM for the quote sheet.</p><p>Return mean rpm on the long-haul frame.</p><p>Implement <code>avg_longhaul_rpm(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average RPM among remaining long-haul loads.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_longhaul_rpm</fn>
+        <signature><![CDATA[def avg_longhaul_rpm(df: pd.DataFrame) -> float:
+    """Mean rpm after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>long_haul</preprocess>
+        <expect>2.3765</expect>
+        <floor>2.1765151515151517</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Cinema review sentiment</name>
+    <slug>cinema-review-sentiment</slug>
+    <scenario>Content ops wants a cheap lexicon score before wiring a heavier NLP model for showtimes.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>30</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Cinema review sentiment
+
+## Situation
+Score short reviews with a tiny lexicon, then measure bag-of-words vocabulary size.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `film_id` | integer | Film identifier |
+| `genre` | text | Genre label |
+| `review` | text | Short review text |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Lexicon score: +1 per POS word, −1 per NEG word; return film_id,score
+2. Fit CountVectorizer on review; return vocabulary size
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[film_id,genre,review
+1,action,good film love it
+2,drama,bad movie hate it
+3,action,great show love
+4,comedy,terrible film
+5,drama,good drama
+6,comedy,bad comedy hate
+7,action,great action love
+8,drama,terrible hate movie
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Score each review with the POS/NEG word lists in the signature docstring context: POS={good,great,love}, NEG={bad,hate,terrible}.</p><p>Tokenize on whitespace (lowercase). Return a frame <code>film_id,score</code> with the net score.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon rule.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative cue words, then net them per review.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS={good,great,love} NEG={bad,hate,terrible}; return film_id,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[film_id,score
+1,2
+2,-2
+3,2
+4,-1
+5,1
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Vocabulary size</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Measure how wide the review vocabulary is.</p><p>Fit CountVectorizer on the review column; return vocabulary size as a float.</p><p>Implement <code>vocab_size(df)</code>.</p><p><strong>Check:</strong> Vocabulary size matches.</p>]]></instructions>
+        <hint>Build a bag-of-words vocabulary over all reviews and count unique tokens.</hint>
+        <checkkind>metric</checkkind>
+        <fn>vocab_size</fn>
+        <signature><![CDATA[from sklearn.feature_extraction.text import CountVectorizer
+
+def vocab_size(df: pd.DataFrame) -> float:
+    """CountVectorizer vocabulary size."""
+    return 0.0
+]]></signature>
+        <expect>13.0000</expect>
+        <floor>12.0</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Utilities bill model</name>
+    <slug>utilities-bill-model</slug>
+    <scenario>A utility analyst needs a quick kWh→bill linear check before publishing a rate explainer.</scenario>
+    <track>ml</track>
+    <coverkey>house</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Utilities bill model
+
+## Situation
+Correlate usage and bill, then fit a linear model.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `account_id` | integer | Account identifier |
+| `region` | text | Service region |
+| `kwh` | number | Usage in kWh |
+| `bill` | number | Bill amount USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Absolute correlation kwh vs bill
+2. LinearRegression R² of bill on kwh
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[account_id,region,kwh,bill
+1,north,300,45
+2,north,450,70
+3,south,280,40
+4,south,600,95
+5,north,320,50
+6,south,500,80
+7,north,410,65
+8,south,290,42
+]]></data>
+    <steps>
+      <step>
+        <title>Usage–bill link</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Confirm usage tracks the bill.</p><p>Return absolute Pearson correlation of kwh and bill.</p><p>Implement <code>abs_kwh_bill_corr(df)</code>.</p><p><strong>Check:</strong> Correlation to 4 decimals.</p>]]></instructions>
+        <hint>Measure association strength between usage and bill, ignoring sign.</hint>
+        <checkkind>metric</checkkind>
+        <fn>abs_kwh_bill_corr</fn>
+        <signature><![CDATA[def abs_kwh_bill_corr(df: pd.DataFrame) -> float:
+    """abs(corr(kwh,bill))."""
+    return 0.0
+]]></signature>
+        <expect>0.9981</expect>
+        <floor>0.9</floor>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Linear R²</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Fit a simple linear explainer.</p><p>Train LinearRegression predicting bill from kwh; return training R².</p><p>Implement <code>kwh_bill_r2(df)</code>.</p><p><strong>Check:</strong> R² matches expect/floor.</p>]]></instructions>
+        <hint>Fit a straight-line model of bill from usage and report explained variance on the training rows.</hint>
+        <checkkind>metric</checkkind>
+        <fn>kwh_bill_r2</fn>
+        <signature><![CDATA[from sklearn.linear_model import LinearRegression
+
+def kwh_bill_r2(df: pd.DataFrame) -> float:
+    """Train R²."""
+    return 0.0
+]]></signature>
+        <expect>0.9962</expect>
+        <floor>0.9</floor>
+        <xp>35</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Campus events desk</name>
+    <slug>campus-events-desk</slug>
+    <scenario>Student affairs wants budget totals for larger events before approving next term's calendar.</scenario>
+    <track>wrangling</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Campus events desk
+
+## Situation
+Focus on events with 20+ attendees.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `event_id` | integer | Event identifier |
+| `org` | text | Student organization |
+| `attendees` | integer | Headcount |
+| `budget` | number | Budget USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep larger events
+2. Sum budget by org
+3. Average attendance on that set
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[event_id,org,attendees,budget
+1,robotics,40,200
+2,debate,15,80
+3,robotics,55,250
+4,music,30,150
+5,debate,12,60
+6,music,45,180
+7,robotics,20,100
+8,debate,18,90
+]]></data>
+    <steps>
+      <step>
+        <title>Larger events</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Ignore tiny meetups.</p><p>Keep attendees ≥ 20.</p><p>Implement <code>large_events(df)</code>.</p><p><strong>Check:</strong> Only larger events remain.</p>]]></instructions>
+        <hint>Drop events under twenty attendees.</hint>
+        <checkkind>frame</checkkind>
+        <fn>large_events</fn>
+        <signature><![CDATA[def large_events(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep attendees >= 20."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[event_id,org,attendees,budget
+1,robotics,40,200
+3,robotics,55,250
+4,music,30,150
+6,music,45,180
+7,robotics,20,100
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Org budgets</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Roll budget by organization.</p><p>Return <code>org,budget_total</code> sorted by org. Grader applies large_events first.</p><p>Implement <code>budget_by_org(df)</code>.</p><p><strong>Check:</strong> Totals match.</p>]]></instructions>
+        <hint>Add budgets within each organization.</hint>
+        <checkkind>frame</checkkind>
+        <fn>budget_by_org</fn>
+        <signature><![CDATA[def budget_by_org(df: pd.DataFrame) -> pd.DataFrame:
+    """Return org,budget_total sorted."""
+    return df
+]]></signature>
+        <preprocess>large_events</preprocess>
+        <expect_csv><![CDATA[org,budget_total
+music,330
+robotics,550
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Average attendance</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Typical headcount for approved events.</p><p>Return mean attendees on the filtered frame.</p><p>Implement <code>avg_attendees(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average attendance among remaining events.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_attendees</fn>
+        <signature><![CDATA[def avg_attendees(df: pd.DataFrame) -> float:
+    """Mean attendees after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>large_events</preprocess>
+        <expect>38.0000</expect>
+        <floor>33.0</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Fleet maintenance desk</name>
+    <slug>fleet-maintenance-desk</slug>
+    <scenario>Fleet ops needs maintenance cost-per-mile on high-mileage vehicles.</scenario>
+    <track>wrangling</track>
+    <coverkey>ship</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Fleet maintenance desk
+
+## Situation
+Normalize maintenance cost by miles, then focus on 1000+ mile vehicles.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `vehicle_id` | integer | Vehicle identifier |
+| `depot` | text | Depot name |
+| `miles` | number | Miles in period |
+| `maint_cost` | number | Maintenance spend |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add cost_per_mile
+2. Keep high-mileage vehicles
+3. Average cost_per_mile on that set
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[vehicle_id,depot,miles,maint_cost
+1,north,1200,200
+2,north,800,120
+3,south,1500,350
+4,south,600,90
+5,north,2000,500
+6,south,900,150
+7,north,700,100
+8,south,1800,400
+]]></data>
+    <steps>
+      <step>
+        <title>Cost per mile</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Normalize maintenance spend.</p><p>Add <code>cost_per_mile</code> = maint_cost / miles.</p><p>Implement <code>add_cpm(df)</code>.</p><p><strong>Check:</strong> cost_per_mile matches.</p>]]></instructions>
+        <hint>Divide maintenance spend by miles for each vehicle.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_cpm</fn>
+        <signature><![CDATA[def add_cpm(df: pd.DataFrame) -> pd.DataFrame:
+    """Add cost_per_mile."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[vehicle_id,depot,miles,maint_cost,cost_per_mile
+1,north,1200,200,0.16666666666666666
+2,north,800,120,0.15
+3,south,1500,350,0.23333333333333334
+4,south,600,90,0.15
+5,north,2000,500,0.25
+6,south,900,150,0.16666666666666666
+7,north,700,100,0.14285714285714285
+8,south,1800,400,0.2222222222222222
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>High mileage</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on hard-working vehicles.</p><p>Keep miles ≥ 1000. Grader applies add_cpm first.</p><p>Implement <code>high_mileage(df)</code>.</p><p><strong>Check:</strong> Only high-mileage vehicles remain.</p>]]></instructions>
+        <hint>Exclude lower-mileage vehicles under one thousand miles.</hint>
+        <checkkind>frame</checkkind>
+        <fn>high_mileage</fn>
+        <signature><![CDATA[def high_mileage(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep miles >= 1000."""
+    return df
+]]></signature>
+        <preprocess>add_cpm</preprocess>
+        <expect_csv><![CDATA[vehicle_id,depot,miles,maint_cost,cost_per_mile
+1,north,1200,200,0.16666666666666666
+3,south,1500,350,0.23333333333333334
+5,north,2000,500,0.25
+8,south,1800,400,0.2222222222222222
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average CPM</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One cost-per-mile for the depot review.</p><p>Return mean cost_per_mile on the filtered frame.</p><p>Implement <code>avg_cpm(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average cost-per-mile among remaining vehicles.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_cpm</fn>
+        <signature><![CDATA[def avg_cpm(df: pd.DataFrame) -> float:
+    """Mean cost_per_mile after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>high_mileage</preprocess>
+        <expect>0.2181</expect>
+        <floor>0.16805555555555557</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Wellness sleep desk</name>
+    <slug>wellness-sleep-desk</slug>
+    <scenario>A wellness app team wants active-user slices and sleep–mood association for a product brief.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>22</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Wellness sleep desk
+
+## Situation
+Active users took 6000+ steps; also measure sleep vs mood correlation.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `user_id` | integer | User identifier |
+| `steps` | integer | Daily steps |
+| `sleep_h` | number | Hours of sleep |
+| `mood` | integer | Self-reported mood 1–5 |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep active users
+2. Absolute correlation of sleep_h and mood
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[user_id,steps,sleep_h,mood
+1,3000,5.0,2
+2,8000,7.5,4
+3,5000,6.0,3
+4,12000,8.0,5
+5,2000,4.5,1
+6,9000,7.0,4
+7,7000,6.5,3
+8,4000,5.5,2
+]]></data>
+    <steps>
+      <step>
+        <title>Active users</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on more active days.</p><p>Keep steps ≥ 6000.</p><p>Implement <code>active_users(df)</code>.</p><p><strong>Check:</strong> Only active users remain.</p>]]></instructions>
+        <hint>Exclude lower step counts under six thousand.</hint>
+        <checkkind>frame</checkkind>
+        <fn>active_users</fn>
+        <signature><![CDATA[def active_users(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep steps >= 6000."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[user_id,steps,sleep_h,mood
+2,8000,7.5,4
+4,12000,8.0,5
+6,9000,7.0,4
+7,7000,6.5,3
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Sleep–mood link</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> How do sleep and mood move together?</p><p>Return absolute Pearson correlation of sleep_h and mood on the full extract.</p><p>Implement <code>abs_sleep_mood_corr(df)</code>.</p><p><strong>Check:</strong> Correlation to 4 decimals.</p>]]></instructions>
+        <hint>Measure association strength between sleep and mood, ignoring sign.</hint>
+        <checkkind>metric</checkkind>
+        <fn>abs_sleep_mood_corr</fn>
+        <signature><![CDATA[def abs_sleep_mood_corr(df: pd.DataFrame) -> float:
+    """abs(corr(sleep_h, mood))."""
+    return 0.0
+]]></signature>
+        <expect>0.9800</expect>
+        <floor>0.6799578870122229</floor>
+        <xp>30</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Fundraising gift desk</name>
+    <slug>fundraising-gift-desk</slug>
+    <scenario>Advancement ops needs major-gift lists and channel totals before a board report.</scenario>
+    <track>wrangling</track>
+    <coverkey>sales</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Fundraising gift desk
+
+## Situation
+Major gifts are $250+; also roll gifts by channel.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `donor_id` | integer | Donor identifier |
+| `channel` | text | Gift channel |
+| `gift` | number | Gift amount USD |
+| `recurring` | 0 / 1 | 1 if recurring donor |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep major gifts
+2. Sum gifts by channel
+3. Recurring donor rate
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[donor_id,channel,gift,recurring
+1,email,50,1
+2,event,500,0
+3,email,25,1
+4,event,1000,0
+5,email,75,0
+6,event,250,0
+7,email,40,1
+8,event,800,0
+]]></data>
+    <steps>
+      <step>
+        <title>Major gifts</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Pull major-gift prospects.</p><p>Keep gift ≥ 250.</p><p>Implement <code>major_gifts(df)</code>.</p><p><strong>Check:</strong> Only major gifts remain.</p>]]></instructions>
+        <hint>Exclude smaller gifts under two hundred fifty.</hint>
+        <checkkind>frame</checkkind>
+        <fn>major_gifts</fn>
+        <signature><![CDATA[def major_gifts(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep gift >= 250."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[donor_id,channel,gift,recurring
+2,event,500,0
+4,event,1000,0
+6,event,250,0
+8,event,800,0
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Channel totals</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare channels.</p><p>Return <code>channel,total_gift</code> sorted by channel.</p><p>Implement <code>gifts_by_channel(df)</code>.</p><p><strong>Check:</strong> Totals match.</p>]]></instructions>
+        <hint>Add gift amounts within each channel.</hint>
+        <checkkind>frame</checkkind>
+        <fn>gifts_by_channel</fn>
+        <signature><![CDATA[def gifts_by_channel(df: pd.DataFrame) -> pd.DataFrame:
+    """Return channel,total_gift sorted."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[channel,total_gift
+email,190
+event,2550
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Recurring rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What share of donors are recurring?</p><p>Return mean recurring as a float.</p><p>Implement <code>recurring_rate(df)</code>.</p><p><strong>Check:</strong> Rate to 4 decimals.</p>]]></instructions>
+        <hint>Average the recurring flags.</hint>
+        <checkkind>metric</checkkind>
+        <fn>recurring_rate</fn>
+        <signature><![CDATA[def recurring_rate(df: pd.DataFrame) -> float:
+    """Mean recurring."""
+    return 0.0
+]]></signature>
+        <expect>0.3750</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Call center CSAT desk</name>
+    <slug>call-center-csat-desk</slug>
+    <scenario>A contact center coach needs CSAT on longer calls before the weekly calibration.</scenario>
+    <track>eda</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Call center CSAT desk
+
+## Situation
+Focus on calls of 10+ minutes and queue CSAT.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `call_id` | integer | Call identifier |
+| `queue` | text | Queue name |
+| `handle_min` | integer | Handle time minutes |
+| `csat` | integer | Customer satisfaction 1–5 |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep longer calls
+2. Average CSAT by queue
+3. Average CSAT on longer calls
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[call_id,queue,handle_min,csat
+1,billing,8,4
+2,tech,15,3
+3,billing,6,5
+4,tech,20,2
+5,billing,12,4
+6,tech,9,3
+7,billing,5,5
+8,tech,18,2
+]]></data>
+    <steps>
+      <step>
+        <title>Longer calls</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Calibration focuses on longer handle times.</p><p>Keep handle_min ≥ 10.</p><p>Implement <code>long_calls(df)</code>.</p><p><strong>Check:</strong> Only longer calls remain.</p>]]></instructions>
+        <hint>Drop shorter calls under ten minutes.</hint>
+        <checkkind>frame</checkkind>
+        <fn>long_calls</fn>
+        <signature><![CDATA[def long_calls(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep handle_min >= 10."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[call_id,queue,handle_min,csat
+2,tech,15,3
+4,tech,20,2
+5,billing,12,4
+8,tech,18,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Queue CSAT</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare queues on the full extract.</p><p>Return <code>queue,avg_csat</code> sorted by queue.</p><p>Implement <code>avg_csat_by_queue(df)</code>.</p><p><strong>Check:</strong> Averages match.</p>]]></instructions>
+        <hint>Average CSAT within each queue.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_csat_by_queue</fn>
+        <signature><![CDATA[def avg_csat_by_queue(df: pd.DataFrame) -> pd.DataFrame:
+    """Return queue,avg_csat sorted."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[queue,avg_csat
+billing,4.5
+tech,2.5
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Long-call CSAT</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Average CSAT on the longer-call set.</p><p>Return mean csat on the filtered frame.</p><p>Implement <code>avg_long_csat(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average CSAT among remaining longer calls.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_long_csat</fn>
+        <signature><![CDATA[def avg_long_csat(df: pd.DataFrame) -> float:
+    """Mean csat after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>long_calls</preprocess>
+        <expect>2.7500</expect>
+        <floor>2.25</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Grocery waste desk</name>
+    <slug>grocery-waste-desk</slug>
+    <scenario>A grocery ops lead needs waste rates by aisle before adjusting order quantities.</scenario>
+    <track>wrangling</track>
+    <coverkey>sales</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Grocery waste desk
+
+## Situation
+Compute waste rate and review dairy aisle.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `sku` | text | Product name |
+| `aisle` | text | Aisle category |
+| `units` | integer | Units received |
+| `waste` | integer | Units wasted |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Add waste_rate
+2. Keep dairy aisle
+3. Average dairy waste rate
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[sku,aisle,units,waste
+milk,dairy,40,2
+bread,bakery,25,1
+eggs,dairy,30,0
+apples,produce,50,5
+chips,snack,15,3
+soda,snack,20,1
+yogurt,dairy,18,2
+cereal,bakery,12,0
+]]></data>
+    <steps>
+      <step>
+        <title>Waste rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Normalize waste to units received.</p><p>Add <code>waste_rate</code> = waste / units.</p><p>Implement <code>add_waste_rate(df)</code>.</p><p><strong>Check:</strong> waste_rate matches.</p>]]></instructions>
+        <hint>Divide wasted units by units received.</hint>
+        <checkkind>frame</checkkind>
+        <fn>add_waste_rate</fn>
+        <signature><![CDATA[def add_waste_rate(df: pd.DataFrame) -> pd.DataFrame:
+    """Add waste_rate = waste/units."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[sku,aisle,units,waste,waste_rate
+milk,dairy,40,2,0.05
+bread,bakery,25,1,0.04
+eggs,dairy,30,0,0.0
+apples,produce,50,5,0.1
+chips,snack,15,3,0.2
+soda,snack,20,1,0.05
+yogurt,dairy,18,2,0.1111111111111111
+cereal,bakery,12,0,0.0
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Dairy aisle</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Today's review is dairy.</p><p>Keep aisle <code>dairy</code>. Grader applies add_waste_rate first.</p><p>Implement <code>dairy_skus(df)</code>.</p><p><strong>Check:</strong> Only dairy rows remain.</p>]]></instructions>
+        <hint>Filter to the dairy aisle.</hint>
+        <checkkind>frame</checkkind>
+        <fn>dairy_skus</fn>
+        <signature><![CDATA[def dairy_skus(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep aisle==dairy."""
+    return df
+]]></signature>
+        <preprocess>add_waste_rate</preprocess>
+        <expect_csv><![CDATA[sku,aisle,units,waste,waste_rate
+milk,dairy,40,2,0.05
+eggs,dairy,30,0,0.0
+yogurt,dairy,18,2,0.1111111111111111
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Dairy average waste</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Average dairy waste rate.</p><p>Return mean waste_rate on the dairy frame.</p><p>Implement <code>avg_dairy_waste(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average waste rates among remaining dairy SKUs.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_dairy_waste</fn>
+        <signature><![CDATA[def avg_dairy_waste(df: pd.DataFrame) -> float:
+    """Mean waste_rate for dairy."""
+    return 0.0
+]]></signature>
+        <preprocess>dairy_skus</preprocess>
+        <expect>0.0537</expect>
+        <floor>0.003703703703703695</floor>
+        <xp>25</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Festival stage desk</name>
+    <slug>festival-stage-desk</slug>
+    <scenario>Festival production wants main-stage attendance and score by stage before booking next year.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>22</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Festival stage desk
+
+## Situation
+Compare main vs side stages on crowd and scores.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `act_id` | integer | Act identifier |
+| `stage` | text | Stage name |
+| `attendees` | integer | Crowd size |
+| `score` | number | Audience score |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep main stage acts
+2. Average score by stage
+3. Average main-stage attendance
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[act_id,stage,attendees,score
+1,main,5000,4.8
+2,main,4200,4.5
+3,side,800,4.0
+4,side,600,3.5
+5,main,4800,4.7
+6,side,900,3.8
+7,main,3500,4.2
+8,side,700,4.1
+]]></data>
+    <steps>
+      <step>
+        <title>Main stage</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Headliners are main stage.</p><p>Keep stage <code>main</code>.</p><p>Implement <code>main_stage(df)</code>.</p><p><strong>Check:</strong> Only main stage remains.</p>]]></instructions>
+        <hint>Exclude side-stage acts.</hint>
+        <checkkind>frame</checkkind>
+        <fn>main_stage</fn>
+        <signature><![CDATA[def main_stage(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep stage==main."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[act_id,stage,attendees,score
+1,main,5000,4.8
+2,main,4200,4.5
+5,main,4800,4.7
+7,main,3500,4.2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Scores by stage</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare stages.</p><p>Return <code>stage,avg_score</code> sorted by stage.</p><p>Implement <code>avg_score_by_stage(df)</code>.</p><p><strong>Check:</strong> Averages match.</p>]]></instructions>
+        <hint>Average audience scores within each stage.</hint>
+        <checkkind>frame</checkkind>
+        <fn>avg_score_by_stage</fn>
+        <signature><![CDATA[def avg_score_by_stage(df: pd.DataFrame) -> pd.DataFrame:
+    """Return stage,avg_score sorted."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[stage,avg_score
+main,4.55
+side,3.8499999999999996
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Main attendance</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Average main-stage crowd.</p><p>Return mean attendees on the main-stage frame.</p><p>Implement <code>avg_main_attendees(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average attendance among main-stage acts.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_main_attendees</fn>
+        <signature><![CDATA[def avg_main_attendees(df: pd.DataFrame) -> float:
+    """Mean attendees for main."""
+    return 0.0
+]]></signature>
+        <preprocess>main_stage</preprocess>
+        <expect>4375.0000</expect>
+        <floor>4175.0</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Coworking desk utilization</name>
+    <slug>coworking-desk-utilization</slug>
+    <scenario>A coworking community manager needs busy-desk utilization before expanding floor 3.</scenario>
+    <track>wrangling</track>
+    <coverkey>house</coverkey>
+    <estimateminutes>24</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Coworking desk utilization
+
+## Situation
+Busy desks have 15+ booked hours; roll hours by floor.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `desk_id` | integer | Desk identifier |
+| `floor` | text | Floor number |
+| `hours_booked` | number | Hours booked in period |
+| `member_type` | text | `hot` or `dedicated` |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep busy desks
+2. Sum hours by floor on that set
+3. Dedicated member share overall
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[desk_id,floor,hours_booked,member_type
+1,2,20,hot
+2,2,5,hot
+3,3,30,dedicated
+4,3,8,hot
+5,2,25,dedicated
+6,3,12,hot
+7,2,4,hot
+8,3,28,dedicated
+]]></data>
+    <steps>
+      <step>
+        <title>Busy desks</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Ignore lightly used desks.</p><p>Keep hours_booked ≥ 15.</p><p>Implement <code>busy_desks(df)</code>.</p><p><strong>Check:</strong> Only busy desks remain.</p>]]></instructions>
+        <hint>Drop desks under fifteen booked hours.</hint>
+        <checkkind>frame</checkkind>
+        <fn>busy_desks</fn>
+        <signature><![CDATA[def busy_desks(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep hours_booked >= 15."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[desk_id,floor,hours_booked,member_type
+1,2,20,hot
+3,3,30,dedicated
+5,2,25,dedicated
+8,3,28,dedicated
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Floor hours</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare floors on busy desks.</p><p>Return <code>floor,total_hours</code> sorted by floor. Grader applies busy_desks first.</p><p>Implement <code>hours_by_floor(df)</code>.</p><p><strong>Check:</strong> Totals match.</p>]]></instructions>
+        <hint>Add booked hours within each floor.</hint>
+        <checkkind>frame</checkkind>
+        <fn>hours_by_floor</fn>
+        <signature><![CDATA[def hours_by_floor(df: pd.DataFrame) -> pd.DataFrame:
+    """Return floor,total_hours sorted."""
+    return df
+]]></signature>
+        <preprocess>busy_desks</preprocess>
+        <expect_csv><![CDATA[floor,total_hours
+2,45
+3,58
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Dedicated share</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> What share of desks are dedicated?</p><p>Return fraction with member_type <code>dedicated</code> on the raw frame.</p><p>Implement <code>dedicated_share(df)</code>.</p><p><strong>Check:</strong> Share to 4 decimals.</p>]]></instructions>
+        <hint>Dedicated desks as a share of all desks.</hint>
+        <checkkind>metric</checkkind>
+        <fn>dedicated_share</fn>
+        <signature><![CDATA[def dedicated_share(df: pd.DataFrame) -> float:
+    """Fraction member_type==dedicated."""
+    return 0.0
+]]></signature>
+        <expect>0.3750</expect>
+        <floor>0.3</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Veterinary visit model</name>
+    <slug>veterinary-visit-model</slug>
+    <scenario>A clinic manager wants a weight→cost linear sanity check for dog visits.</scenario>
+    <track>ml</track>
+    <coverkey>clinic</coverkey>
+    <estimateminutes>32</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Veterinary visit model
+
+## Situation
+Focus on dog visits; correlate weight and cost, then fit a linear model.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `visit_id` | integer | Visit identifier |
+| `species` | text | Animal species |
+| `weight_kg` | number | Patient weight |
+| `cost` | number | Visit cost USD |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep dog visits
+2. Absolute corr weight vs cost
+3. Linear R² of cost on weight
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[visit_id,species,weight_kg,cost
+1,dog,12,80
+2,cat,4,60
+3,dog,25,150
+4,cat,5,70
+5,dog,8,90
+6,cat,3,55
+7,dog,30,200
+8,cat,6,65
+]]></data>
+    <steps>
+      <step>
+        <title>Dog visits</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> This model is dogs-only.</p><p>Keep species <code>dog</code>.</p><p>Implement <code>dog_visits(df)</code>.</p><p><strong>Check:</strong> Only dog visits remain.</p>]]></instructions>
+        <hint>Exclude other species.</hint>
+        <checkkind>frame</checkkind>
+        <fn>dog_visits</fn>
+        <signature><![CDATA[def dog_visits(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep species==dog."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[visit_id,species,weight_kg,cost
+1,dog,12,80
+3,dog,25,150
+5,dog,8,90
+7,dog,30,200
+]]></expect_csv>
+        <xp>20</xp>
+      </step>
+      <step>
+        <title>Weight–cost link</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Confirm weight tracks cost.</p><p>Return absolute correlation of weight_kg and cost. Grader applies dog_visits first.</p><p>Implement <code>abs_weight_cost_corr(df)</code>.</p><p><strong>Check:</strong> Correlation to 4 decimals.</p>]]></instructions>
+        <hint>Measure association strength between weight and cost, ignoring sign.</hint>
+        <checkkind>metric</checkkind>
+        <fn>abs_weight_cost_corr</fn>
+        <signature><![CDATA[def abs_weight_cost_corr(df: pd.DataFrame) -> float:
+    """abs(corr(weight_kg, cost))."""
+    return 0.0
+]]></signature>
+        <preprocess>dog_visits</preprocess>
+        <expect>0.9586</expect>
+        <floor>0.9</floor>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Linear R²</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Fit cost from weight on dog visits.</p><p>Train LinearRegression predicting cost from weight_kg; return training R². Grader applies dog_visits first.</p><p>Implement <code>weight_cost_r2(df)</code>.</p><p><strong>Check:</strong> R² matches expect/floor.</p>]]></instructions>
+        <hint>Fit a straight-line model of cost from weight and report explained variance.</hint>
+        <checkkind>metric</checkkind>
+        <fn>weight_cost_r2</fn>
+        <signature><![CDATA[from sklearn.linear_model import LinearRegression
+
+def weight_cost_r2(df: pd.DataFrame) -> float:
+    """Train R²."""
+    return 0.0
+]]></signature>
+        <preprocess>dog_visits</preprocess>
+        <expect>0.9189</expect>
+        <floor>0.9</floor>
+        <xp>35</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Fashion review lexicon</name>
+    <slug>fashion-review-lexicon</slug>
+    <scenario>A fashion marketplace wants lexicon sentiment on PDP reviews before escalating to a transformer.</scenario>
+    <track>nlp</track>
+    <coverkey>nlp</coverkey>
+    <estimateminutes>28</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Fashion review lexicon
+
+## Situation
+Score reviews with POS={good,great,love} and NEG={bad,hate,terrible}.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `sku` | integer | Product SKU id |
+| `review` | text | Customer review text |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Return sku,score lexicon net
+2. Keep positive scores
+3. Average score overall
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[sku,review
+1,love the fabric great fit
+2,bad quality hate it
+3,great style love color
+4,terrible sizing bad
+5,good purchase love
+6,hate material terrible
+7,good look great
+8,bad experience hate
+]]></data>
+    <steps>
+      <step>
+        <title>Lexicon scores</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Net POS minus NEG word hits per review.</p><p>Tokenize lowercase on whitespace. Return <code>sku,score</code>.</p><p>Implement <code>lexicon_scores(df)</code>.</p><p><strong>Check:</strong> Scores match the lexicon.</p>]]></instructions>
+        <hint>Reward positive cue words and penalize negative ones, then net them.</hint>
+        <checkkind>frame</checkkind>
+        <fn>lexicon_scores</fn>
+        <signature><![CDATA[def lexicon_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """POS/NEG lexicon; return sku,score."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[sku,score
+1,2
+2,-2
+3,2
+4,-2
+5,2
+6,-2
+7,2
+8,-2
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Positive reviews</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Merchandising wants positive-scoring SKUs.</p><p>Keep score > 0. Grader applies lexicon_scores first.</p><p>Implement <code>positive_scores(df)</code>.</p><p><strong>Check:</strong> Only positive scores remain.</p>]]></instructions>
+        <hint>Keep reviews whose net score is above zero.</hint>
+        <checkkind>frame</checkkind>
+        <fn>positive_scores</fn>
+        <signature><![CDATA[def positive_scores(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep score > 0."""
+    return df
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect_csv><![CDATA[sku,score
+1,2
+3,2
+5,2
+7,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Average score</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Overall lexicon average.</p><p>Return mean score on the scored frame.</p><p>Implement <code>avg_score(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average net scores across all reviews.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_score</fn>
+        <signature><![CDATA[def avg_score(df: pd.DataFrame) -> float:
+    """Mean score after lexicon_scores."""
+    return 0.0
+]]></signature>
+        <preprocess>lexicon_scores</preprocess>
+        <expect>0.0000</expect>
+        <floor>-0.5</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Gaming win baseline</name>
+    <slug>gaming-win-baseline</slug>
+    <scenario>A game analytics intern must rebuild a logistic win baseline from kill counts.</scenario>
+    <track>ml</track>
+    <coverkey>lab</coverkey>
+    <estimateminutes>36</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Gaming win baseline
+
+## Situation
+Predict wins from kills with a fixed train/test split.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `player_id` | integer | Player identifier |
+| `mode` | text | Game mode |
+| `kills` | integer | Kills in match |
+| `wins` | 0 / 1 | 1 if match won |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Train/test sizes
+2. Logistic test accuracy kills→wins
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[player_id,mode,kills,wins
+1,solo,2,0
+2,duo,8,1
+3,solo,1,0
+4,duo,10,1
+5,solo,5,0
+6,duo,7,1
+7,solo,0,0
+8,duo,12,1
+]]></data>
+    <steps>
+      <step>
+        <title>Split sizes</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Document holdout sizes.</p><p>Feature kills, target wins, test_size=0.25, random_state=0. Return <code>n_train,n_test</code>.</p><p>Implement <code>split_shapes(df)</code>.</p><p><strong>Check:</strong> Counts match.</p>]]></instructions>
+        <hint>Hold out one quarter of matches with a fixed seed.</hint>
+        <checkkind>frame</checkkind>
+        <fn>split_shapes</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+
+def split_shapes(df: pd.DataFrame) -> pd.DataFrame:
+    """n_train,n_test."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[n_train,n_test
+6,2
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Logistic accuracy</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Fit a logistic win baseline.</p><p>Train LogisticRegression on the same split; return test accuracy.</p><p>Implement <code>logistic_accuracy(df)</code>.</p><p><strong>Check:</strong> Accuracy matches expect/floor.</p>]]></instructions>
+        <hint>Train on training matches and score the held-out matches.</hint>
+        <checkkind>metric</checkkind>
+        <fn>logistic_accuracy</fn>
+        <signature><![CDATA[from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+def logistic_accuracy(df: pd.DataFrame) -> float:
+    """Test accuracy."""
+    return 0.0
+]]></signature>
+        <expect>1.0000</expect>
+        <floor>0.5</floor>
+        <xp>40</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Childcare attendance desk</name>
+    <slug>childcare-attendance-desk</slug>
+    <scenario>A childcare director needs late-pickup rates for regularly attending children.</scenario>
+    <track>eda</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>23</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Childcare attendance desk
+
+## Situation
+Regular attendance is 15+ days; review late pickups.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `child_id` | integer | Child identifier |
+| `room` | text | Classroom |
+| `attendance_days` | integer | Days attended |
+| `late_pickup` | 0 / 1 | 1 if late pickup occurred |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep regular attendees
+2. Late rate by room
+3. Overall late rate on that set
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[child_id,room,attendance_days,late_pickup
+1,toddlers,18,0
+2,toddlers,12,1
+3,preschool,20,0
+4,preschool,10,1
+5,toddlers,16,0
+6,preschool,19,0
+7,toddlers,8,1
+8,preschool,15,0
+]]></data>
+    <steps>
+      <step>
+        <title>Regular attendees</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Focus on regular attendance.</p><p>Keep attendance_days ≥ 15.</p><p>Implement <code>regular_kids(df)</code>.</p><p><strong>Check:</strong> Only regular attendees remain.</p>]]></instructions>
+        <hint>Exclude children under fifteen attendance days.</hint>
+        <checkkind>frame</checkkind>
+        <fn>regular_kids</fn>
+        <signature><![CDATA[def regular_kids(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep attendance_days >= 15."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[child_id,room,attendance_days,late_pickup
+1,toddlers,18,0
+3,preschool,20,0
+5,toddlers,16,0
+6,preschool,19,0
+8,preschool,15,0
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Late by room</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare rooms.</p><p>Return <code>room,late_rate</code> sorted by room. Grader applies regular_kids first.</p><p>Implement <code>late_rate_by_room(df)</code>.</p><p><strong>Check:</strong> Rates match.</p>]]></instructions>
+        <hint>Average late-pickup flags within each room.</hint>
+        <checkkind>frame</checkkind>
+        <fn>late_rate_by_room</fn>
+        <signature><![CDATA[def late_rate_by_room(df: pd.DataFrame) -> pd.DataFrame:
+    """Return room,late_rate sorted."""
+    return df
+]]></signature>
+        <preprocess>regular_kids</preprocess>
+        <expect_csv><![CDATA[room,late_rate
+preschool,0.0
+toddlers,0.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Overall late rate</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> One late rate for the parent newsletter.</p><p>Return mean late_pickup on the filtered frame.</p><p>Implement <code>overall_late_rate(df)</code>.</p><p><strong>Check:</strong> Rate to 4 decimals.</p>]]></instructions>
+        <hint>Average late flags across remaining children.</hint>
+        <checkkind>metric</checkkind>
+        <fn>overall_late_rate</fn>
+        <signature><![CDATA[def overall_late_rate(df: pd.DataFrame) -> float:
+    """Mean late_pickup after filter."""
+    return 0.0
+]]></signature>
+        <preprocess>regular_kids</preprocess>
+        <expect>0.0000</expect>
+        <floor>0.1</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+  <mission>
+    <name>Recycling route desk</name>
+    <slug>recycling-route-desk</slug>
+    <scenario>A city sustainability office needs clean-route tonnage before expanding compost pickup.</scenario>
+    <track>wrangling</track>
+    <coverkey>eda</coverkey>
+    <estimateminutes>25</estimateminutes>
+    <status>published</status>
+    <brief><![CDATA[# Recycling route desk
+
+## Situation
+Clean routes have contamination ≤ 0.10; roll tons by zone.
+
+## Data dictionary (`data.csv`)
+Each row is one record in this extract. Columns:
+
+| Column | Type | Meaning |
+|--------|------|---------|
+| `route_id` | integer | Route identifier |
+| `zone` | text | Service zone |
+| `tons` | number | Tons collected |
+| `contamination` | number | Contamination fraction |
+
+## What "done" looks like
+Work **step by step**. Each Check grades one helper in `main.py`.
+
+1. Keep clean routes
+2. Sum tons by zone on that set
+3. Average contamination overall
+
+Do not invent extra columns or rename fields unless a step asks for it.
+]]></brief>
+    <starter><![CDATA[import pandas as pd
+]]></starter>
+    <data><![CDATA[route_id,zone,tons,contamination
+1,east,12.0,0.05
+2,east,8.5,0.12
+3,west,10.0,0.04
+4,west,6.0,0.15
+5,east,14.0,0.06
+6,west,9.0,0.09
+7,east,7.5,0.11
+8,west,11.0,0.03
+]]></data>
+    <steps>
+      <step>
+        <title>Clean routes</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Exclude high-contamination routes.</p><p>Keep contamination ≤ 0.1.</p><p>Implement <code>clean_routes(df)</code>.</p><p><strong>Check:</strong> Only clean routes remain.</p>]]></instructions>
+        <hint>Drop routes above the ten-percent contamination cap.</hint>
+        <checkkind>frame</checkkind>
+        <fn>clean_routes</fn>
+        <signature><![CDATA[def clean_routes(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep contamination <= 0.1."""
+    return df
+]]></signature>
+        <expect_csv><![CDATA[route_id,zone,tons,contamination
+1,east,12.0,0.05
+3,west,10.0,0.04
+5,east,14.0,0.06
+6,west,9.0,0.09
+8,west,11.0,0.03
+]]></expect_csv>
+        <xp>25</xp>
+      </step>
+      <step>
+        <title>Zone tonnage</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Compare zones on clean routes.</p><p>Return <code>zone,total_tons</code> sorted by zone. Grader applies clean_routes first.</p><p>Implement <code>tons_by_zone(df)</code>.</p><p><strong>Check:</strong> Totals match.</p>]]></instructions>
+        <hint>Add tonnage within each zone.</hint>
+        <checkkind>frame</checkkind>
+        <fn>tons_by_zone</fn>
+        <signature><![CDATA[def tons_by_zone(df: pd.DataFrame) -> pd.DataFrame:
+    """Return zone,total_tons sorted."""
+    return df
+]]></signature>
+        <preprocess>clean_routes</preprocess>
+        <expect_csv><![CDATA[zone,total_tons
+east,26.0
+west,30.0
+]]></expect_csv>
+        <xp>30</xp>
+      </step>
+      <step>
+        <title>Average contamination</title>
+        <instructions><![CDATA[<p><strong>Goal:</strong> Citywide contamination average.</p><p>Return mean contamination on the raw frame.</p><p>Implement <code>avg_contamination(df)</code>.</p><p><strong>Check:</strong> Average to 4 decimals.</p>]]></instructions>
+        <hint>Average contamination across all routes.</hint>
+        <checkkind>metric</checkkind>
+        <fn>avg_contamination</fn>
+        <signature><![CDATA[def avg_contamination(df: pd.DataFrame) -> float:
+    """Mean contamination."""
+    return 0.0
+]]></signature>
+        <expect>0.0813</expect>
+        <floor>0.03125</floor>
+        <xp>20</xp>
+      </step>
+    </steps>
+  </mission>
+</nexcodelab-missions>

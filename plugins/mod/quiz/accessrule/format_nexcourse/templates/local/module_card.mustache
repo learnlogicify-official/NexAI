@@ -1,0 +1,92 @@
+{{!
+    @template format_nexcourse/local/module_card
+    Full-width module accordion — body matches the former right pane.
+}}
+<details class="nexcourse-acc" id="{{paneid}}"{{#active}} open{{/active}}>
+    <summary class="nexcourse-acc__summary">
+        <span class="nexcourse-acc__badge">{{modulenolabel}}</span>
+        <span class="nexcourse-acc__title">{{name}}</span>
+        <span class="nexcourse-acc__meta">
+            <span class="nexcourse-acc__bar" aria-hidden="true">
+                <span class="nexcourse-acc__bar-fill" style="width: {{progresspct}}%;"></span>
+            </span>
+            <span class="nexcourse-acc__pct">{{progresspct}}%</span>
+            <span class="nexcourse-acc__caret" aria-hidden="true"></span>
+        </span>
+    </summary>
+    <div class="nexcourse-acc__body">
+        {{#hassummary}}
+            <p class="nexcourse-pane__summary">{{summary}}</p>
+        {{/hassummary}}
+        <div class="nexcourse-pane__progress">
+            <div class="nexcourse-pane__progress-row">
+                <span>{{#str}}progress, format_nexcourse{{/str}}</span>
+                <strong>{{activitydisplay}}</strong>
+            </div>
+            <div class="nexcourse-bar" aria-hidden="true">
+                <div class="nexcourse-bar__fill" style="width: {{progresspct}}%;"></div>
+            </div>
+        </div>
+        <div class="nexcourse-pane__meta">
+            <div class="nexcourse-pane__badges">
+                {{#badges}}
+                    <span class="nexcourse-chip nexcourse-chip--{{type}}">{{label}}</span>
+                {{/badges}}
+            </div>
+            <div class="nexcourse-pane__marks">
+                <span class="nexcourse-pane__marks-label">{{#str}}marks, format_nexcourse{{/str}}</span>
+                {{#hashmarks}}
+                    <span class="nexcourse-pane__marks-value">{{marksdisplay}}</span>
+                {{/hashmarks}}
+                {{^hashmarks}}
+                    <span class="nexcourse-pane__marks-value nexcourse-pane__marks-value--empty">{{#str}}marksnone, format_nexcourse{{/str}}</span>
+                {{/hashmarks}}
+            </div>
+        </div>
+
+        <div class="nexcourse-acc__content"{{#hasmultiplegroups}} data-region="nx-section-tabs"{{/hasmultiplegroups}}>
+            {{#hasgroups}}
+                {{#hasmultiplegroups}}
+                    <div class="nx-section__tabs" role="tablist" aria-label="{{#str}}subsections, format_nexcourse{{/str}}">
+                        {{#groups}}
+                            <button type="button"
+                                    class="nx-section__tab{{#active}} is-active{{/active}}"
+                                    role="tab"
+                                    id="nx-tab-{{id}}"
+                                    data-nx-tab="{{id}}"
+                                    aria-selected="{{#active}}true{{/active}}{{^active}}false{{/active}}"
+                                    aria-controls="nx-panel-{{id}}"
+                                    tabindex="{{tabindex}}">
+                                <span class="nx-section__tab-name">{{name}}</span>
+                                <span class="nx-section__tab-count">{{activitycount}}</span>
+                            </button>
+                        {{/groups}}
+                    </div>
+                    <div class="nx-section__panels">
+                        {{#groups}}
+                            <div class="nx-section__panel{{#active}} is-active{{/active}}"
+                                 role="tabpanel"
+                                 id="nx-panel-{{id}}"
+                                 data-nx-panel="{{id}}"
+                                 aria-labelledby="nx-tab-{{id}}"
+                                 {{^active}}hidden{{/active}}>
+                                {{> format_nexcourse/local/activity_list }}
+                            </div>
+                        {{/groups}}
+                    </div>
+                {{/hasmultiplegroups}}
+                {{^hasmultiplegroups}}
+                    {{#groups}}
+                        {{#showgroupheading}}
+                            <h4 class="nexcourse-pane__group-title">{{name}}</h4>
+                        {{/showgroupheading}}
+                        {{> format_nexcourse/local/activity_list }}
+                    {{/groups}}
+                {{/hasmultiplegroups}}
+            {{/hasgroups}}
+            {{^hasgroups}}
+                <p class="nx-section__empty">{{#str}}noactivities, format_nexcourse{{/str}}</p>
+            {{/hasgroups}}
+        </div>
+    </div>
+</details>

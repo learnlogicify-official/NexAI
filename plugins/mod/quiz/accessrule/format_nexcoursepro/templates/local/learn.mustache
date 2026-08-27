@@ -1,0 +1,643 @@
+{{!
+    @template format_nexcoursepro/local/learn
+}}
+<div class="nxpro-learn{{#editing}} is-editing{{/editing}}" data-region="nxpro-learn" data-courseid="{{courseid}}"
+     data-courseurl="{{{courseurl}}}"
+     data-sesskey="{{sesskey}}"
+     data-canedit="{{#canedit}}1{{/canedit}}{{^canedit}}0{{/canedit}}"
+     data-canmanage="{{#canmanageactivities}}1{{/canmanageactivities}}{{^canmanageactivities}}0{{/canmanageactivities}}"
+     data-cansection="{{#canupdatesection}}1{{/canupdatesection}}{{^canupdatesection}}0{{/canupdatesection}}"
+     data-hassubsection="{{#hassubsection}}1{{/hassubsection}}{{^hassubsection}}0{{/hassubsection}}"
+     data-editing="{{#editing}}1{{/editing}}{{^editing}}0{{/editing}}">
+    <section class="nxpro-stats{{^hasstats}} nxpro-stats--course-only{{/hasstats}}" data-region="nxpro-stats"
+             aria-label="{{#str}}courseprogress, format_nexcoursepro{{/str}}">
+        <div class="nxpro-stats__course">
+            <a class="nxpro-iconbtn" href="{{{dashboardurl}}}" title="{{#str}}back, format_nexcoursepro{{/str}}"
+               aria-label="{{#str}}back, format_nexcoursepro{{/str}}">
+                <span class="nxpro-ico nxpro-ico--back" aria-hidden="true"></span>
+            </a>
+            <div class="nxpro-stats__course-meta">
+                <span class="nxpro-stats__badge" aria-hidden="true"></span>
+                <span class="nxpro-stats__coursename">{{coursename}}</span>
+            </div>
+        </div>
+        {{#hasstats}}
+            {{#stats}}
+                <div class="nxpro-stats__progress">
+                    <div class="nxpro-donut" style="--nxpro-donut-pct: {{progresspct}};" role="img"
+                         aria-label="{{progresspct}}%">
+                        <span class="nxpro-donut__ring" aria-hidden="true"></span>
+                        <strong class="nxpro-donut__value">{{progresspct}}%</strong>
+                    </div>
+                    <div class="nxpro-stats__progress-meta">
+                        <div class="nxpro-stats__progress-label">{{#str}}courseprogress, format_nexcoursepro{{/str}}</div>
+                        <div class="nxpro-stats__progress-sub">{{activitydisplay}}</div>
+                    </div>
+                </div>
+                <div class="nxpro-stats__grid">
+                    {{#items}}
+                        <div class="nxpro-stat nxpro-stat--{{key}}">
+                            <span class="nxpro-stat__icon" aria-hidden="true"></span>
+                            <div class="nxpro-stat__body">
+                                <strong class="nxpro-stat__value">{{value}}</strong>
+                                <span class="nxpro-stat__label">{{label}}</span>
+                            </div>
+                        </div>
+                    {{/items}}
+                </div>
+            {{/stats}}
+        {{/hasstats}}
+    </section>
+
+    <div class="nxpro-body">
+        <main class="nxpro-main" data-region="nxpro-main">
+            {{#main}}
+                <article class="nxpro-av nxpro-av--{{kind}}" data-region="nxpro-pane" data-cmid="{{cmid}}" data-kind="{{kind}}">
+                    <header class="nxpro-av__hero">
+                        <div class="nxpro-av__hero-row">
+                            <div class="nxpro-av__hero-main">
+                                <div class="nxpro-av__eyebrow" data-region="nxpro-eyebrow-text">{{eyebrow}}</div>
+                                <h1 class="nxpro-av__title" data-region="nxpro-title">{{title}}</h1>
+                                <div class="nxpro-av__section{{^sectionlabel}} is-hidden{{/sectionlabel}}" data-region="nxpro-section">{{sectionlabel}}</div>
+                            </div>
+                            <div class="nxpro-av__hero-meta" data-region="nxpro-hero-meta">
+                                <div class="nxpro-av__score{{^hasactivitygrade}} is-hidden{{/hasactivitygrade}}"
+                                     data-region="nxpro-activity-score"
+                                     title="{{#str}}activityscore, format_nexcoursepro{{/str}}">
+                                    <span class="nxpro-av__score-label">{{#str}}activityscore, format_nexcoursepro{{/str}}</span>
+                                    <strong class="nxpro-av__score-value" data-region="nxpro-activity-score-value">{{gradedisplay}}</strong>
+                                </div>
+                                <div class="nxpro-av__completion{{^hascompletion}} is-hidden{{/hascompletion}}"
+                                     data-region="nxpro-completion"
+                                     aria-label="{{#str}}completioncriteria, format_nexcoursepro{{/str}}">
+                                    <span class="nxpro-av__completion-label">{{#str}}completioncriteria, format_nexcoursepro{{/str}}</span>
+                                    <div class="nxpro-av__completion-body" data-region="nxpro-completion-body">{{{completionhtml}}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <section class="nxpro-av__status{{^hasstatus}} is-hidden{{/hasstatus}}{{#hasquiztabs}} is-hidden{{/hasquiztabs}}" data-region="nxpro-status">
+                        <div class="nxpro-av__status-grid" data-region="nxpro-status-grid">
+                            {{#statusitems}}
+                                <div class="nxpro-av__chip">
+                                    <span class="nxpro-av__chip-label">{{label}}</span>
+                                    <strong class="nxpro-av__chip-value">{{value}}</strong>
+                                </div>
+                            {{/statusitems}}
+                        </div>
+                        <div class="nxpro-av__actions">
+                            <a class="nxpro-av__cta{{^showcta}} is-hidden{{/showcta}}"
+                               data-region="nxpro-cta" href="{{{ctaurl}}}">{{ctalabel}}</a>
+                            <a class="nxpro-av__secondary{{^showsecondary}} is-hidden{{/showsecondary}}"
+                               data-region="nxpro-secondary" href="{{{secondaryurl}}}">{{secondarylabel}}</a>
+                        </div>
+                    </section>
+
+                    <div class="nxpro-quiz{{^hasquiztabs}} is-hidden{{/hasquiztabs}}" data-region="nxpro-quiz">
+                        <div class="nxpro-quiz__tabs" role="tablist" aria-label="{{#str}}quiztabs, format_nexcoursepro{{/str}}">
+                            <button type="button" class="nxpro-quiz__tab is-active" role="tab"
+                                    data-action="nxpro-quiz-tab" data-tab="overview"
+                                    aria-selected="true" id="nxpro-quiz-tab-overview">
+                                {{#str}}quiztaboverview, format_nexcoursepro{{/str}}
+                            </button>
+                            <button type="button" class="nxpro-quiz__tab" role="tab"
+                                    data-action="nxpro-quiz-tab" data-tab="attempts"
+                                    aria-selected="false" id="nxpro-quiz-tab-attempts">
+                                {{#str}}quiztabattempts, format_nexcoursepro{{/str}}
+                                <span class="nxpro-quiz__tab-count{{^hasquizattempts}} is-hidden{{/hasquizattempts}}"
+                                      data-region="nxpro-quiz-attempt-count">{{quizattemptcount}}</span>
+                            </button>
+                        </div>
+
+                        <div class="nxpro-quiz__panel is-active" role="tabpanel" data-region="nxpro-quiz-overview"
+                             aria-labelledby="nxpro-quiz-tab-overview">
+                            <div class="nxpro-quiz__body{{^hasquizbody}} is-hidden{{/hasquizbody}}"
+                                 data-region="nxpro-quiz-body">{{{quizbodyhtml}}}</div>
+
+                            <div class="nxpro-quiz__intro{{^hasquizintro}} is-hidden{{/hasquizintro}}"
+                                 data-region="nxpro-quiz-intro">{{{quizintro}}}</div>
+
+                            <ul class="nxpro-quiz__messages{{^hasquizmessages}} is-hidden{{/hasquizmessages}}"
+                                data-region="nxpro-quiz-messages">
+                                {{#quizmessages}}
+                                    <li>{{text}}</li>
+                                {{/quizmessages}}
+                            </ul>
+
+                            <div class="nxpro-quiz__actions{{^hasquizactions}} is-hidden{{/hasquizactions}}"
+                                 data-region="nxpro-quiz-actions">{{{quizactionshtml}}}</div>
+                        </div>
+
+                        <div class="nxpro-quiz__panel" role="tabpanel" data-region="nxpro-quiz-attempts"
+                             aria-labelledby="nxpro-quiz-tab-attempts" hidden>
+                            <div class="nxpro-quiz__attempts-host" data-region="nxpro-quiz-attempts-host"></div>
+                            <div class="nxpro-quiz__attempts" data-region="nxpro-quiz-attempts-list">
+                                {{#hasquizattempts}}
+                                    {{#quizattempts}}
+                                        <article class="nxpro-quiz__attempt {{stateclass}}">
+                                            <div class="nxpro-quiz__attempt-head">
+                                                <strong class="nxpro-quiz__attempt-title">{{title}}</strong>
+                                                <span class="nxpro-quiz__attempt-badge nxpro-quiz__attempt-badge--{{badgekind}}">{{statelabel}}</span>
+                                            </div>
+                                            <div class="nxpro-quiz__attempt-meta">
+                                                {{#hastimestart}}
+                                                    <div class="nxpro-av__chip">
+                                                        <span class="nxpro-av__chip-label">{{#str}}quizstarted, format_nexcoursepro{{/str}}</span>
+                                                        <strong class="nxpro-av__chip-value">{{timestart}}</strong>
+                                                    </div>
+                                                {{/hastimestart}}
+                                                {{#hastimefinish}}
+                                                    <div class="nxpro-av__chip">
+                                                        <span class="nxpro-av__chip-label">{{#str}}quizfinished, format_nexcoursepro{{/str}}</span>
+                                                        <strong class="nxpro-av__chip-value">{{timefinish}}</strong>
+                                                    </div>
+                                                {{/hastimefinish}}
+                                                {{#hasgrade}}
+                                                    <div class="nxpro-av__chip">
+                                                        <span class="nxpro-av__chip-label">{{#str}}grademax, format_nexcoursepro{{/str}}</span>
+                                                        <strong class="nxpro-av__chip-value">{{grade}}</strong>
+                                                    </div>
+                                                {{/hasgrade}}
+                                            </div>
+                                            {{#canreview}}
+                                                <div class="nxpro-quiz__attempt-actions">
+                                                    <a class="nxpro-quiz__attempt-action{{#iscontinue}} is-continue{{/iscontinue}}"
+                                                       href="{{{reviewurl}}}"{{^iscontinue}} target="_blank" rel="noopener noreferrer"{{/iscontinue}}>{{actionlabel}}</a>
+                                                </div>
+                                            {{/canreview}}
+                                        </article>
+                                    {{/quizattempts}}
+                                {{/hasquizattempts}}
+                            </div>
+                            <p class="nxpro-quiz__empty{{#hasquizattempts}} is-hidden{{/hasquizattempts}}"
+                               data-region="nxpro-quiz-attempts-empty">{{#str}}quiznoattempts, format_nexcoursepro{{/str}}</p>
+                        </div>
+                    </div>
+
+                    <div class="nxpro-av__media{{^hasmedia}} is-hidden{{/hasmedia}}" data-region="nxpro-media">
+                        <div class="nxpro-av__player" data-region="nxpro-player"
+                             data-mediaurl="{{{mediaurl}}}" data-mediakind="{{mediakind}}">
+                            {{#isvideofile}}
+                                <video class="nxpro-av__video" controls playsinline src="{{{mediaurl}}}"></video>
+                            {{/isvideofile}}
+                            {{#isaudiofile}}
+                                <audio class="nxpro-av__audio" controls src="{{{mediaurl}}}"></audio>
+                            {{/isaudiofile}}
+                            {{#isembed}}
+                                <div class="nxpro-av__embed">
+                                    <iframe class="nxpro-av__iframe" src="{{{mediaurl}}}" title="{{title}}"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                                            allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                                </div>
+                            {{/isembed}}
+                            {{#isexternallink}}
+                                <div class="nxpro-av__external">
+                                    <p>{{#str}}watchexternalhint, format_nexcoursepro{{/str}}</p>
+                                    <a class="nxpro-av__cta" href="{{{mediaurl}}}" target="_blank" rel="noopener">{{#str}}watchvideo, format_nexcoursepro{{/str}}</a>
+                                </div>
+                            {{/isexternallink}}
+                        </div>
+                    </div>
+
+                    <div class="nxpro-av__body{{^hashhtml}} is-hidden{{/hashhtml}}" data-region="nxpro-html">
+                        {{#hashhtml}}{{{html}}}{{/hashhtml}}
+                    </div>
+
+                    <p class="nxpro-av__empty{{#hasactivity}}{{#hashhtml}} is-hidden{{/hashhtml}}{{#hasmedia}} is-hidden{{/hasmedia}}{{#showcta}} is-hidden{{/showcta}}{{#hasquiztabs}} is-hidden{{/hasquiztabs}}{{/hasactivity}}{{^hasactivity}}{{#hashhtml}} is-hidden{{/hashhtml}}{{/hasactivity}}"
+                       data-region="nxpro-empty">{{#str}}emptycourse, format_nexcoursepro{{/str}}</p>
+
+                    <div class="nxpro-loading is-hidden" data-region="nxpro-loading" aria-live="polite" aria-busy="true">
+                        <div class="nxpro-skel" aria-hidden="true">
+                            <div class="nxpro-skel__line nxpro-skel__line--eyebrow"></div>
+                            <div class="nxpro-skel__line nxpro-skel__line--title"></div>
+                            <div class="nxpro-skel__line nxpro-skel__line--sub"></div>
+                            <div class="nxpro-skel__band">
+                                <div class="nxpro-skel__chips">
+                                    <span class="nxpro-skel__chip"></span>
+                                    <span class="nxpro-skel__chip"></span>
+                                    <span class="nxpro-skel__chip"></span>
+                                </div>
+                                <div class="nxpro-skel__btn"></div>
+                            </div>
+                            <div class="nxpro-skel__block"></div>
+                            <div class="nxpro-skel__block nxpro-skel__block--short"></div>
+                        </div>
+                        <span class="nxpro-loading__label">{{#str}}loadingactivity, format_nexcoursepro{{/str}}</span>
+                    </div>
+                </article>
+            {{/main}}
+
+            <section class="nxpro-lb-board is-hidden" data-region="nxpro-leaderboard-view" hidden
+                     aria-label="{{#str}}leaderboardtitle, format_nexcoursepro{{/str}}">
+                <header class="nxpro-lb-board__head">
+                    <h2 class="nxpro-lb-board__title">{{#str}}leaderboardtitle, format_nexcoursepro{{/str}}</h2>
+                    <p class="nxpro-lb-board__sub">{{#str}}leaderboardsubtitle, format_nexcoursepro{{/str}}</p>
+                </header>
+                <div class="nxpro-lb-toolbar" data-region="nxpro-lb-toolbar">
+                    <label class="nxpro-lb-filter">
+                        <span>{{#str}}leaderboardcollegefilter, format_nexcoursepro{{/str}}</span>
+                        <select data-action="nxpro-lb-college" aria-label="{{#str}}leaderboardcollegefilter, format_nexcoursepro{{/str}}">
+                            <option value="">{{#str}}leaderboardallcolleges, format_nexcoursepro{{/str}}</option>
+                            {{#leaderboard}}
+                                {{#institutions}}
+                                    <option value="{{name}}"{{#selected}} selected{{/selected}}>{{name}}</option>
+                                {{/institutions}}
+                            {{/leaderboard}}
+                        </select>
+                    </label>
+                </div>
+                <div class="nxpro-lb-board__body" data-region="nxpro-lb-board-body">
+                    {{#leaderboard}}
+                        {{#available}}
+                            {{#hasentries}}
+                                <div class="nxpro-lb-table-wrap">
+                                    <table class="nxpro-lb-table">
+                                        <colgroup>
+                                            <col class="nxpro-lb-col-rank">
+                                            <col class="nxpro-lb-col-name">
+                                            <col class="nxpro-lb-col-grade">
+                                            <col class="nxpro-lb-col-pct">
+                                            <col class="nxpro-lb-col-level">
+                                            <col class="nxpro-lb-col-college">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="nxpro-lb-rank">{{#str}}leaderboardrank, format_nexcoursepro{{/str}}</th>
+                                                <th scope="col" class="nxpro-lb-student">{{#str}}leaderboardname, format_nexcoursepro{{/str}}</th>
+                                                <th scope="col" class="nxpro-lb-num">{{#str}}leaderboardgrade, format_nexcoursepro{{/str}}</th>
+                                                <th scope="col" class="nxpro-lb-num">{{#str}}leaderboardpercent, format_nexcoursepro{{/str}}</th>
+                                                <th scope="col" class="nxpro-lb-num nxpro-lb-level">{{#str}}leaderboardlevel, format_nexcoursepro{{/str}}</th>
+                                                <th scope="col" class="nxpro-lb-college">{{#str}}leaderboardcollege, format_nexcoursepro{{/str}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-region="nxpro-lb-rows">
+                                            {{#entries}}
+                                                <tr class="{{#isme}}nxpro-lb-current{{/isme}}" data-userid="{{userid}}"{{#isme}} aria-current="true"{{/isme}}>
+                                                    <td class="nxpro-lb-rank">{{ranklabel}}</td>
+                                                    <td class="nxpro-lb-student">
+                                                        <div class="nxpro-lb-who">
+                                                            {{#avatarurl}}<img class="nxpro-lb-avatar" src="{{{avatarurl}}}" alt="" width="28" height="28">{{/avatarurl}}
+                                                            <div class="nxpro-lb-who__text">
+                                                                <span class="nxpro-lb-name">{{name}}{{#isme}} <span class="nxpro-lb-you">{{#str}}leaderboardyou, format_nexcoursepro{{/str}}</span>{{/isme}}</span>
+                                                                {{#username}}<span class="nxpro-lb-username">@{{username}}</span>{{/username}}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="nxpro-lb-num">{{grade}}</td>
+                                                    <td class="nxpro-lb-num">{{percent}}</td>
+                                                    <td class="nxpro-lb-num nxpro-lb-level"><span class="nxpro-lb-level-pill">{{level}}</span></td>
+                                                    <td class="nxpro-lb-college">{{institution}}</td>
+                                                </tr>
+                                            {{/entries}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {{/hasentries}}
+                            {{^hasentries}}
+                                <p class="nxpro-lb-empty" data-region="nxpro-lb-empty">{{#str}}leaderboardempty, format_nexcoursepro{{/str}}</p>
+                            {{/hasentries}}
+                        {{/available}}
+                        {{^available}}
+                            <p class="nxpro-lb-empty" data-region="nxpro-lb-empty">{{unavailablemessage}}</p>
+                        {{/available}}
+                    {{/leaderboard}}
+                    {{^leaderboard}}
+                        <p class="nxpro-lb-empty">{{#str}}leaderboardunavailable, format_nexcoursepro{{/str}}</p>
+                    {{/leaderboard}}
+                </div>
+                <nav class="nxpro-lb-pager" data-region="nxpro-lb-pager" aria-label="{{#str}}leaderboardpagination, format_nexcoursepro{{/str}}" hidden></nav>
+            </section>
+
+            <footer class="nxpro-footer" data-region="nxpro-footer">
+                <button type="button" class="nxpro-report" data-action="nxpro-report" disabled>
+                    <span class="nxpro-ico nxpro-ico--flag" aria-hidden="true"></span>
+                    {{#str}}reportissue, format_nexcoursepro{{/str}}
+                </button>
+                <div class="nxpro-footer__nav">
+                    {{#hasprev}}
+                        {{#prev}}
+                            <a class="nxpro-btn nxpro-btn--ghost" data-action="nxpro-nav" data-cmid="{{id}}"
+                               href="{{{viewurl}}}">{{#str}}prevchapter, format_nexcoursepro{{/str}}</a>
+                        {{/prev}}
+                    {{/hasprev}}
+                    {{^hasprev}}
+                        <span class="nxpro-btn nxpro-btn--ghost is-disabled" aria-disabled="true">{{#str}}prevchapter, format_nexcoursepro{{/str}}</span>
+                    {{/hasprev}}
+                    {{#hasnext}}
+                        {{#next}}
+                            <a class="nxpro-btn nxpro-btn--solid" data-action="nxpro-nav" data-cmid="{{id}}"
+                               href="{{{viewurl}}}">{{#str}}nextchapter, format_nexcoursepro{{/str}}</a>
+                        {{/next}}
+                    {{/hasnext}}
+                    {{^hasnext}}
+                        <span class="nxpro-btn nxpro-btn--solid is-disabled" aria-disabled="true">{{#str}}nextchapter, format_nexcoursepro{{/str}}</span>
+                    {{/hasnext}}
+                </div>
+            </footer>
+        </main>
+
+        <aside class="nxpro-aside" id="nxpro-aside" data-region="nxpro-aside">
+            <div class="nxpro-aside__head">
+                <div class="nxpro-aside__tabs" role="tablist" aria-label="{{#str}}togglesidebar, format_nexcoursepro{{/str}}">
+                    <button type="button" class="nxpro-aside__tab is-active" role="tab"
+                            data-action="nxpro-aside-tab" data-tab="content"
+                            aria-selected="true" id="nxpro-tab-content">
+                        {{tabcontentlabel}}
+                    </button>
+                    <button type="button" class="nxpro-aside__tab" role="tab"
+                            data-action="nxpro-aside-tab" data-tab="leaderboard"
+                            aria-selected="false" id="nxpro-tab-leaderboard">
+                        {{tableaderboardlabel}}
+                    </button>
+                </div>
+                <button type="button" class="nxpro-iconbtn nxpro-rail-toggle" data-action="nxpro-toggle-rail"
+                        title="{{#str}}togglesidebar, format_nexcoursepro{{/str}}"
+                        aria-label="{{#str}}togglesidebar, format_nexcoursepro{{/str}}"
+                        aria-expanded="true" aria-controls="nxpro-aside">
+                    <span class="nxpro-ico nxpro-ico--panel" aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div data-region="nxpro-aside-content">
+            <label class="nxpro-search">
+                <span class="nxpro-ico nxpro-ico--search" aria-hidden="true"></span>
+                <input type="search" class="nxpro-search__input" data-action="nxpro-search"
+                       placeholder="{{#str}}searchplaceholder, format_nexcoursepro{{/str}}" autocomplete="off">
+            </label>
+
+            {{#canedit}}
+                <div class="nxpro-editbar{{^editing}} is-hidden{{/editing}}" data-region="nxpro-editbar"{{^editing}} hidden{{/editing}}>
+                    <p class="nxpro-editbar__hint">{{#str}}editingmode, format_nexcoursepro{{/str}}</p>
+                </div>
+            {{/canedit}}
+
+            <div class="nxpro-outline" data-region="nxpro-outline">
+            {{#hassections}}
+                    {{#sections}}
+                        <details class="nxpro-sec" data-section="{{sectionnum}}" data-sectionid="{{sectionid}}" {{#expanded}}open{{/expanded}}>
+                            <summary class="nxpro-sec__sum">
+                                <span class="nxpro-sec__drag{{^editing}} is-hidden{{/editing}}" data-region="nxpro-sec-drag" draggable="true"
+                                      title="{{#str}}dragtoReorder, format_nexcoursepro{{/str}}" aria-hidden="true"></span>
+                                <span class="nxpro-sec__chev" aria-hidden="true"></span>
+                                <span class="nxpro-sec__title">{{title}}</span>
+                                {{#hasprogress}}
+                                <span class="nxpro-ring{{#sectioncomplete}} is-done{{/sectioncomplete}}"
+                                      style="--nxpro-ring: {{progresspct}};"
+                                      title="{{completedcount}} / {{activitycount}}"
+                                      role="img"
+                                      aria-label="{{progresslabel}}">
+                                    <span class="nxpro-ring__val">{{progresspct}}</span>
+                                </span>
+                                {{/hasprogress}}
+                            </summary>
+                            <ul class="nxpro-acts" data-region="nxpro-acts" data-sectionid="{{sectionid}}" data-section="{{sectionnum}}">
+                                {{#canmanageactivities}}
+                                <li class="nxpro-insert{{^editing}} is-hidden{{/editing}}" data-region="nxpro-insert">
+                                    <button type="button" class="nxpro-insert__btn section-modchooser-link"
+                                            data-action="open-chooser"
+                                            data-sectionnum="{{sectionnum}}"
+                                            data-section-id="{{sectionid}}"
+                                            {{#firstcmid}}data-beforemod="{{firstcmid}}"{{/firstcmid}}
+                                            title="{{#str}}insertactivity, format_nexcoursepro{{/str}}"
+                                            aria-label="{{#str}}insertactivity, format_nexcoursepro{{/str}}"><span aria-hidden="true">+</span></button>
+                                </li>
+                                {{/canmanageactivities}}
+                                {{#hasactivities}}
+                                    {{#activities}}
+                                        <li class="nxpro-act{{#active}} is-active{{/active}}{{#completed}} is-done{{/completed}}{{#failed}} is-failed{{/failed}}{{#isnested}} is-nested{{/isnested}}"
+                                            data-search="{{searchtext}}"
+                                            data-cmid="{{id}}"
+                                            data-sectionid="{{sectionid}}"
+                                            data-modname="{{modname}}"
+                                            data-modurl="{{{modurl}}}"
+                                            data-viewurl="{{{viewurl}}}"
+                                            data-editurl="{{{editurl}}}"
+                                            draggable="{{#editing}}true{{/editing}}{{^editing}}false{{/editing}}">
+                                            <span class="nxpro-act__drag{{^editing}} is-hidden{{/editing}}" data-region="nxpro-act-drag"
+                                                  title="{{#str}}dragtoReorder, format_nexcoursepro{{/str}}" aria-hidden="true"></span>
+                                            <a class="nxpro-act__link" href="{{{viewurl}}}" data-action="nxpro-nav" data-cmid="{{id}}">
+                                                <span class="nxpro-act__name nxpro-act__name--view{{#editing}} is-hidden{{/editing}}">{{name}}</span>
+                                                <span class="nxpro-act__check{{#completed}} is-done{{/completed}}{{#failed}} is-failed{{/failed}}" aria-hidden="true"></span>
+                                            </a>
+                                            <button type="button" class="nxpro-act__rename{{^editing}} is-hidden{{/editing}}"
+                                                    data-region="nxpro-rename" data-action="nxpro-rename" data-cmid="{{id}}"
+                                                    title="{{#str}}renameactivity, format_nexcoursepro{{/str}}">{{name}}</button>
+                                            <a class="nxpro-act__edit{{^editing}} is-hidden{{/editing}}" data-region="nxpro-act-edit"
+                                               href="{{{editurl}}}" title="{{#str}}editactivity, format_nexcoursepro{{/str}}">✎</a>
+                                            {{#canmanageactivities}}
+                                            <button type="button" class="nxpro-act__delete{{^editing}} is-hidden{{/editing}}"
+                                                    data-region="nxpro-act-delete" data-action="nxpro-delete" data-cmid="{{id}}"
+                                                    title="{{#str}}deleteactivity, format_nexcoursepro{{/str}}"
+                                                    aria-label="{{#str}}deleteactivity, format_nexcoursepro{{/str}}">
+                                                <svg class="nxpro-act__delete-ico" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" focusable="false">
+                                                    <path fill="currentColor" d="M9 3h6l1 2h5v2H3V5h5l1-2zm1 6h2v9h-2V9zm4 0h2v9h-2V9zM7 9h2v9H7V9zm-1 12h12a1 1 0 0 0 1-1V7H5v13a1 1 0 0 0 1 1z"/>
+                                                </svg>
+                                            </button>
+                                            {{/canmanageactivities}}
+                                        </li>
+                                        {{#canmanageactivities}}
+                                        <li class="nxpro-insert{{^editing}} is-hidden{{/editing}}" data-region="nxpro-insert">
+                                            <button type="button" class="nxpro-insert__btn section-modchooser-link"
+                                                    data-action="open-chooser"
+                                                    data-sectionnum="{{sectionnum}}"
+                                                    data-section-id="{{sectionid}}"
+                                                    {{#hasnext}}data-beforemod="{{nextid}}"{{/hasnext}}
+                                                    title="{{#str}}insertactivity, format_nexcoursepro{{/str}}"
+                                                    aria-label="{{#str}}insertactivity, format_nexcoursepro{{/str}}"><span aria-hidden="true">+</span></button>
+                                        </li>
+                                        {{/canmanageactivities}}
+                                    {{/activities}}
+                                {{/hasactivities}}
+                            </ul>
+                            {{#hassubsections}}
+                                {{#subsections}}
+                                <details class="nxpro-subsec" data-section="{{sectionnum}}" data-sectionid="{{sectionid}}" {{#expanded}}open{{/expanded}}>
+                                    <summary class="nxpro-subsec__sum">
+                                        <span class="nxpro-sec__chev" aria-hidden="true"></span>
+                                        <span class="nxpro-subsec__title">{{title}}</span>
+                                        {{#hasprogress}}
+                                        <span class="nxpro-ring nxpro-ring--sm{{#sectioncomplete}} is-done{{/sectioncomplete}}"
+                                              style="--nxpro-ring: {{progresspct}};"
+                                              title="{{completedcount}} / {{activitycount}}"
+                                              role="img"
+                                              aria-label="{{progresslabel}}">
+                                            <span class="nxpro-ring__val">{{progresspct}}</span>
+                                        </span>
+                                        {{/hasprogress}}
+                                    </summary>
+                                    <ul class="nxpro-acts nxpro-acts--nested" data-region="nxpro-acts" data-sectionid="{{sectionid}}" data-section="{{sectionnum}}">
+                                        {{#activities}}
+                                        <li class="nxpro-act{{#active}} is-active{{/active}}{{#completed}} is-done{{/completed}}{{#failed}} is-failed{{/failed}} is-nested"
+                                            data-search="{{searchtext}}"
+                                            data-cmid="{{id}}"
+                                            data-sectionid="{{sectionid}}"
+                                            data-modname="{{modname}}"
+                                            data-modurl="{{{modurl}}}"
+                                            data-viewurl="{{{viewurl}}}"
+                                            data-editurl="{{{editurl}}}">
+                                            <a class="nxpro-act__link" href="{{{viewurl}}}" data-action="nxpro-nav" data-cmid="{{id}}">
+                                                <span class="nxpro-act__name">{{name}}</span>
+                                                <span class="nxpro-act__check{{#completed}} is-done{{/completed}}{{#failed}} is-failed{{/failed}}" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                        {{/activities}}
+                                    </ul>
+                                </details>
+                                {{/subsections}}
+                            {{/hassubsections}}
+                            {{^hasactivities}}
+                            {{^hassubsections}}
+                                <p class="nxpro-aside__empty" data-region="nxpro-sec-empty">{{#str}}noactivities, format_nexcoursepro{{/str}}</p>
+                            {{/hassubsections}}
+                            {{/hasactivities}}
+                            {{#canmanageactivities}}
+                            <div class="nxpro-sec__foot{{^editing}} is-hidden{{/editing}}" data-region="nxpro-sec-foot">
+                                {{#candelete}}
+                                <button type="button" class="nxpro-btn nxpro-btn--ghost nxpro-btn--sm nxpro-btn--danger"
+                                        data-region="nxpro-sec-delete" data-action="nxpro-delete-section"
+                                        data-sectionid="{{sectionid}}">{{#str}}deletesection, format_nexcoursepro{{/str}}</button>
+                                {{/candelete}}
+                                {{#hassubsection}}
+                                <button type="button" class="nxpro-btn nxpro-btn--ghost nxpro-btn--sm"
+                                        data-action="nxpro-add-nested" data-section="{{sectionnum}}"
+                                        data-sectionid="{{sectionid}}">{{#str}}addnestedsection, format_nexcoursepro{{/str}}</button>
+                                {{/hassubsection}}
+                            </div>
+                            {{/canmanageactivities}}
+                            {{^canmanageactivities}}
+                            {{#candelete}}
+                            <div class="nxpro-sec__foot{{^editing}} is-hidden{{/editing}}" data-region="nxpro-sec-foot">
+                                <button type="button" class="nxpro-btn nxpro-btn--ghost nxpro-btn--sm nxpro-btn--danger"
+                                        data-region="nxpro-sec-delete" data-action="nxpro-delete-section"
+                                        data-sectionid="{{sectionid}}">{{#str}}deletesection, format_nexcoursepro{{/str}}</button>
+                            </div>
+                            {{/candelete}}
+                            {{/canmanageactivities}}
+                        </details>
+                        {{#canupdatesection}}
+                        <div class="nxpro-between-sec{{^editing}} is-hidden{{/editing}}" data-region="nxpro-between-sec">
+                            <button type="button" class="nxpro-btn nxpro-btn--ghost nxpro-btn--sm"
+                                    data-action="nxpro-add-section" data-aftersectionid="{{sectionid}}">{{#str}}addsection, format_nexcoursepro{{/str}}</button>
+                        </div>
+                        {{/canupdatesection}}
+                    {{/sections}}
+                    {{#canupdatesection}}
+                    <div class="nxpro-outline__addsec{{^editing}} is-hidden{{/editing}}" data-region="nxpro-between-sec">
+                        <button type="button" class="nxpro-btn nxpro-btn--ghost nxpro-btn--sm"
+                                data-action="nxpro-add-section" data-aftersectionid="0">{{#str}}addsection, format_nexcoursepro{{/str}}</button>
+                    </div>
+                    {{/canupdatesection}}
+            {{/hassections}}
+            {{^hassections}}
+                <p class="nxpro-aside__empty" data-region="nxpro-outline-empty">{{#str}}emptycourse, format_nexcoursepro{{/str}}</p>
+                {{#canupdatesection}}
+                <div class="nxpro-outline__addsec{{^editing}} is-hidden{{/editing}}" data-region="nxpro-between-sec">
+                    <button type="button" class="nxpro-btn nxpro-btn--ghost nxpro-btn--sm"
+                            data-action="nxpro-add-section" data-aftersectionid="0">{{#str}}addsection, format_nexcoursepro{{/str}}</button>
+                </div>
+                {{/canupdatesection}}
+            {{/hassections}}
+            </div>
+            </div>
+
+            <div class="nxpro-aside-lb is-hidden" data-region="nxpro-aside-leaderboard" hidden>
+                <div data-region="nxpro-aside-lb-body">
+                    {{#leaderboard}}
+                        {{#hasme}}
+                            {{#me}}
+                                <div class="nxpro-lb-profile" data-region="nxpro-lb-profile">
+                                    <div class="nxpro-lb-profile__hero">
+                                        <button type="button" class="nxpro-lb-profile__avatar-btn" data-action="nxpro-lb-avatar"
+                                                title="{{changeavatar}}" aria-label="{{changeavatar}}">
+                                            <span class="nxpro-lb-profile__avatar-frame">
+                                                <img class="nxpro-lb-profile__avatar" src="{{{avatarurl}}}" alt="" width="140" height="140">
+                                            </span>
+                                            <span class="nxpro-lb-profile__avatar-hint">{{changeavatar}}</span>
+                                        </button>
+                                        <p class="nxpro-lb-profile__user">{{name}}</p>
+                                        {{#usernamehandle}}<p class="nxpro-lb-profile__handle">{{usernamehandle}}</p>{{/usernamehandle}}
+                                    </div>
+                                    <div class="nxpro-lb-profile__stats">
+                                        <div class="nxpro-lb-profile__stat">
+                                            <img class="nxpro-lb-profile__ico" src="{{{scoreicon}}}" alt="" width="48" height="48">
+                                            <span class="nxpro-lb-profile__label">{{labelscore}}</span>
+                                            <strong class="nxpro-lb-profile__value">{{score}}</strong>
+                                        </div>
+                                        <div class="nxpro-lb-profile__stat">
+                                            <img class="nxpro-lb-profile__ico" src="{{{rankicon}}}" alt="" width="48" height="48">
+                                            <span class="nxpro-lb-profile__label">{{labeloverall}}</span>
+                                            <strong class="nxpro-lb-profile__value">{{overallvalue}}</strong>
+                                        </div>
+                                        <div class="nxpro-lb-profile__stat">
+                                            <img class="nxpro-lb-profile__ico" src="{{{collegeicon}}}" alt="" width="48" height="48">
+                                            <span class="nxpro-lb-profile__label">{{labelcollege}}</span>
+                                            <strong class="nxpro-lb-profile__value">{{collegevalue}}</strong>
+                                        </div>
+                                    </div>
+                                    {{#showlevel}}
+                                    <div class="nxpro-lb-profile__level">
+                                        <img class="nxpro-lb-profile__level-ico" src="{{{levelicon}}}" alt="" width="48" height="48">
+                                        <div class="nxpro-lb-profile__level-meta">
+                                            <div class="nxpro-lb-profile__level-top">
+                                                <span class="nxpro-lb-profile__label">{{labellevel}} {{level}}</span>
+                                                <span class="nxpro-lb-profile__level-pct">{{levelpercent}}%</span>
+                                            </div>
+                                            <div class="nxpro-lb-profile__bar" role="img" aria-label="{{levelpercent}}%">
+                                                <span class="nxpro-lb-profile__bar-fill" style="width: {{levelpercent}}%;"></span>
+                                            </div>
+                                            <div class="nxpro-lb-profile__next">{{nextlevel}}</div>
+                                        </div>
+                                    </div>
+                                    {{/showlevel}}
+                                    <div class="nxpro-lb-avatars is-hidden" data-region="nxpro-lb-avatars" hidden>
+                                        <p class="nxpro-lb-avatars__title">{{changeavatar}}</p>
+                                        <div class="nxpro-lb-avatars__grid">
+                                            {{#avatarchoices}}
+                                                <button type="button"
+                                                        class="nxpro-lb-avatars__item{{#selected}} is-selected{{/selected}}{{^unlocked}} is-locked{{/unlocked}}"
+                                                        data-action="nxpro-lb-pick-avatar"
+                                                        data-avatar="{{id}}"
+                                                        {{^unlocked}}disabled data-required="{{requiredlevel}}" title="Locked"{{/unlocked}}
+                                                        {{#unlocked}}title="Avatar {{id}}"{{/unlocked}}>
+                                                    <img src="{{{url}}}" alt="" width="56" height="56">
+                                                </button>
+                                            {{/avatarchoices}}
+                                        </div>
+                                    </div>
+                                </div>
+                            {{/me}}
+                        {{/hasme}}
+                        {{^hasme}}
+                            <p class="nxpro-aside__empty">{{#str}}leaderboardempty, format_nexcoursepro{{/str}}</p>
+                        {{/hasme}}
+                    {{/leaderboard}}
+                    {{^leaderboard}}
+                        <p class="nxpro-aside__empty">{{#str}}leaderboardunavailable, format_nexcoursepro{{/str}}</p>
+                    {{/leaderboard}}
+                </div>
+            </div>
+        </aside>
+
+        <div class="nxpro-rail-dock">
+            <button type="button" class="nxpro-rail-reopen" data-action="nxpro-toggle-rail"
+                    title="{{#str}}togglesidebar, format_nexcoursepro{{/str}}"
+                    aria-label="{{#str}}togglesidebar, format_nexcoursepro{{/str}}"
+                    aria-expanded="true" aria-controls="nxpro-aside">
+                <span class="nxpro-ico nxpro-ico--panel" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+
+    <div class="nxpro-rail-backdrop is-hidden" data-region="nxpro-rail-backdrop" aria-hidden="true"></div>
+
+    <button type="button" class="nxpro-mobile-rail-fab" data-action="nxpro-toggle-rail"
+            title="{{#str}}tabcontent, format_nexcoursepro{{/str}}"
+            aria-label="{{#str}}tabcontent, format_nexcoursepro{{/str}}"
+            aria-expanded="false" aria-controls="nxpro-aside">
+        <span class="nxpro-ico nxpro-ico--panel" aria-hidden="true"></span>
+        <span class="nxpro-mobile-rail-fab__label">{{#str}}tabcontent, format_nexcoursepro{{/str}}</span>
+    </button>
+
+    <button type="button" class="nxpro-help" title="{{#str}}help, format_nexcoursepro{{/str}}" aria-label="{{#str}}help, format_nexcoursepro{{/str}}">?</button>
+</div>

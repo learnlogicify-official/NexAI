@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/nexstack/db" VERSION="20260816" COMMENT="NexStack Studio tables"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+  <TABLES>
+    <TABLE NAME="local_nexstack_mission" COMMENT="Full-stack practice missions">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="200" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="slug" TYPE="char" LENGTH="80" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="track" TYPE="char" LENGTH="40" NOTNULL="true" DEFAULT="web"/>
+        <FIELD NAME="difficulty" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="easy"/>
+        <FIELD NAME="runtime" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="static"/>
+        <FIELD NAME="summary" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="briefmd" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="scaffoldjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="stepsjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="ready"/>
+        <FIELD NAME="sortorder" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="estimatedmins" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="45"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="slug_uix" UNIQUE="true" FIELDS="slug"/>
+        <INDEX NAME="status_ix" UNIQUE="false" FIELDS="status, sortorder"/>
+        <INDEX NAME="track_ix" UNIQUE="false" FIELDS="track, status"/>
+      </INDEXES>
+    </TABLE>
+
+    <TABLE NAME="local_nexstack_workspace" COMMENT="Per-user mission file workspace">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="missionid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="filesjson" TYPE="text" NOTNULL="false"/>
+        <FIELD NAME="activestep" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="completedsteps" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT=""/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="inprogress"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="user_mission_uix" UNIQUE="true" FIELDS="userid, missionid"/>
+        <INDEX NAME="mission_ix" UNIQUE="false" FIELDS="missionid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

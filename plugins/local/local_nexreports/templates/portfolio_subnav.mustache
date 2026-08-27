@@ -1,0 +1,11 @@
+{{!
+    @template local_nexreports/portfolio_subnav
+    Portfolio report options (Platforms / GitHub).
+}}
+{{#showportfoliosubnav}}
+<nav class="nxr-subtabs" aria-label="{{#str}}portfolio, local_nexreports{{/str}}">
+    {{#portfoliosubnav}}
+    <a class="nxr-subtabs__item{{#active}} is-active{{/active}}" href="{{url}}">{{label}}</a>
+    {{/portfoliosubnav}}
+</nav>
+{{/showportfoliosubnav}}

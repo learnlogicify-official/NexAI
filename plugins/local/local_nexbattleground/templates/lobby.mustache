@@ -1,0 +1,121 @@
+{{!
+    @template local_nexbattleground/lobby
+}}
+<div class="nbg nbg-app nbg-lobby-page nbg-app--bleed" data-region="nbg-lobby">
+    {{> local_nexbattleground/header }}
+    {{> local_nexbattleground/topnav }}
+
+    {{#canbattle}}
+        <section class="nbg-panel nbg-panel--actions">
+            <header class="nbg-panel__head">
+                <h2 class="nbg-panel__title">{{#str}}playnow, local_nexbattleground{{/str}}</h2>
+                <p class="nbg-panel__sub">{{#str}}playnowhint, local_nexbattleground{{/str}}</p>
+            </header>
+
+            <div class="nbg-playgrid">
+                <div class="nbg-playcard">
+                    <div class="nbg-playcard__label">{{#str}}quickmatch, local_nexbattleground{{/str}}</div>
+                    <p class="nbg-playcard__hint">{{#str}}quickmatchhint, local_nexbattleground{{/str}}</p>
+                    <div class="nbg-match">
+                        <label class="nbg-field">
+                            <span>{{#str}}difficulty, local_nexbattleground{{/str}}</span>
+                            <select data-region="difficulty">
+                                <option value="">{{#str}}anydifficulty, local_nexbattleground{{/str}}</option>
+                                <option value="easy">{{#str}}easy, local_nexbattleground{{/str}}</option>
+                                <option value="medium">{{#str}}medium, local_nexbattleground{{/str}}</option>
+                                <option value="hard">{{#str}}hard, local_nexbattleground{{/str}}</option>
+                                <option value="veryhard">{{#str}}veryhard, local_nexbattleground{{/str}}</option>
+                            </select>
+                        </label>
+                        <button type="button" class="nbg-btn nbg-btn--primary" data-action="find-match">
+                            {{#str}}findmatch, local_nexbattleground{{/str}}
+                        </button>
+                        <button type="button" class="nbg-btn nbg-btn--ghost" data-action="cancel-queue" hidden>
+                            {{#str}}cancelqueue, local_nexbattleground{{/str}}
+                        </button>
+                    </div>
+                    <p class="nbg-status" data-region="queue-status" hidden></p>
+                </div>
+
+                <div class="nbg-playcard">
+                    <div class="nbg-playcard__label">{{#str}}privateroom, local_nexbattleground{{/str}}</div>
+                    <p class="nbg-playcard__hint">{{#str}}privateroomhint, local_nexbattleground{{/str}}</p>
+                    <label class="nbg-field nbg-field--block">
+                        <span>{{#str}}difficulty, local_nexbattleground{{/str}}</span>
+                        <select data-region="room-difficulty">
+                            <option value="">{{#str}}anydifficulty, local_nexbattleground{{/str}}</option>
+                            <option value="easy">{{#str}}easy, local_nexbattleground{{/str}}</option>
+                            <option value="medium">{{#str}}medium, local_nexbattleground{{/str}}</option>
+                            <option value="hard">{{#str}}hard, local_nexbattleground{{/str}}</option>
+                            <option value="veryhard">{{#str}}veryhard, local_nexbattleground{{/str}}</option>
+                        </select>
+                    </label>
+                    <div class="nbg-challenge__row">
+                        <button type="button" class="nbg-btn nbg-btn--secondary" data-action="create-room">
+                            {{#str}}createroom, local_nexbattleground{{/str}}
+                        </button>
+                        <input type="text" class="nbg-input" data-region="join-code" maxlength="6" inputmode="numeric" pattern="[0-9]*"
+                               placeholder="{{#str}}enteryourcode, local_nexbattleground{{/str}}" autocomplete="off"/>
+                        <button type="button" class="nbg-btn nbg-btn--primary" data-action="join-room">
+                            {{#str}}joinroom, local_nexbattleground{{/str}}
+                        </button>
+                    </div>
+                    <p class="nbg-room-peek" data-region="room-peek" hidden></p>
+                    <div class="nbg-room__active" data-region="room-active" hidden>
+                        <p class="nbg-room__hint">{{#str}}sharecode, local_nexbattleground{{/str}}</p>
+                        <div class="nbg-room__codewrap">
+                            <strong class="nbg-room__code" data-region="room-code"></strong>
+                            <span class="nbg-diffchip" data-region="room-diff" hidden></span>
+                            <button type="button" class="nbg-btn nbg-btn--ghost" data-action="copy-code">{{#str}}copycode, local_nexbattleground{{/str}}</button>
+                            <button type="button" class="nbg-btn nbg-btn--ghost" data-action="cancel-room">{{#str}}cancelroom, local_nexbattleground{{/str}}</button>
+                        </div>
+                        <p class="nbg-status" data-region="room-wait">{{#str}}waitingforopponent, local_nexbattleground{{/str}}</p>
+                    </div>
+                    <p class="nbg-status" data-region="room-status" hidden></p>
+                </div>
+
+                <div class="nbg-playcard">
+                    <div class="nbg-playcard__label">{{#str}}challengeuser, local_nexbattleground{{/str}}</div>
+                    <p class="nbg-playcard__hint">{{#str}}challengehint, local_nexbattleground{{/str}}</p>
+                    <label class="nbg-field nbg-field--block">
+                        <span>{{#str}}difficulty, local_nexbattleground{{/str}}</span>
+                        <select data-region="challenge-difficulty">
+                            <option value="">{{#str}}anydifficulty, local_nexbattleground{{/str}}</option>
+                            <option value="easy">{{#str}}easy, local_nexbattleground{{/str}}</option>
+                            <option value="medium">{{#str}}medium, local_nexbattleground{{/str}}</option>
+                            <option value="hard">{{#str}}hard, local_nexbattleground{{/str}}</option>
+                            <option value="veryhard">{{#str}}veryhard, local_nexbattleground{{/str}}</option>
+                        </select>
+                    </label>
+                    <div class="nbg-challenge__row">
+                        <input type="text" class="nbg-input nbg-input--grow" data-region="challenge-user"
+                               placeholder="{{#str}}username, local_nexbattleground{{/str}}" autocomplete="off"/>
+                        <button type="button" class="nbg-btn nbg-btn--secondary" data-action="challenge">
+                            {{#str}}sendchallenge, local_nexbattleground{{/str}}
+                        </button>
+                    </div>
+                    <p class="nbg-status" data-region="challenge-status" hidden></p>
+                </div>
+            </div>
+        </section>
+    {{/canbattle}}
+
+    <section class="nbg-panel" data-region="incoming-wrap" hidden>
+        <header class="nbg-panel__head">
+            <h2 class="nbg-panel__title">{{#str}}incoming, local_nexbattleground{{/str}}</h2>
+        </header>
+        <ul class="nbg-list" data-region="incoming"></ul>
+    </section>
+
+    <section class="nbg-panel nbg-panel--recent">
+        <header class="nbg-panel__head nbg-panel__head--row">
+            <div>
+                <h2 class="nbg-panel__title">{{#str}}recent, local_nexbattleground{{/str}}</h2>
+                <p class="nbg-panel__sub" data-region="recent-meta"></p>
+            </div>
+        </header>
+        <ul class="nbg-list nbg-list--recent" data-region="recent"></ul>
+        <p class="nbg-empty" data-region="recent-empty">{{#str}}nobattles, local_nexbattleground{{/str}}</p>
+        <nav class="nbg-pager" data-region="recent-pager" hidden aria-label="{{#str}}recent, local_nexbattleground{{/str}}"></nav>
+    </section>
+</div>

@@ -1,0 +1,715 @@
+{{!
+    @template local_nexreports/overview
+    Super-admin site overview dashboard.
+}}
+<div class="nxr-app"
+     data-region="nxr-overview"
+     data-label-registrations="{{#str}}newregistrations, local_nexreports{{/str}}"
+     data-label-enrolments="{{#str}}courseenrolments, local_nexreports{{/str}}"
+     data-label-completions="{{#str}}coursecompletions, local_nexreports{{/str}}"
+     data-label-activeusers="{{#str}}activeusers, local_nexreports{{/str}}"
+     data-label-totalyears="{{#str}}totalyears, local_nexreports{{/str}}"
+     data-label-totaldepartments="{{#str}}totaldepartments, local_nexreports{{/str}}"
+     data-label-totalstudents="{{#str}}totalstudents, local_nexreports{{/str}}"
+     data-label-timespent="{{#str}}timespent, local_nexreports{{/str}}"
+     data-label-timespent-unavailable="{{#str}}timespentunavailable, local_nexreports{{/str}}"
+     data-label-pct-up="Up"
+     data-label-pct-down="Down"
+     data-label-pct-flat="{{#str}}pctflat, local_nexreports{{/str}}"
+     data-label-series-active="{{#str}}seriesactive, local_nexreports{{/str}}"
+     data-label-series-enrolments="{{#str}}seriesenrolments, local_nexreports{{/str}}"
+     data-label-series-completions="{{#str}}seriescompletions, local_nexreports{{/str}}"
+     data-label-series-visits="{{#str}}seriesvisits, local_nexreports{{/str}}"
+     data-label-series-timespent="{{#str}}seriestimespent, local_nexreports{{/str}}"
+     data-label-avg-active="{{#str}}averageactiveusers, local_nexreports{{/str}}"
+     data-label-avg-visits="{{#str}}averagesitevisits, local_nexreports{{/str}}"
+     data-label-avg-timespent="{{#str}}averagetimespent, local_nexreports{{/str}}"
+     data-label-avg-activity="{{#str}}averageactivitycompleted, local_nexreports{{/str}}"
+     data-label-total-assignments="{{#str}}totalassignmentsubmitted, local_nexreports{{/str}}"
+     data-label-total-activity-completed="{{#str}}totalactivitycompleted, local_nexreports{{/str}}"
+     data-label-series-assignments="{{#str}}seriesassignmentsubmitted, local_nexreports{{/str}}"
+     data-label-series-activities-completed="{{#str}}seriesactivitiescompleted, local_nexreports{{/str}}"
+     data-label-total-active="{{#str}}totalactiveusers, local_nexreports{{/str}}"
+     data-label-total-enrolments="{{#str}}totalenrolments, local_nexreports{{/str}}"
+     data-label-total-completions="{{#str}}totalcompletions, local_nexreports{{/str}}"
+     data-label-total-visits="{{#str}}totalsitevisits, local_nexreports{{/str}}"
+     data-label-total-timespent="{{#str}}totaltimespent, local_nexreports{{/str}}"
+     data-label-average-course-time="{{#str}}averagecoursetime, local_nexreports{{/str}}"
+     data-label-all-users="{{#str}}allusers, local_nexreports{{/str}}"
+     data-label-all-courses="{{#str}}allcourses, local_nexreports{{/str}}"
+     data-label-rank="{{#str}}rank, local_nexreports{{/str}}"
+     data-label-coursename="{{#str}}coursename, local_nexreports{{/str}}"
+     data-label-enrolments-col="{{#str}}enrolments, local_nexreports{{/str}}"
+     data-label-fullname="{{#str}}fullname, local_nexreports{{/str}}"
+     data-label-email="{{#str}}email, local_nexreports{{/str}}"
+     data-label-lastaccess="{{#str}}lastaccess, local_nexreports{{/str}}"
+     data-label-onlinesince="{{#str}}onlinesince, local_nexreports{{/str}}"
+     data-label-status="{{#str}}status, local_nexreports{{/str}}"
+     data-label-active="{{#str}}active, local_nexreports{{/str}}"
+     data-label-inactive="{{#str}}inactive, local_nexreports{{/str}}"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-nomatches="{{#str}}nomatches, local_nexreports{{/str}}"
+     data-label-searching="{{#str}}searching, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-select-course-first="{{#str}}selectcoursefirst, local_nexreports{{/str}}"
+     data-label-select-year-first="{{#str}}selectyearfirst, local_nexreports{{/str}}"
+    data-label-search-course="{{#str}}searchbycourse, local_nexreports{{/str}}"
+     data-label-search-user="{{#str}}searchbyuser, local_nexreports{{/str}}"
+     data-label-coming-soon="{{#str}}comingsoon, local_nexreports{{/str}}"
+     data-label-daily-registrations="{{#str}}newregistrations, local_nexreports{{/str}}"
+     data-label-daily-enrolments="{{#str}}courseenrolments, local_nexreports{{/str}}"
+     data-label-daily-completions="{{#str}}coursecompletions, local_nexreports{{/str}}"
+     data-label-daily-activitycompletions="{{#str}}activitycompletions, local_nexreports{{/str}}"
+     data-label-daily-visits="{{#str}}totalsitevisits, local_nexreports{{/str}}"
+     data-label-daily-onlinelearners="{{#str}}onlinelearners, local_nexreports{{/str}}"
+     data-label-daily-onlineteachers="{{#str}}onlineteachers, local_nexreports{{/str}}"
+     data-label-visits-by-hour="{{#str}}visitsbyhour, local_nexreports{{/str}}"
+     data-label-average-course-progress="{{#str}}averagecourseprogress, local_nexreports{{/str}}"
+     data-label-progress-students="{{#str}}progressstudents, local_nexreports{{/str}}"
+     data-label-progress-student="{{#str}}progressstudent, local_nexreports{{/str}}"
+     data-label-no-course-progress="{{#str}}nocourseprogress, local_nexreports{{/str}}"
+     data-label-export-error="{{#str}}exporterror, local_nexreports{{/str}}"
+     data-label-no-chart-export="{{#str}}nochartexport, local_nexreports{{/str}}"
+     data-label-total-students="{{#str}}totalstudents, local_nexreports{{/str}}"
+     data-label-learners-by-institution="{{#str}}learnersbyinstitution, local_nexreports{{/str}}"
+     data-label-institution="{{#str}}institution, local_nexreports{{/str}}"
+     data-label-department="{{#str}}department, local_nexreports{{/str}}"
+     data-label-students-count="{{#str}}studentscount, local_nexreports{{/str}}"
+     data-label-no-departments="{{#str}}nodepartments, local_nexreports{{/str}}"
+     data-label-all-departments="{{#str}}alldepartments, local_nexreports{{/str}}"
+     data-label-colleges-list="{{#str}}collegeslist, local_nexreports{{/str}}"
+     data-label-departments-by-college="{{#str}}departmentsbycollege, local_nexreports{{/str}}"
+     data-label-select-college="{{#str}}selectcollege, local_nexreports{{/str}}"
+     data-label-select-college-hint="{{#str}}selectcollegehint, local_nexreports{{/str}}"
+     data-label-year-of-passing="{{#str}}yearofpassing, local_nexreports{{/str}}"
+     data-label-no-years="{{#str}}noyearofpassing, local_nexreports{{/str}}"
+     data-label-dept-by-year="{{#str}}deptbyyear, local_nexreports{{/str}}">
+
+    {{> local_nexreports/shell }}
+
+    <section class="nxr-kpis" data-region="kpis" aria-live="polite"></section>
+
+    <section class="nxr-grid nxr-grid--charts">
+        <article class="nxr-card" data-chart-card="overview">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}siteoverview, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    <p class="nxr-card__meta">{{#str}}lastupdated, local_nexreports{{/str}}</p>
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-summary" data-region="overview-summary"></div>
+            <div class="nxr-chart" data-region="overview-chart" data-export-chart="overview-chart"></div>
+        </article>
+        <article class="nxr-card" data-chart-card="visits">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}visitsonsite, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-visits-user">
+                        {{#str}}userfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="visits-user" data-type="user"
+                         data-placeholder="{{#str}}allusers, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-visits-user">
+                            <span class="nxr-combo__value">{{#str}}allusers, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbyuser, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nxr-summary" data-region="visits-summary"></div>
+            <div class="nxr-chart" data-region="visits-chart" data-export-chart="visits-chart"></div>
+        </article>
+        <article class="nxr-card nxr-card--timespent" data-chart-card="timespent-site">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}timespentonsite, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                {{#institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-site-year">
+                        {{#str}}yearofpassing, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="site-year" data-type="year"
+                         data-placeholder="{{#str}}allyears, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-site-year">
+                            <span class="nxr-combo__value">{{#str}}allyears, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}yearofpassing, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}yearofpassing, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-site-department">
+                        {{#str}}department, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="site-department" data-type="department"
+                         data-placeholder="{{#str}}alldepartments, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-site-department">
+                            <span class="nxr-combo__value">{{#str}}alldepartments, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}department, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}department, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-site-user">
+                        {{#str}}userfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="timespent-user" data-type="user"
+                         data-placeholder="{{#str}}allusers, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-site-user">
+                            <span class="nxr-combo__value">{{#str}}allusers, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbyuser, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nxr-summary" data-region="site-timespent-summary"></div>
+            <div class="nxr-chart" data-region="site-timespent-chart" data-export-chart="site-timespent-chart"></div>
+        </article>
+        <article class="nxr-card nxr-card--timespent" data-chart-card="timespent-course">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}timespentoncourse, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-course">
+                        {{#str}}coursefilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="timespent-course" data-type="course"
+                         data-placeholder="{{#str}}allcourses, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-course">
+                            <span class="nxr-combo__value">{{#str}}allcourses, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbycourse, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbycourse, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{^institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-course-group">
+                        {{#str}}groupfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="course-group" data-type="group"
+                         data-placeholder="{{#str}}allgroups, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-course-group">
+                            <span class="nxr-combo__value">{{#str}}allgroups, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbygroup, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbygroup, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+                {{#institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-course-year">
+                        {{#str}}yearofpassing, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="course-year" data-type="year"
+                         data-placeholder="{{#str}}allyears, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-course-year">
+                            <span class="nxr-combo__value">{{#str}}allyears, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}yearofpassing, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}yearofpassing, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-course-department">
+                        {{#str}}department, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="course-department" data-type="department"
+                         data-placeholder="{{#str}}alldepartments, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-course-department">
+                            <span class="nxr-combo__value">{{#str}}alldepartments, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}department, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}department, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-course-user">
+                        {{#str}}userfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="course-user" data-type="user"
+                         data-placeholder="{{#str}}allusers, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-course-user">
+                            <span class="nxr-combo__value">{{#str}}allusers, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbyuser, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nxr-summary" data-region="course-timespent-summary"></div>
+            <div class="nxr-chart" data-region="course-timespent-chart" data-export-chart="course-timespent-chart"></div>
+        </article>
+        <article class="nxr-card nxr-card--timespent" data-chart-card="activity-status">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}courseactivitystatus, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-activity-course">
+                        {{#str}}coursefilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="activity-course" data-type="course"
+                         data-placeholder="{{#str}}allcourses, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-activity-course">
+                            <span class="nxr-combo__value">{{#str}}allcourses, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbycourse, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbycourse, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{^institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-activity-group">
+                        {{#str}}groupfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="activity-group" data-type="group"
+                         data-placeholder="{{#str}}allgroups, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-activity-group">
+                            <span class="nxr-combo__value">{{#str}}allgroups, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbygroup, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbygroup, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+                {{#institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-activity-year">
+                        {{#str}}yearofpassing, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="activity-year" data-type="year"
+                         data-placeholder="{{#str}}allyears, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-activity-year">
+                            <span class="nxr-combo__value">{{#str}}allyears, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}yearofpassing, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}yearofpassing, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-activity-department">
+                        {{#str}}department, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="activity-department" data-type="department"
+                         data-placeholder="{{#str}}alldepartments, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-activity-department">
+                            <span class="nxr-combo__value">{{#str}}alldepartments, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}department, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}department, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-activity-user">
+                        {{#str}}userfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="activity-user" data-type="user"
+                         data-placeholder="{{#str}}allusers, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-activity-user">
+                            <span class="nxr-combo__value">{{#str}}allusers, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbyuser, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nxr-summary" data-region="activity-status-summary"></div>
+            <div class="nxr-chart" data-region="activity-status-chart" data-export-chart="activity-status-chart"></div>
+        </article>
+
+        <article class="nxr-card nxr-card--colleges nxr-card--scrollbody">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}collegeslist, local_nexreports{{/str}}</h2>
+            </header>
+            <div class="nxr-headcount__total nxr-headcount__total--compact">
+                <p class="nxr-headcount__total-label">{{#str}}totalstudents, local_nexreports{{/str}}</p>
+                <p class="nxr-headcount__total-value" data-region="headcount-total">
+                    {{#headcount}}{{totalstudents}}{{/headcount}}{{^headcount}}—{{/headcount}}
+                </p>
+            </div>
+            <div class="nxr-card__scroll" data-region="colleges-list">
+                {{#headcount}}
+                {{#hasinstitutions}}
+                <ul class="nxr-college-list">
+                    {{#institutions}}
+                    <li class="nxr-college-list__item">
+                        <span class="nxr-college-list__name">{{name}}</span>
+                        <span class="nxr-college-list__count">{{count}}</span>
+                    </li>
+                    {{/institutions}}
+                </ul>
+                {{/hasinstitutions}}
+                {{^hasinstitutions}}
+                <p class="nxr-empty">{{#str}}nodata, local_nexreports{{/str}}</p>
+                {{/hasinstitutions}}
+                {{/headcount}}
+                {{^headcount}}
+                <div class="nxr-skeleton nxr-skeleton--table"></div>
+                {{/headcount}}
+            </div>
+        </article>
+    </section>
+
+    <section class="nxr-grid nxr-grid--progress">
+        <article class="nxr-card nxr-card--courseprogress" data-chart-card="course-progress">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}courseprogress, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-progress-course">
+                        {{#str}}coursefilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="progress-course" data-type="course"
+                         data-placeholder="{{#str}}allcourses, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-progress-course">
+                            <span class="nxr-combo__value">{{#str}}allcourses, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbycourse, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbycourse, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{^institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-progress-group">
+                        {{#str}}groupfilter, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="progress-group" data-type="group"
+                         data-placeholder="{{#str}}allgroups, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-progress-group">
+                            <span class="nxr-combo__value">{{#str}}allgroups, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}searchbygroup, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}searchbygroup, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+                {{#institutionadmin}}
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-progress-year">
+                        {{#str}}yearofpassing, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="progress-year" data-type="year"
+                         data-placeholder="{{#str}}allyears, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-progress-year">
+                            <span class="nxr-combo__value">{{#str}}allyears, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}yearofpassing, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}yearofpassing, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label" id="nxr-lbl-progress-department">
+                        {{#str}}department, local_nexreports{{/str}}
+                    </span>
+                    <div class="nxr-combo" data-combo="progress-department" data-type="department"
+                         data-placeholder="{{#str}}alldepartments, local_nexreports{{/str}}">
+                        <button type="button" class="nxr-combo__toggle" aria-haspopup="listbox"
+                                aria-expanded="false" aria-labelledby="nxr-lbl-progress-department">
+                            <span class="nxr-combo__value">{{#str}}alldepartments, local_nexreports{{/str}}</span>
+                            <span class="nxr-combo__caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="nxr-combo__panel" hidden>
+                            <input type="text" class="nxr-combo__search" autocomplete="off"
+                                   placeholder="{{#str}}department, local_nexreports{{/str}}"
+                                   aria-label="{{#str}}department, local_nexreports{{/str}}">
+                            <ul class="nxr-combo__list" role="listbox"></ul>
+                        </div>
+                    </div>
+                </div>
+                {{/institutionadmin}}
+            </div>
+            <div class="nxr-summary" data-region="course-progress-summary"></div>
+            <div class="nxr-donut" data-region="course-progress-chart" data-export-chart="course-progress-chart"></div>
+        </article>
+
+        <article class="nxr-card nxr-card--departments nxr-card--scrollbody"
+                 data-region="departments-block"
+                 {{#headcount}}data-headcount-json="{{{json}}}"{{/headcount}}>
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}departmentsbycollege, local_nexreports{{/str}}</h2>
+            </header>
+            <div class="nxr-report-filters">
+                <label class="nxr-report-filter nxr-report-filter--grow">
+                    <span class="nxr-report-filter__label">{{#str}}selectcollege, local_nexreports{{/str}}</span>
+                    <select data-filter="college-select" data-region="college-select">
+                        <option value="">{{#str}}selectcollege, local_nexreports{{/str}}</option>
+                        {{#headcount}}
+                        {{#institutions}}
+                        <option value="{{name}}" {{#selected}}selected{{/selected}}>{{name}} ({{count}})</option>
+                        {{/institutions}}
+                        {{/headcount}}
+                    </select>
+                </label>
+            </div>
+            <div class="nxr-card__scroll" data-region="departments-list">
+                {{#headcount}}
+                {{#institutions}}
+                {{#selected}}
+                <h3 class="nxr-headcount__subtitle">{{#str}}department, local_nexreports{{/str}}</h3>
+                {{#hasdepartments}}
+                <table class="nxr-dept-table">
+                    <thead>
+                        <tr>
+                            <th>{{#str}}department, local_nexreports{{/str}}</th>
+                            <th class="nxr-num">{{#str}}studentscount, local_nexreports{{/str}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#departments}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td class="nxr-num">{{count}}</td>
+                        </tr>
+                        {{/departments}}
+                    </tbody>
+                </table>
+                {{/hasdepartments}}
+                {{^hasdepartments}}
+                <p class="nxr-empty">{{#str}}nodepartments, local_nexreports{{/str}}</p>
+                {{/hasdepartments}}
+                <h3 class="nxr-headcount__subtitle">{{#str}}yearofpassing, local_nexreports{{/str}}</h3>
+                {{#hasyears}}
+                <table class="nxr-dept-table">
+                    <thead>
+                        <tr>
+                            <th>{{#str}}yearofpassing, local_nexreports{{/str}}</th>
+                            <th class="nxr-num">{{#str}}studentscount, local_nexreports{{/str}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#years}}
+                        <tr>
+                            <td>{{name}}</td>
+                            <td class="nxr-num">{{count}}</td>
+                        </tr>
+                        {{/years}}
+                    </tbody>
+                </table>
+                {{/hasyears}}
+                {{^hasyears}}
+                <p class="nxr-empty">{{#str}}noyearofpassing, local_nexreports{{/str}}</p>
+                {{/hasyears}}
+                {{/selected}}
+                {{/institutions}}
+                {{^hasinstitutions}}
+                <p class="nxr-empty">{{#str}}nodata, local_nexreports{{/str}}</p>
+                {{/hasinstitutions}}
+                {{/headcount}}
+                {{^headcount}}
+                <p class="nxr-empty">{{#str}}selectcollegehint, local_nexreports{{/str}}</p>
+                {{/headcount}}
+            </div>
+        </article>
+    </section>
+
+    <section class="nxr-grid nxr-grid--tables">
+        <article class="nxr-card nxr-card--scrollbody">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}popularcourses, local_nexreports{{/str}}</h2>
+            </header>
+            <label class="nxr-search">
+                <span class="nxr-search__icon" aria-hidden="true"></span>
+                <input type="search" data-filter="courses" placeholder="{{#str}}searchbycourse, local_nexreports{{/str}}">
+            </label>
+            <div class="nxr-card__scroll" data-region="popular-courses"></div>
+        </article>
+        <article class="nxr-card nxr-card--scrollbody">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}realtimeusers, local_nexreports{{/str}}</h2>
+            </header>
+            <label class="nxr-search">
+                <span class="nxr-search__icon" aria-hidden="true"></span>
+                <input type="search" data-filter="users" placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}">
+            </label>
+            <div class="nxr-card__scroll" data-region="realtime-users"></div>
+        </article>
+    </section>
+
+    <section class="nxr-grid nxr-grid--extra">
+        <article class="nxr-card nxr-card--scrollbody" data-chart-card="daily">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}todaysactivity, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                <label class="nxr-report-filter">
+                    <span class="nxr-report-filter__label">{{#str}}activityday, local_nexreports{{/str}}</span>
+                    <input type="date" data-filter="activity-day">
+                </label>
+            </div>
+            <div class="nxr-card__scroll">
+                <div class="nxr-summary" data-region="daily-summary"></div>
+                <div class="nxr-chart" data-region="daily-chart" data-export-chart="daily-chart"></div>
+            </div>
+        </article>
+        <article class="nxr-card nxr-card--scrollbody">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}inactiveusers, local_nexreports{{/str}}</h2>
+                <div class="nxr-table-export" data-region="table-export" data-region-inactive-export="1">
+                    <button type="button" class="nxr-table-export__toggle" aria-haspopup="true" aria-expanded="false"
+                            title="{{#str}}export, local_nexreports{{/str}}"
+                            aria-label="{{#str}}export, local_nexreports{{/str}}">
+                        <span class="nxr-table-export__dots" aria-hidden="true"></span>
+                    </button>
+                    <ul class="nxr-table-export__menu" role="menu" hidden>
+                        <li role="none"><a role="menuitem" data-export-format="csv" data-region="inactive-export" href="{{wwwroot}}/local/nexreports/download.php?report=inactive_users&amp;format=csv">{{#str}}exportcsv, local_nexreports{{/str}}</a></li>
+                        <li role="none"><a role="menuitem" data-export-format="excel" href="{{wwwroot}}/local/nexreports/download.php?report=inactive_users&amp;format=excel">{{#str}}exportexcel, local_nexreports{{/str}}</a></li>
+                        <li role="none"><a role="menuitem" data-export-format="pdf" href="{{wwwroot}}/local/nexreports/download.php?report=inactive_users&amp;format=pdf">{{#str}}exportpdf, local_nexreports{{/str}}</a></li>
+                    </ul>
+                </div>
+            </header>
+            <div class="nxr-report-filters">
+                <div class="nxr-report-filter">
+                    <span class="nxr-report-filter__label">{{#str}}inactiveperiod, local_nexreports{{/str}}</span>
+                    <select data-filter="inactive-months">
+                        <option value="0">{{#str}}inactivenever, local_nexreports{{/str}}</option>
+                        <option value="1" selected>{{#str}}inactive1m, local_nexreports{{/str}}</option>
+                        <option value="3">{{#str}}inactive3m, local_nexreports{{/str}}</option>
+                        <option value="6">{{#str}}inactive6m, local_nexreports{{/str}}</option>
+                    </select>
+                </div>
+                <label class="nxr-search">
+                    <span class="nxr-search__icon" aria-hidden="true"></span>
+                    <input type="search" data-filter="inactive-search"
+                           placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}">
+                </label>
+            </div>
+            <div class="nxr-card__scroll" data-region="inactive-users">
+                <div class="nxr-skeleton nxr-skeleton--table"></div>
+            </div>
+        </article>
+    </section>
+</div>

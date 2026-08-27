@@ -1,0 +1,24 @@
+{{!
+    @template mod_nexinterview/report
+}}
+<div class="nxi-act nxi-act--report">
+    <p class="nxi-act__eyebrow">NexInterview</p>
+    <h1 class="nxi-act__title">{{#str}}feedbacktitle, nexinterview{{/str}}</h1>
+    <p class="nxi-act__meta">{{name}}</p>
+    <p class="nxi-act__score">{{#str}}overall, nexinterview{{/str}}: <strong>{{overall}}</strong></p>
+    {{#recommendation}}
+        <p class="nxi-act__meta">{{#str}}recommendation, nexinterview{{/str}}: {{recommendation}}</p>
+    {{/recommendation}}
+    {{#summary}}
+        <p class="nxi-act__blurb">{{summary}}</p>
+    {{/summary}}
+    {{#hasstrengths}}
+        <h2>{{#str}}strengths, nexinterview{{/str}}</h2>
+        <ul>{{#strengths}}<li>{{text}}</li>{{/strengths}}</ul>
+    {{/hasstrengths}}
+    {{#hasweaknesses}}
+        <h2>{{#str}}improve, nexinterview{{/str}}</h2>
+        <ul>{{#weaknesses}}<li>{{text}}</li>{{/weaknesses}}</ul>
+    {{/hasweaknesses}}
+    <p><a class="nxi-act__link" href="{{{backurl}}}">← Back</a></p>
+</div>

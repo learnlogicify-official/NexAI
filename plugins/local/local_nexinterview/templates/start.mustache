@@ -1,0 +1,105 @@
+{{!
+    @template local_nexinterview/start
+}}
+<div class="nxi-start" data-region="nxi-start">
+    {{#hasongoing}}
+        <aside class="nxi-ongoing nxi-ongoing--start" role="status">
+            <div class="nxi-ongoing__copy">
+                <strong class="nxi-ongoing__title">{{#str}}ongoingtitle, local_nexinterview{{/str}}</strong>
+                <p class="nxi-ongoing__sub">
+                    {{#str}}ongoingsub_start, local_nexinterview{{/str}}
+                    {{#ongoingtrack}} · {{ongoingtrack}}{{/ongoingtrack}}
+                </p>
+            </div>
+            <a class="nxi-ongoing__cta" href="{{{resumeurl}}}">{{#str}}resumeinterview, local_nexinterview{{/str}} →</a>
+        </aside>
+    {{/hasongoing}}
+
+    <div class="nxi-start__top">
+        <a class="nxi-back" href="{{{huburl}}}">← {{#str}}backtohub, local_nexinterview{{/str}}</a>
+        <div class="nxi-steps" data-region="steps" aria-label="Setup progress">
+            <span class="nxi-steps__item is-active" data-step="1">
+                <span class="nxi-steps__num">1</span>
+                <span class="nxi-steps__label">{{#str}}stepresume, local_nexinterview{{/str}}</span>
+            </span>
+            <span class="nxi-steps__line" aria-hidden="true"></span>
+            <span class="nxi-steps__item" data-step="2">
+                <span class="nxi-steps__num">2</span>
+                <span class="nxi-steps__label">{{#str}}stepdevices, local_nexinterview{{/str}}</span>
+            </span>
+        </div>
+    </div>
+
+    <div class="nxi-start__card" data-region="step-resume">
+        <p class="nxi-start__eyebrow">{{tracktitle}}</p>
+        <h1>{{#str}}resumetitle, local_nexinterview{{/str}}</h1>
+        <p class="nxi-start__sub">{{{resumesub}}}</p>
+
+        <div class="nxi-drop" data-region="resume-drop">
+            <input id="nxi-resume-file" class="nxi-drop__input" type="file"
+                   accept=".pdf,.txt,.md,application/pdf,text/plain"
+                   data-region="resume-file">
+            <div class="nxi-drop__visual" aria-hidden="true">
+                <span class="nxi-drop__glyph">⬆</span>
+            </div>
+            <p class="nxi-drop__title">{{#str}}resumedrop, local_nexinterview{{/str}}</p>
+            <p class="nxi-drop__hint">{{#str}}resumeupload, local_nexinterview{{/str}}</p>
+            <p class="nxi-drop__file" data-region="resume-filename" hidden></p>
+        </div>
+
+        <details class="nxi-paste">
+            <summary>{{#str}}resumepaste, local_nexinterview{{/str}}</summary>
+            <label class="nxi-label sr-only" for="nxi-resume-text">{{#str}}resumepaste, local_nexinterview{{/str}}</label>
+            <textarea id="nxi-resume-text" class="nxi-textarea" data-region="resume-text" rows="10"
+                      placeholder="{{#str}}resumeplaceholder, local_nexinterview{{/str}}"></textarea>
+        </details>
+
+        <p class="nxi-start__hint" data-region="resume-hint" hidden></p>
+        <div class="nxi-start__actions">
+            <a class="nxi-btn-ghost" href="{{{huburl}}}">{{#str}}cancel, local_nexinterview{{/str}}</a>
+            <button type="button" class="nxi-btn-solid" data-action="to-devices">{{#str}}resumenext, local_nexinterview{{/str}}</button>
+        </div>
+    </div>
+
+    <div class="nxi-start__card" data-region="step-devices" hidden>
+        <p class="nxi-start__eyebrow">{{tracktitle}}</p>
+        <h1>{{#str}}devicestitle, local_nexinterview{{/str}}</h1>
+        <p class="nxi-start__sub">{{#str}}devicessub, local_nexinterview{{/str}}</p>
+        <div class="nxi-device-warn" data-region="device-warn" hidden></div>
+
+        <div class="nxi-setup">
+            <div class="nxi-setup__preview">
+                <video data-region="setup-video" playsinline autoplay muted></video>
+                <span class="nxi-setup__live">{{#str}}previewlive, local_nexinterview{{/str}}</span>
+            </div>
+            <ul class="nxi-device-list">
+                <li data-device="mic">
+                    <span class="nxi-dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>{{#str}}devicemic, local_nexinterview{{/str}}</strong>
+                        <em data-label>{{#str}}devicechecking, local_nexinterview{{/str}}</em>
+                    </div>
+                </li>
+                <li data-device="cam">
+                    <span class="nxi-dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>{{#str}}devicecam, local_nexinterview{{/str}}</strong>
+                        <em data-label>{{#str}}devicechecking, local_nexinterview{{/str}}</em>
+                    </div>
+                </li>
+                <li data-device="spk">
+                    <span class="nxi-dot" aria-hidden="true"></span>
+                    <div>
+                        <strong>{{#str}}devicespk, local_nexinterview{{/str}}</strong>
+                        <em data-label>{{#str}}devicevoice, local_nexinterview{{/str}}</em>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="nxi-start__actions">
+            <button type="button" class="nxi-btn-ghost" data-action="back-resume">{{#str}}back, local_nexinterview{{/str}}</button>
+            <button type="button" class="nxi-btn-solid" data-action="enter-room" disabled>{{#str}}startlive, local_nexinterview{{/str}}</button>
+        </div>
+    </div>
+</div>

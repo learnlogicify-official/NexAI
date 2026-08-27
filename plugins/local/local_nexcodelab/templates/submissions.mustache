@@ -1,0 +1,24 @@
+{{!
+    @template local_nexcodelab/submissions
+}}
+<div class="ncl-app ncl-app--bleed" data-region="ncl-submissions">
+    {{> local_nexcodelab/header }}
+    <nav class="ncl-topnav" aria-label="NexCodeLab">
+        <a class="ncl-topnav__item" href="{{{listurl}}}">
+            <span class="ncl-ico ncl-ico--book" aria-hidden="true"></span>
+            {{#str}}problems, local_nexcodelab{{/str}}
+        </a>
+        <a class="ncl-topnav__item" href="{{{leaderboardurl}}}">
+            <span class="ncl-ico ncl-ico--trophy" aria-hidden="true"></span>
+            {{#str}}leaderboard, local_nexcodelab{{/str}}
+        </a>
+        <a class="ncl-topnav__item is-active" href="#">{{#str}}submissions, local_nexcodelab{{/str}}</a>
+        {{#canmanage}}
+            <a class="ncl-topnav__item ncl-topnav__item--right" href="{{{manageurl}}}">{{#str}}manage, local_nexcodelab{{/str}}</a>
+        {{/canmanage}}
+    </nav>
+    <section class="ncl-panel">
+        <h2 class="ncl-panel__title">{{#str}}submissions, local_nexcodelab{{/str}}</h2>
+        <div data-region="subs" style="margin-top:1rem"></div>
+    </section>
+</div>

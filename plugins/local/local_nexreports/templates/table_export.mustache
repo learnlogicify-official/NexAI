@@ -1,0 +1,24 @@
+{{!
+    @template local_nexreports/table_export
+
+    Three-dot export menu: CSV / Excel / PDF.
+    Parent page must set data-export-url on the report root; JS syncs filter params onto links.
+}}
+<div class="nxr-table-export" data-region="table-export">
+    <button type="button" class="nxr-table-export__toggle" aria-haspopup="true" aria-expanded="false"
+            title="{{#str}}export, local_nexreports{{/str}}"
+            aria-label="{{#str}}export, local_nexreports{{/str}}">
+        <span class="nxr-table-export__dots" aria-hidden="true"></span>
+    </button>
+    <ul class="nxr-table-export__menu" role="menu" hidden>
+        <li role="none">
+            <a role="menuitem" data-export-format="csv" href="{{exporturl}}">{{#str}}exportcsv, local_nexreports{{/str}}</a>
+        </li>
+        <li role="none">
+            <a role="menuitem" data-export-format="excel" href="{{exporturl}}">{{#str}}exportexcel, local_nexreports{{/str}}</a>
+        </li>
+        <li role="none">
+            <a role="menuitem" data-export-format="pdf" href="{{exporturl}}">{{#str}}exportpdf, local_nexreports{{/str}}</a>
+        </li>
+    </ul>
+</div>

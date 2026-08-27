@@ -1,0 +1,154 @@
+/* Paper-Generation style question text for qbank_leetcodeimport */
+
+.qbank-lc-paper {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color: #1f2937;
+    line-height: 1.55;
+    max-width: 920px;
+}
+
+.qbank-lc-paper .qbank-lc-title {
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin: 0 0 0.6rem;
+}
+
+.qbank-lc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem 0.65rem;
+    margin: 0 0 1.25rem;
+}
+
+.qbank-lc-diff {
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+.qbank-lc-diff-easy {
+    color: #059669;
+}
+
+.qbank-lc-diff-medium {
+    color: #d97706;
+}
+
+.qbank-lc-diff-hard,
+.qbank-lc-diff-veryhard {
+    color: #7c3aed;
+}
+
+.qbank-lc-likes,
+.qbank-lc-rate {
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.qbank-lc-tag {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.qbank-lc-paper h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 1.25rem 0 0.5rem;
+}
+
+.qbank-lc-paper ul {
+    margin: 0.35rem 0 0.75rem 1.2rem;
+    padding: 0;
+}
+
+.qbank-lc-paper li {
+    margin: 0.25rem 0;
+}
+
+/* Paper I/O sample boxes — use <pre>, never <code> */
+.qbank-lc-io {
+    background: #f3f4f6 !important;
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    overflow: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.92rem;
+    white-space: pre-wrap;
+    margin: 0.35rem 0 0.9rem;
+    border: 0;
+}
+
+/* Live AJAX import runner */
+.qbank-lc-runner {
+    max-width: 960px;
+    margin: 0.5rem 0 2rem;
+}
+
+.qbank-lc-bartrack {
+    height: 16px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0.75rem 0 0.35rem;
+}
+
+.qbank-lc-barfill {
+    height: 100%;
+    background: linear-gradient(90deg, #0ea5e9, #14b8a6);
+    border-radius: 999px;
+    transition: width 0.25s ease;
+    width: 0;
+}
+
+.qbank-lc-barlabel {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.qbank-lc-log {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    max-height: 280px;
+    overflow: auto;
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px 0;
+}
+
+.qbank-lc-logline {
+    margin: 0.2rem 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.qbank-lc-logline.is-ok {
+    color: #6ee7b7;
+}
+
+.qbank-lc-logline.is-skip {
+    color: #fcd34d;
+}
+
+img.qbank-lc-figure {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.5rem 0 1rem;
+    border-radius: 8px;
+}
+
+.qbank-lc-summary {
+    margin-top: 0.75rem;
+}
+
+.qbank-lc-done {
+    margin-top: 1rem;
+}
+

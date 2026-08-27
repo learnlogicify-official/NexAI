@@ -1,0 +1,174 @@
+{{!
+    @template local_nexcodelab/problem
+
+    NexCodeLab-style full-screen IDE: problem list | description | NexEditor.
+}}
+<div class="ncl-np" data-region="ncl-ide" data-problemid="{{problemid}}">
+    <div class="ncl-np__toasts" data-region="toasts" aria-live="polite" aria-atomic="true"></div>
+
+    <header class="ncl-np__topbar">
+        <div class="ncl-np__topbar-left">
+            <button type="button" class="ncl-np__iconbtn" data-action="toggle-sidebar" title="Problems" aria-label="Problems">☰</button>
+            <a class="ncl-np__brand" href="{{{listurl}}}" data-action="go-list">{{#str}}pluginname, local_nexcodelab{{/str}}</a>
+        </div>
+        <div class="ncl-np__topbar-center">
+            <button type="button" class="ncl-np__btn ncl-np__btn--run" data-action="run">
+                <span class="ncl-np__btn-ico" aria-hidden="true">▶</span>
+                {{#str}}runcode, local_nexcodelab{{/str}}
+            </button>
+            <button type="button" class="ncl-np__btn ncl-np__btn--submit" data-action="submit">
+                <span class="ncl-np__btn-ico" aria-hidden="true">✓</span>
+                {{#str}}submit, local_nexcodelab{{/str}}
+            </button>
+        </div>
+        <div class="ncl-np__topbar-right">
+            <button type="button" class="ncl-np__themebtn" data-action="toggle-theme" title="Toggle theme" aria-pressed="false">
+                <span class="ncl-np__theme-ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><path fill="currentColor" d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M12.8 3.2l-1.1 1.1M4.3 11.7l-1.1 1.1"/></svg>
+                </span>
+                <span data-region="theme-label">{{#str}}editorlight, local_nexcodelab{{/str}}</span>
+            </button>
+            <button type="button" class="ncl-np__iconbtn" data-action="focus-page" title="{{#str}}fs_page, local_nexcodelab{{/str}}" aria-label="{{#str}}fs_page, local_nexcodelab{{/str}}" aria-pressed="false">⛶</button>
+            <a class="ncl-np__iconbtn ncl-np__back" href="{{{listurl}}}" data-action="go-list" title="{{#str}}backtolist, local_nexcodelab{{/str}}">←</a>
+        </div>
+    </header>
+
+    <div class="ncl-np__body">
+        {{! —— Problem list sidebar —— }}
+        <aside class="ncl-np__sidebar" data-region="sidebar">
+            <div class="ncl-np__sidebar-head">
+                <div>
+                    <div class="ncl-np__sidebar-title">{{#str}}codingproblems, local_nexcodelab{{/str}}</div>
+                    <div class="ncl-np__sidebar-sub" data-region="sidebar-count">—</div>
+                </div>
+                <button type="button" class="ncl-np__iconbtn ncl-np__iconbtn--sm" data-action="toggle-sidebar" title="Close">×</button>
+            </div>
+            <div class="ncl-np__sidebar-filters">
+                <input type="search" class="ncl-np__search" data-region="sidebar-search"
+                       placeholder="{{#str}}searchproblems, local_nexcodelab{{/str}}" />
+                <div class="ncl-np__diff-filters" data-region="sidebar-diffs">
+                    <button type="button" class="ncl-np__diffchip is-active" data-diff="">{{#str}}all, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-np__diffchip" data-diff="easy">{{#str}}easy, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-np__diffchip" data-diff="medium">{{#str}}medium, local_nexcodelab{{/str}}</button>
+                    <button type="button" class="ncl-np__diffchip" data-diff="hard">{{#str}}hard, local_nexcodelab{{/str}}</button>
+                </div>
+            </div>
+            <div class="ncl-np__sidebar-list" data-region="sidebar-list"></div>
+        </aside>
+
+        <div class="ncl-np__workspace" data-region="split">
+            {{! —— Description pane —— }}
+            <section class="ncl-np__pane ncl-np__pane--desc" data-region="left-pane">
+                <div class="ncl-np__pane-bar">
+                    <nav class="ncl-np__tabs" data-region="left-tabs">
+                        <button type="button" class="ncl-np__tab is-active" data-left="desc">{{#str}}description, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-np__tab" data-left="solution">{{#str}}solution, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-np__tab" data-left="subs">{{#str}}submissions, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-np__tab" data-left="discussion">{{#str}}discussion, local_nexcodelab{{/str}}</button>
+                    </nav>
+                    <button type="button" class="ncl-np__iconbtn ncl-np__iconbtn--sm" data-action="focus-desc" title="{{#str}}fs_desc, local_nexcodelab{{/str}}">⤢</button>
+                </div>
+
+                <div class="ncl-np__scroll" data-region="desc">
+                    <header class="ncl-np__meta">
+                        <h1 class="ncl-np__title" data-region="title">…</h1>
+                        <div class="ncl-np__meta-row" data-region="meta"></div>
+                    </header>
+                    <div class="ncl-np__statement" data-region="statement"></div>
+                    <div class="ncl-np__examples" data-region="examples"></div>
+                </div>
+
+                <div class="ncl-np__scroll" data-region="solution" hidden>
+                    <p class="ncl-np__empty">{{#str}}solutionsoon, local_nexcodelab{{/str}}</p>
+                </div>
+                <div class="ncl-np__scroll" data-region="subs" hidden></div>
+                <div class="ncl-np__scroll" data-region="discussion" hidden>
+                    <p class="ncl-np__empty">{{#str}}discussionsoon, local_nexcodelab{{/str}}</p>
+                </div>
+            </section>
+
+            <div class="ncl-np__vresizer" data-action="resize-col" role="separator" aria-orientation="vertical" tabindex="0"></div>
+
+            {{! —— NexEditor + tests —— }}
+            <section class="ncl-np__pane ncl-np__pane--editor" data-region="right-pane">
+                <div class="ncl-np__editor-stack" data-region="editor-stack">
+                    <div class="ncl-np__nex-head">
+                        <div class="ncl-np__nex-brand">
+                            <span class="ncl-np__nex-mark" aria-hidden="true"></span>
+                            {{#str}}nexeditor, local_nexcodelab{{/str}}
+                        </div>
+                        <div class="ncl-np__nex-actions">
+                            <label class="ncl-np__langwrap ncl-np__langwrap--editor">
+                                <span class="sr-only">{{#str}}language, local_nexcodelab{{/str}}</span>
+                                <select class="ncl-np__lang" data-region="language"></select>
+                            </label>
+                            <button type="button" class="ncl-np__iconbtn ncl-np__iconbtn--sm" data-action="focus-right" title="{{#str}}fs_right, local_nexcodelab{{/str}}">⧉</button>
+                            <button type="button" class="ncl-np__iconbtn ncl-np__iconbtn--sm" data-action="focus-editor" title="{{#str}}fs_editor, local_nexcodelab{{/str}}">⛶</button>
+                        </div>
+                    </div>
+
+                    <div class="ncl-np__ace-stage" data-region="editor-stage">
+                        <textarea id="ncl-ide-editor" class="ncl-np__textarea" data-region="editor" spellcheck="false"></textarea>
+                        <div class="ncl-np__ace" data-region="ace" hidden></div>
+                    </div>
+
+                    <div class="ncl-np__statusbar">
+                        <span data-region="cursor">Ln 1, Col 1</span>
+                        <span data-region="status-lang">—</span>
+                        <span>Spaces: 4</span>
+                        <button type="button" class="ncl-np__status-theme" data-action="toggle-theme" title="Toggle theme" aria-pressed="false">
+                            <span class="ncl-np__theme-ico" aria-hidden="true">☀</span>
+                            <span data-region="theme-label">{{#str}}editorlight, local_nexcodelab{{/str}}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ncl-np__hresizer" data-action="resize-row" role="separator" aria-orientation="horizontal" tabindex="0"></div>
+
+                <div class="ncl-np__tests" data-region="bottom">
+                    <nav class="ncl-np__tabs ncl-np__tabs--tests" data-region="right-tabs">
+                        <button type="button" class="ncl-np__tab is-active" data-right="samples">{{#str}}sampletests, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-np__tab" data-right="hidden">{{#str}}hiddentests, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-np__tab" data-right="custom">{{#str}}customtest, local_nexcodelab{{/str}}</button>
+                        <button type="button" class="ncl-np__tab" data-right="results">{{#str}}results, local_nexcodelab{{/str}}</button>
+                    </nav>
+
+                    <div class="ncl-np__tests-body" data-region="samples">
+                        <div class="ncl-np__loader" data-region="samples-loader" hidden>
+                            <div class="ncl-np__spinner" aria-hidden="true"></div>
+                            <div class="ncl-np__loader-text">{{#str}}running, local_nexcodelab{{/str}}</div>
+                        </div>
+                        <div class="ncl-np__casechips" data-region="sample-chips"></div>
+                        <div class="ncl-np__caseview" data-region="sample-view"></div>
+                    </div>
+
+                    <div class="ncl-np__tests-body" data-region="hidden" hidden>
+                        <div class="ncl-np__loader" data-region="hidden-loader" hidden>
+                            <div class="ncl-np__spinner" aria-hidden="true"></div>
+                            <div class="ncl-np__loader-text">{{#str}}submitting, local_nexcodelab{{/str}}</div>
+                        </div>
+                        <p class="ncl-np__empty" data-region="hidden-msg">—</p>
+                    </div>
+
+                    <div class="ncl-np__tests-body" data-region="custom" hidden>
+                        <div class="ncl-np__custom">
+                            <div class="ncl-np__iocards">
+                                <label class="ncl-np__iocard">
+                                    <div class="ncl-np__iocard-head">{{#str}}stdin, local_nexcodelab{{/str}}</div>
+                                    <textarea class="ncl-np__iocard-input" data-region="custom-stdin" rows="5"></textarea>
+                                </label>
+                                <label class="ncl-np__iocard">
+                                    <div class="ncl-np__iocard-head">{{#str}}expected, local_nexcodelab{{/str}}</div>
+                                    <textarea class="ncl-np__iocard-input" data-region="custom-expected" rows="5"></textarea>
+                                </label>
+                            </div>
+                            <button type="button" class="ncl-np__btn ncl-np__btn--run" data-action="run-custom">{{#str}}run, local_nexcodelab{{/str}}</button>
+                        </div>
+                    </div>
+
+                    <div class="ncl-np__tests-body" data-region="results" hidden></div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

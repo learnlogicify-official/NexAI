@@ -1,0 +1,46 @@
+{{!
+    @template format_nexcourse/local/content
+    NexCourse shell — header, module cards / section tabs, core editor when editing.
+}}
+<div class="nexcourse" data-region="nexcourse">
+    {{#nexcourse}}
+        {{#hascourseheader}}
+            {{#courseheader}}
+                {{> format_nexcourse/local/course_header }}
+            {{/courseheader}}
+        {{/hascourseheader}}
+
+        {{#showhome}}
+            {{#home}}
+                {{> format_nexcourse/local/home }}
+            {{/home}}
+        {{/showhome}}
+
+        {{#showsectionpanel}}
+            <div class="nexcourse-sectionview">
+                {{#sectionpanel}}
+                    {{> format_nexcourse/local/section_panel }}
+                {{/sectionpanel}}
+            </div>
+        {{/showsectionpanel}}
+
+        {{#showsection}}
+            <div class="nexcourse-sectionview">
+                {{#singlesection}}
+                    {{^showsectionpanel}}
+                        <div class="nexcourse-sectionview__bar">
+                            <a class="nexcourse-back" href="{{{backurl}}}">← {{backlabel}}</a>
+                        </div>
+                    {{/showsectionpanel}}
+                {{/singlesection}}
+                {{#editing}}
+                    <div class="nexcourse-editing-note alert alert-info">{{#str}}editingon, format_nexcourse{{/str}}</div>
+                {{/editing}}
+            </div>
+        {{/showsection}}
+    {{/nexcourse}}
+
+    <div class="nexcourse-core{{#nexcourse}}{{#hidecore}} nexcourse-core--hidden{{/hidecore}}{{/nexcourse}}">
+        {{> core_courseformat/local/content }}
+    </div>
+</div>

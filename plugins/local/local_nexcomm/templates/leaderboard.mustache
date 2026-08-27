@@ -1,0 +1,33 @@
+{{!
+    @template local_nexcomm/leaderboard
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-leaderboard"
+     data-label-rank="{{#str}}rank, local_nexcomm{{/str}}"
+     data-label-user="{{#str}}leaderboarduser, local_nexcomm{{/str}}"
+     data-label-institution="{{#str}}institution, local_nexcomm{{/str}}"
+     data-label-xp="{{#str}}xp, local_nexcomm{{/str}}"
+     data-label-reading="{{#str}}reading, local_nexcomm{{/str}}"
+     data-label-listening="{{#str}}listening, local_nexcomm{{/str}}"
+     data-label-speaking="{{#str}}speaking, local_nexcomm{{/str}}"
+     data-label-writing="{{#str}}writing, local_nexcomm{{/str}}"
+     data-label-you="{{#str}}you, local_nexcomm{{/str}}"
+     data-label-your-rank="{{#str}}yourrank, local_nexcomm{{/str}}"
+     data-label-not-ranked-global="{{#str}}notranked, local_nexcomm{{/str}}"
+     data-label-not-ranked="{{#str}}notrankedincollege, local_nexcomm{{/str}}"
+     data-label-empty="{{#str}}noleaderboard, local_nexcomm{{/str}}">
+    {{> local_nexcomm/header }}
+    {{> local_nexcomm/topnav }}
+    <section class="nc-panel">
+        <h2 class="nc-panel__title">{{#str}}leaderboard, local_nexcomm{{/str}}</h2>
+        <div class="nc-leaderboard-toolbar">
+            <label class="nc-leaderboard-filter">
+                <span>{{#str}}collegefilter, local_nexcomm{{/str}}</span>
+                <select data-filter="institution">
+                    <option value="">{{#str}}allcolleges, local_nexcomm{{/str}}</option>
+                </select>
+            </label>
+            <div class="nc-my-rank" data-region="my-rank"></div>
+        </div>
+        <div data-region="board"></div>
+    </section>
+</div>

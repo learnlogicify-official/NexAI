@@ -1,0 +1,72 @@
+{{!
+    @template local_nexstack/catalog
+    Mission catalog using NexCodeLab list chrome.
+}}
+<link rel="stylesheet" type="text/css" href="{{{catalogcssurl}}}" />
+<script type="application/json" id="nxs-catalog-data">{{{missionsjson}}}</script>
+<div class="nxs-app nxs-list-page nxs-app--bleed" data-region="nxs-catalog">
+    {{> local_nexstack/header }}
+
+    <nav class="nxs-topnav" aria-label="NexStack">
+        <a class="nxs-topnav__item is-active" href="{{{listurl}}}">
+            <span class="nxs-ico nxs-ico--book" aria-hidden="true"></span>
+            {{#str}}catalog, local_nexstack{{/str}}
+        </a>
+    </nav>
+
+    <div class="nxs-layout nxs-layout--full">
+        <div class="nxs-layout__main">
+            <section class="nxs-panel">
+                <header class="nxs-panel__head">
+                    <h2 class="nxs-panel__title">
+                        <span class="nxs-ico nxs-ico--book nxs-ico--lg" aria-hidden="true"></span>
+                        {{#str}}missions, local_nexstack{{/str}}
+                    </h2>
+                </header>
+
+                <div class="nxs-searchrow">
+                    <label class="nxs-search">
+                        <span class="nxs-ico nxs-ico--search" aria-hidden="true"></span>
+                        <input type="search" class="nxs-search__input" data-filter="search"
+                               placeholder="{{#str}}searchmissions, local_nexstack{{/str}}"
+                               autocomplete="off">
+                        <kbd class="nxs-search__kbd">⌘K</kbd>
+                    </label>
+                    <div class="nxs-diffpills" data-region="track-pills" role="group" aria-label="{{#str}}track, local_nexstack{{/str}}">
+                        <button type="button" class="nxs-diffpill is-active" data-track="">{{#str}}all, local_nexstack{{/str}}</button>
+                        <button type="button" class="nxs-diffpill" data-track="web">Web</button>
+                        <button type="button" class="nxs-diffpill" data-track="frontend">Frontend</button>
+                    </div>
+                    <input type="hidden" data-filter="track" value="">
+                </div>
+
+                <div class="nxs-statustabs" data-region="status-tabs" role="tablist">
+                    <button type="button" class="nxs-statustab is-active" data-status="all" role="tab">
+                        {{#str}}allmissions, local_nexstack{{/str}} <span data-count="all">0</span>
+                    </button>
+                    <button type="button" class="nxs-statustab nxs-statustab--done" data-status="completed" role="tab">
+                        <span class="nxs-ico nxs-ico--check" aria-hidden="true"></span>
+                        {{#str}}completed, local_nexstack{{/str}} <span data-count="completed">0</span>
+                    </button>
+                    <button type="button" class="nxs-statustab nxs-statustab--progress" data-status="inprogress" role="tab">
+                        <span class="nxs-ico nxs-ico--clock" aria-hidden="true"></span>
+                        {{#str}}inprogress, local_nexstack{{/str}} <span data-count="inprogress">0</span>
+                    </button>
+                    <button type="button" class="nxs-statustab nxs-statustab--todo" data-status="notstarted" role="tab">
+                        <span class="nxs-ico nxs-ico--circle" aria-hidden="true"></span>
+                        {{#str}}notstarted, local_nexstack{{/str}} <span data-count="notstarted">0</span>
+                    </button>
+                </div>
+                <input type="hidden" data-filter="userstatus" value="all">
+            </section>
+
+            <section class="nxs-results">
+                <div class="nxs-results__bar">
+                    <h2 class="nxs-results__title" data-region="found-count">0 {{#str}}missionsfound, local_nexstack{{/str}}</h2>
+                </div>
+                <div class="nxs-grid" data-region="grid"></div>
+                <nav class="nxs-pager" data-region="pager" aria-label="{{#str}}pagination, local_nexstack{{/str}}" hidden></nav>
+            </section>
+        </div>
+    </div>
+</div>

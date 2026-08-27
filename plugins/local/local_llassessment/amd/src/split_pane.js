@@ -1,0 +1,645 @@
+/**
+ * Split each quiz question into problem | response panes.
+ * CodeRunner has no .qtext — statement + editor live in one flat .formulation.
+ *
+ * @module     local_llassessment/split_pane
+ * @copyright  2026 Nex Academy
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+define([], function() {
+
+    const SPLIT_KEY = 'll_arena_split_left';
+    const DEFAULT_SPLIT = 42;
+
+    /**
+     * @return {number}
+     */
+    const readSplitPct = function() {
+        try {
+            const v = parseFloat(window.localStorage.getItem(SPLIT_KEY));
+            if (!isNaN(v) && v >= 28 && v <= 65) {
+                return v;
+            }
+        } catch (e) {
+            // Ignore.
+        }
+        return DEFAULT_SPLIT;
+    };
+
+    /**
+     * @param {number} pct
+     */
+    const writeSplitPct = function(pct) {
+        const n = Math.min(65, Math.max(28, pct));
+        try {
+            window.localStorage.setItem(SPLIT_KEY, String(Math.round(n * 10) / 10));
+        } catch (e) {
+            // Ignore.
+        }
+        try {
+            document.documentElement.style.setProperty('--ll-split-left', n + '%');
+            document.body.style.setProperty('--ll-split-left', n + '%');
+            const arena = document.getElementById('ll-arena');
+            if (arena) {
+                arena.style.setProperty('--ll-split-left', n + '%');
+            }
+        } catch (e2) {
+            // Ignore.
+        }
+        return n;
+    };
+
+    /**
+     * @param {Element} split
+     * @param {number} [pct]
+     */
+    const applySplitPct = function(split, pct) {
+        // Review stacked coding layout must stay full-width — never apply attempt split %.
+        if (split && (split.classList.contains('ll-review-cr-split--stacked')
+            || (document.body.classList.contains('ll-arena-review')
+                && split.classList.contains('ll-review-cr-split')))) {
+            const leftPane = split.querySelector('.ll-arena-split__left');
+            if (leftPane) {
+                leftPane.style.setProperty('width', '100%', 'important');
+                leftPane.style.setProperty('max-width', '100%', 'important');
+                leftPane.style.setProperty('flex', '0 0 auto', 'important');
+                leftPane.style.setProperty('flex-basis', 'auto', 'important');
+            }
+            return 100;
+        }
+        const n = typeof pct === 'number' ? pct : readSplitPct();
+        writeSplitPct(n);
+        if (!split) {
+            return n;
+        }
+        const leftPane = split.querySelector('.ll-arena-split__left');
+        if (leftPane) {
+            leftPane.style.flexBasis = n + '%';
+            leftPane.style.width = n + '%';
+            leftPane.style.flexGrow = '0';
+            leftPane.style.flexShrink = '0';
+        }
+        return n;
+    };
+
+    /**
+     * @param {Element} el
+     * @return {boolean}
+     */
+    const isAnswerRelated = function(el) {
+        if (!el || el.nodeType !== 1) {
+            return false;
+        }
+        if (el.matches && el.matches(
+            'textarea, .prompt, .answerprompt, .penaltyregime, .ace_editor, .ace_text-input, ' +
+            '.coderunner-answer, .ablock, .im-controls, .outcome, .validationerror, ' +
+            '.form-filemanager, .ll-cr-ide, button.reset, input.reset'
+        )) {
+            return true;
+        }
+        if (el.querySelector && el.querySelector(
+            'textarea[name*="answer"], .ace_editor, .prompt, .im-controls, select[name*="language"]'
+        )) {
+            // Container that holds the answer UI (but allow pure example tables).
+            if (el.matches('.coderunner-examples, .for-example-para, .qtext, .problemtext')) {
+                return false;
+            }
+            // If it mainly contains answer widgets, treat as answer-related.
+            if (el.querySelector('textarea[name*="answer"], .ace_editor, .prompt')) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    /**
+     * Split CodeRunner formulation: prose/examples → left; prompt/editor/controls → right.
+     *
+     * @param {Element} formulation
+     * @param {Element} stemHost
+     * @param {Element} responseHost
+     */
+    const splitCodeRunner = function(formulation, stemHost, responseHost) {
+        const nodes = Array.prototype.slice.call(formulation.childNodes);
+        let hitAnswer = false;
+        nodes.forEach(function(node) {
+            if (node.nodeType === 3) {
+                // Text nodes: keep with current side.
+                const text = node.textContent.trim();
+                if (!text) {
+                    return;
+                }
+                (hitAnswer ? responseHost : stemHost).appendChild(node);
+                return;
+            }
+            if (node.nodeType !== 1) {
+                return;
+            }
+            if (!hitAnswer && isAnswerRelated(node)) {
+                hitAnswer = true;
+            }
+            // Examples always stay with the problem statement.
+            if (node.matches && node.matches('.coderunner-examples, .for-example-para')) {
+                stemHost.appendChild(node);
+                return;
+            }
+            (hitAnswer ? responseHost : stemHost).appendChild(node);
+        });
+
+        // Safety: if stem empty, pull any non-answer blocks back from response.
+        if (!stemHost.childNodes.length) {
+            Array.prototype.slice.call(responseHost.children).forEach(function(child) {
+                if (!isAnswerRelated(child) && !(child.querySelector && child.querySelector('textarea, .ace_editor'))) {
+                    stemHost.appendChild(child);
+                }
+            });
+        }
+    };
+
+    /**
+     * Remove / park Moodle "Flag question" UI that soft-nav or qengine injects into the stem.
+     *
+     * @param {Element} stemHost
+     * @param {Element} [wrap]
+     */
+    const scrubFlagsFromStem = function(stemHost, wrap) {
+        const root = stemHost || (wrap && wrap.querySelector('.ll-arena-split__stem'));
+        if (!root) {
+            return;
+        }
+        const park = (wrap && wrap.querySelector('.ll-arena-qinfo--sr, .info')) || null;
+        root.querySelectorAll(
+            '.questionflag, .qn_flag, .editing_flag,' +
+            'input[name*="flagged"], input[id*="flagged"],' +
+            'label[for*="flagged"], [data-region="flag"]'
+        ).forEach(function(el) {
+            if (park) {
+                park.appendChild(el);
+            } else {
+                el.classList.add('ll-cr-hidden');
+                el.setAttribute('hidden', 'hidden');
+                el.style.display = 'none';
+            }
+        });
+    };
+
+    /**
+     * @param {Element} wrap
+     */
+    const splitQuestion = function(wrap) {
+        if (wrap.querySelector('.ll-arena-split')) {
+            return;
+        }
+        const que = wrap.querySelector('.que');
+        if (!que) {
+            return;
+        }
+
+        const qtype = (wrap.getAttribute('data-qtype') || '').toLowerCase();
+        const isCode = qtype.indexOf('coderunner') !== -1 || que.classList.contains('coderunner');
+        const slot = wrap.getAttribute('data-slot') || '';
+
+        const split = document.createElement('div');
+        split.className = 'll-arena-split' + (isCode ? ' ll-arena-split--coderunner' : '');
+        split.setAttribute('data-slot', slot);
+        split.setAttribute('data-qtype', qtype || 'unknown');
+
+        const left = document.createElement('section');
+        left.className = 'll-arena-split__left';
+        left.setAttribute('aria-label', 'Problem');
+        const leftLabel = document.createElement('div');
+        leftLabel.className = 'll-arena-split__pane-label';
+        leftLabel.textContent = 'Problem description';
+        const stemHost = document.createElement('div');
+        stemHost.className = 'll-arena-split__stem';
+        stemHost.setAttribute('data-region', 'stem');
+        left.appendChild(leftLabel);
+        left.appendChild(stemHost);
+
+        const resizer = document.createElement('div');
+        resizer.className = 'll-arena-split__resizer';
+        resizer.setAttribute('role', 'separator');
+        resizer.setAttribute('aria-orientation', 'vertical');
+        resizer.setAttribute('tabindex', '0');
+        resizer.setAttribute('aria-label', 'Resize panes');
+
+        const right = document.createElement('section');
+        right.className = 'll-arena-split__right';
+        right.setAttribute('aria-label', isCode ? 'Code Editor' : 'Your answer');
+        const rightLabel = document.createElement('div');
+        rightLabel.className = 'll-arena-split__pane-label';
+        rightLabel.textContent = isCode ? 'Code Editor' : 'Your answer';
+        const responseHost = document.createElement('div');
+        responseHost.className = 'll-arena-split__response';
+        responseHost.setAttribute('data-region', 'response');
+        right.appendChild(rightLabel);
+        right.appendChild(responseHost);
+
+        split.appendChild(left);
+        split.appendChild(resizer);
+        split.appendChild(right);
+        applySplitPct(split);
+
+        const info = que.querySelector(':scope > .info');
+        const content = que.querySelector(':scope > .content');
+
+        const pool = document.createElement('div');
+        if (content) {
+            while (content.firstChild) {
+                pool.appendChild(content.firstChild);
+            }
+        } else {
+            Array.prototype.slice.call(que.children).forEach(function(child) {
+                if (child !== info) {
+                    pool.appendChild(child);
+                }
+            });
+        }
+
+        const formulation = pool.querySelector('.formulation') || pool;
+
+        if (isCode) {
+            splitCodeRunner(formulation, stemHost, responseHost);
+            // Anything left in pool (outside formulation) → response (e.g. outcome).
+            while (pool.firstChild) {
+                const n = pool.firstChild;
+                if (n === formulation || (formulation.contains && formulation.contains(n))) {
+                    // formulation may already be emptied; if still present empty, drop it.
+                    if (n === formulation && !formulation.childNodes.length) {
+                        pool.removeChild(n);
+                        continue;
+                    }
+                }
+                if (n.nodeType === 1 && n.classList && n.classList.contains('formulation') && !n.childNodes.length) {
+                    pool.removeChild(n);
+                    continue;
+                }
+                responseHost.appendChild(n);
+            }
+        } else {
+            const stem = formulation.querySelector(':scope > .qtext')
+                || formulation.querySelector('.qtext')
+                || pool.querySelector('.qtext');
+            if (stem) {
+                stemHost.appendChild(stem);
+            }
+            while (pool.firstChild) {
+                responseHost.appendChild(pool.firstChild);
+            }
+            if (!stemHost.childNodes.length) {
+                const nested = responseHost.querySelector('.qtext');
+                if (nested) {
+                    stemHost.appendChild(nested);
+                }
+            }
+        }
+
+        // Move outcome/feedback that landed in stem back to response.
+        stemHost.querySelectorAll('.im-controls, .outcome, .specificfeedback, textarea[name*="answer"]').forEach(function(bad) {
+            responseHost.appendChild(bad);
+        });
+        // Flag checkbox must never sit in the problem pane (shows up after soft-nav / JS reinits).
+        scrubFlagsFromStem(stemHost, wrap);
+
+        const shell = document.createElement('div');
+        shell.className = que.className;
+        if (que.id) {
+            shell.id = que.id;
+        }
+        if (info) {
+            info.classList.add('ll-arena-qinfo');
+            const header = document.createElement('div');
+            header.className = 'll-arena-qhead';
+
+            const row = document.createElement('div');
+            row.className = 'll-arena-qhead__row';
+
+            const title = document.createElement('h2');
+            title.className = 'll-arena-qhead__title';
+            const noEl = info.querySelector('h3.no, .no, .qno');
+            if (noEl) {
+                title.textContent = noEl.textContent.replace(/\s+/g, ' ').trim();
+            } else {
+                title.textContent = 'Question';
+            }
+            row.appendChild(title);
+
+            // Reference-style "Flag for review" — drives Moodle's real flag control/AJAX.
+            const moodleFlag = info.querySelector('.questionflag')
+                || shell.querySelector('.questionflag')
+                || que.querySelector('.questionflag');
+            const flagBtn = document.createElement('button');
+            flagBtn.type = 'button';
+            flagBtn.className = 'll-arena-flag';
+            flagBtn.innerHTML =
+                '<span class="ll-arena-flag__icon" aria-hidden="true">⚑</span>' +
+                '<span class="ll-arena-flag__text">Flag for review</span>';
+
+            const readFlagged = function() {
+                if (!moodleFlag) {
+                    return false;
+                }
+                const hidden = moodleFlag.querySelector('input.questionflagvalue, input[type="hidden"].questionflagvalue');
+                if (hidden) {
+                    return String(hidden.value) === '1';
+                }
+                const box = moodleFlag.querySelector('input[type="checkbox"]');
+                if (box) {
+                    return !!box.checked;
+                }
+                const pressed = moodleFlag.querySelector('[aria-pressed]');
+                if (pressed) {
+                    return pressed.getAttribute('aria-pressed') === 'true';
+                }
+                return moodleFlag.classList.contains('flagged')
+                    || !!moodleFlag.querySelector('img[src*="flagged"]');
+            };
+
+            const syncFlagUi = function() {
+                const on = readFlagged();
+                flagBtn.classList.toggle('is-flagged', on);
+                flagBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                flagBtn.querySelector('.ll-arena-flag__text').textContent =
+                    on ? 'Flagged for review' : 'Flag for review';
+                // Mirror onto the current navigator button.
+                const navBtn = document.querySelector(
+                    '.ll-nav__btn.is-current, .ll-nav__btn.thispage, .qnbutton.thispage, .qnbutton.is-current'
+                );
+                if (navBtn) {
+                    navBtn.classList.toggle('flagged', on);
+                    navBtn.classList.toggle('is-flagged', on);
+                }
+            };
+
+            if (moodleFlag) {
+                // Keep Moodle markup for AJAX, but visually hide it.
+                moodleFlag.classList.add('ll-cr-hidden', 'll-arena-flag-source');
+                flagBtn.addEventListener('click', function(ev) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+
+                    // 1) Prefer Moodle's official flag processor (AJAX + UI update).
+                    try {
+                        if (window.M && M.core_question_flags && typeof M.core_question_flags.process === 'function'
+                            && window.Y && Y.one) {
+                            M.core_question_flags.process(Y.one(moodleFlag));
+                            window.setTimeout(syncFlagUi, 30);
+                            window.setTimeout(syncFlagUi, 200);
+                            return;
+                        }
+                    } catch (err) {}
+
+                    // 2) Click Moodle's interactive control (image / aria button / label).
+                    const target = moodleFlag.querySelector(
+                        'input.questionflagimage, [aria-pressed], .questionflagimage, label, a'
+                    ) || moodleFlag;
+                    try {
+                        target.click();
+                    } catch (err2) {
+                        // 3) Manual checkbox / hidden value fallback.
+                        const hidden = moodleFlag.querySelector('input.questionflagvalue');
+                        const box = moodleFlag.querySelector('input[type="checkbox"]');
+                        if (hidden) {
+                            hidden.value = String(hidden.value) === '1' ? '0' : '1';
+                            try {
+                                hidden.dispatchEvent(new Event('change', {bubbles: true}));
+                            } catch (e3) {}
+                        } else if (box) {
+                            box.checked = !box.checked;
+                            try {
+                                box.dispatchEvent(new Event('change', {bubbles: true}));
+                                box.click();
+                            } catch (e4) {}
+                        }
+                    }
+                    window.setTimeout(syncFlagUi, 30);
+                    window.setTimeout(syncFlagUi, 200);
+                });
+                syncFlagUi();
+            } else {
+                flagBtn.disabled = true;
+                flagBtn.title = 'Flagging unavailable for this question';
+            }
+            row.appendChild(flagBtn);
+            header.appendChild(row);
+
+            const meta = document.createElement('div');
+            meta.className = 'll-arena-qhead__meta';
+            if (isCode) {
+                const tag = document.createElement('span');
+                tag.className = 'll-arena-tag ll-arena-tag--coding';
+                tag.textContent = 'CODING';
+                meta.appendChild(tag);
+            }
+            // Show total marks allocated to this question (never earned / obtained).
+            const marksLabel = (function() {
+                const formatMarks = function(n) {
+                    const v = parseFloat(n);
+                    if (isNaN(v) || v < 0) {
+                        return '';
+                    }
+                    return (Math.round(v * 100) / 100).toString();
+                };
+
+                // Prefer authoritative slot maxmark from quiz_slots (via PHP config).
+                const slotMarks = (function() {
+                    const arena = document.getElementById('ll-arena');
+                    const raw = arena && arena.getAttribute('data-ll-slot-marks');
+                    if (!raw) {
+                        return null;
+                    }
+                    try {
+                        return JSON.parse(raw);
+                    } catch (e) {
+                        return null;
+                    }
+                })();
+                const resolveSlotNo = function() {
+                    const host = info.closest('.que') || info.parentElement;
+                    if (host) {
+                        const ds = host.getAttribute('data-slot');
+                        if (ds && /^\d+$/.test(ds)) {
+                            return parseInt(ds, 10) || 0;
+                        }
+                        // Moodle field names: q{usage}:{slot}_answer
+                        const named = host.querySelector(
+                            'input[name*=":"], textarea[name*=":"], select[name*=":"]'
+                        );
+                        if (named && named.name) {
+                            const sm = named.name.match(/:(\d+)(?:_|$)/);
+                            if (sm) {
+                                return parseInt(sm[1], 10) || 0;
+                            }
+                        }
+                    }
+                    const qnoEl = info.querySelector('h3.no .qno, .no .qno, .qno')
+                        || info.querySelector('h3.no, .no');
+                    if (qnoEl) {
+                        const nm = (qnoEl.textContent || '').match(/(\d+)/);
+                        if (nm) {
+                            return parseInt(nm[1], 10) || 0;
+                        }
+                    }
+                    return 0;
+                };
+                const slotNo = resolveSlotNo();
+                if (slotMarks && slotNo > 0) {
+                    const allocated = slotMarks[String(slotNo)] != null
+                        ? slotMarks[String(slotNo)]
+                        : slotMarks[slotNo];
+                    const formatted = formatMarks(allocated);
+                    if (formatted !== '') {
+                        return formatted + ' marks';
+                    }
+                }
+
+                /**
+                 * Fallback: parse max/allocated from Moodle grade text only.
+                 *
+                 * @param {string} text
+                 * @return {string}
+                 */
+                const maxFromText = function(text) {
+                    const t = String(text || '').replace(/\s+/g, ' ').trim();
+                    if (!t) {
+                        return '';
+                    }
+                    // "Marked out of 2.00" / "Mark 1.00 out of 2.00"
+                    let m = t.match(/out\s+of\s+([\d.]+)/i);
+                    if (m) {
+                        return formatMarks(m[1]);
+                    }
+                    // "1.00 / 2.00" → take denominator (total)
+                    m = t.match(/[\d.]+\s*\/\s*([\d.]+)/);
+                    if (m) {
+                        return formatMarks(m[1]);
+                    }
+                    return '';
+                };
+
+                const grade = info.querySelector('.grade');
+                if (grade) {
+                    const fromGrade = maxFromText(grade.textContent);
+                    if (fromGrade) {
+                        return fromGrade + ' marks';
+                    }
+                }
+                const fromInfo = maxFromText(info.textContent || '');
+                if (fromInfo) {
+                    return fromInfo + ' marks';
+                }
+                return '';
+            })();
+            if (marksLabel) {
+                const tag = document.createElement('span');
+                tag.className = 'll-arena-tag ll-arena-tag--marks';
+                tag.textContent = marksLabel;
+                meta.appendChild(tag);
+            }
+            header.appendChild(meta);
+
+            // Keep original info hidden but in DOM for Moodle JS.
+            info.classList.add('ll-arena-qinfo--sr');
+            // Header lives in the LEFT panel only (saves vertical space above the editor).
+            left.insertBefore(header, stemHost);
+            shell.appendChild(info);
+        }
+        shell.appendChild(split);
+        que.replaceWith(shell);
+
+        enableResizer(split, resizer);
+        window.setTimeout(function() {
+            try {
+                window.dispatchEvent(new Event('resize'));
+            } catch (e) {
+                // Ignore.
+            }
+        }, 50);
+    };
+
+    /**
+     * @param {Element} split
+     * @param {Element} resizer
+     */
+    const enableResizer = function(split, resizer) {
+        let dragging = false;
+        let lastPct = readSplitPct();
+
+        const onMove = function(ev) {
+            if (!dragging) {
+                return;
+            }
+            const rect = split.getBoundingClientRect();
+            if (!rect.width) {
+                return;
+            }
+            const x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
+            lastPct = Math.min(65, Math.max(28, (x / rect.width) * 100));
+            applySplitPct(split, lastPct);
+        };
+        const stop = function() {
+            if (!dragging) {
+                return;
+            }
+            dragging = false;
+            resizer.classList.remove('is-dragging');
+            document.body.classList.remove('ll-arena-resizing');
+            document.removeEventListener('mousemove', onMove);
+            document.removeEventListener('mouseup', stop);
+            document.removeEventListener('touchmove', onMove);
+            document.removeEventListener('touchend', stop);
+            writeSplitPct(lastPct);
+            try {
+                window.dispatchEvent(new Event('resize'));
+            } catch (e) {
+                // Ignore.
+            }
+        };
+        const start = function(ev) {
+            dragging = true;
+            resizer.classList.add('is-dragging');
+            document.body.classList.add('ll-arena-resizing');
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', stop);
+            document.addEventListener('touchmove', onMove, {passive: true});
+            document.addEventListener('touchend', stop);
+            ev.preventDefault();
+        };
+        resizer.addEventListener('mousedown', start);
+        resizer.addEventListener('touchstart', start, {passive: false});
+
+        // Keyboard nudge for accessibility.
+        resizer.addEventListener('keydown', function(ev) {
+            let delta = 0;
+            if (ev.key === 'ArrowLeft') {
+                delta = -2;
+            } else if (ev.key === 'ArrowRight') {
+                delta = 2;
+            }
+            if (!delta) {
+                return;
+            }
+            ev.preventDefault();
+            lastPct = applySplitPct(split, readSplitPct() + delta);
+        });
+    };
+
+    const init = function() {
+        applySplitPct(null);
+        document.querySelectorAll('.ll-arena-question-wrap').forEach(splitQuestion);
+        document.querySelectorAll('.ll-arena-split').forEach(function(split) {
+            applySplitPct(split);
+        });
+        document.querySelectorAll('.ll-arena-split__stem').forEach(function(stem) {
+            scrubFlagsFromStem(stem, stem.closest('.ll-arena-question-wrap'));
+        });
+    };
+
+    return {
+        init: init,
+        splitQuestion: splitQuestion,
+        scrubFlagsFromStem: scrubFlagsFromStem,
+        applySplitPct: applySplitPct,
+        readSplitPct: readSplitPct
+    };
+});

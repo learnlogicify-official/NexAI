@@ -1,0 +1,37 @@
+{{!
+    @template local_nexcomm/catalog
+}}
+<div class="nc nc-app nc-app--bleed" data-region="nc-catalog"
+     data-label-empty="{{#str}}noactivities, local_nexcomm{{/str}}"
+     data-label-start="{{#str}}start, local_nexcomm{{/str}}"
+     data-label-continue="{{#str}}continue, local_nexcomm{{/str}}"
+     data-label-retry="{{#str}}retry, local_nexcomm{{/str}}"
+     data-label-completed="{{#str}}completed, local_nexcomm{{/str}}">
+    {{> local_nexcomm/header }}
+    {{> local_nexcomm/topnav }}
+    <section class="nc-panel">
+        <header class="nc-panel__head">
+            <h2 class="nc-panel__title">{{#str}}catalog, local_nexcomm{{/str}}</h2>
+        </header>
+        <div class="nc-filters">
+            <div class="nc-skillpills" data-region="skill-pills" role="group">
+                <button type="button" class="nc-pill is-active" data-skill="">{{#str}}allskills, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-pill" data-skill="reading">{{#str}}reading, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-pill" data-skill="listening">{{#str}}listening, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-pill" data-skill="speaking">{{#str}}speaking, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-pill" data-skill="writing">{{#str}}writing, local_nexcomm{{/str}}</button>
+            </div>
+            <div class="nc-diffpills" data-region="diff-pills" role="group">
+                <button type="button" class="nc-diffpill is-active" data-diff="">{{#str}}all, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-diffpill nc-diffpill--easy" data-diff="easy">{{#str}}easy, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-diffpill nc-diffpill--medium" data-diff="medium">{{#str}}medium, local_nexcomm{{/str}}</button>
+                <button type="button" class="nc-diffpill nc-diffpill--hard" data-diff="hard">{{#str}}hard, local_nexcomm{{/str}}</button>
+            </div>
+            <input type="search" class="nc-search" data-filter="search" placeholder="{{#str}}searchplaceholder, local_nexcomm{{/str}}" autocomplete="off"/>
+            <input type="hidden" data-filter="skill" value="{{skill}}"/>
+            <input type="hidden" data-filter="difficulty" value=""/>
+        </div>
+        <div class="nc-grid" data-region="grid"></div>
+        <p class="nc-empty" data-region="empty" hidden>{{#str}}noactivities, local_nexcomm{{/str}}</p>
+    </section>
+</div>

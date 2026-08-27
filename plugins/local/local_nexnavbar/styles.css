@@ -1,0 +1,463 @@
+/* NexNavbar — collapsible left sidebar (RemUI top bar replacement). */
+
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+:root {
+  --nxn-font: 'Hind Siliguri', 'Segoe UI', system-ui, sans-serif;
+  --nxn-accent: #2563eb;
+  --nxn-accent-soft: #eff6ff;
+  --nxn-text: #0f172a;
+  --nxn-muted: #64748b;
+  --nxn-border: #e2e8f0;
+  --nxn-bg: #ffffff;
+  --nxn-width: 268px;
+  --nxn-width-collapsed: 84px;
+  --nxn-gap: 24px; /* left:12px sidebar + 12px breathing room */
+  --nxn-offset: calc(var(--nxn-width) + var(--nxn-gap));
+  --nxn-radius: 22px;
+  --nxn-shadow: 0 12px 40px rgba(15, 23, 42, 0.1);
+}
+
+body.nxn-sidebar-enabled.nxn-ready {
+  --nxn-offset: calc(var(--nxn-width) + var(--nxn-gap));
+}
+
+body.nxn-sidebar-enabled.nxn-ready.nxn-collapsed {
+  --nxn-offset: calc(var(--nxn-width-collapsed) + var(--nxn-gap));
+}
+
+/* —— Hide RemUI / Boost top navbar once sidebar is ready —— */
+body.nxn-sidebar-enabled.nxn-ready .edw-header,
+body.nxn-sidebar-enabled.nxn-ready .edw-header-bar,
+body.nxn-sidebar-enabled.nxn-ready header.navbar.fixed-top,
+body.nxn-sidebar-enabled.nxn-ready nav.navbar.fixed-top.moodle-has-zindex,
+body.nxn-sidebar-enabled.nxn-ready #page-wrapper > nav.navbar.fixed-top {
+  display: none !important;
+}
+
+/* RemUI often pads the page for the fixed header — reclaim that space. */
+body.nxn-sidebar-enabled.nxn-ready #page,
+body.nxn-sidebar-enabled.nxn-ready #page-wrapper,
+body.nxn-sidebar-enabled.nxn-ready .main-inner,
+body.nxn-sidebar-enabled.nxn-ready #region-main-box {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/*
+ * Push main chrome clear of the fixed sidebar.
+ * RemUI/Boost use #page.drawers — padding-left is more reliable than margin.
+ * Extra specificity beats Nex* full-bleed shells that set padding: 0.
+ */
+body.nxn-sidebar-enabled.nxn-ready #page,
+body.nxn-sidebar-enabled.nxn-ready #page.drawers,
+body.nxn-sidebar-enabled.nxn-ready #page-wrapper,
+body.nxn-sidebar-enabled.nxn-ready #page-content,
+body.nxn-sidebar-enabled.nxn-ready #topofscroll,
+body.nxn-sidebar-enabled.nxn-ready .main-inner,
+body.nxn-sidebar-enabled.nxn-ready #region-main-box,
+body.nxn-sidebar-enabled.nxn-ready.nxd-fullwidth #page,
+body.nxn-sidebar-enabled.nxn-ready.nxd-fullwidth #page.drawers,
+body.nxn-sidebar-enabled.nxn-ready.nxd-fullwidth #page-content,
+body.nxn-sidebar-enabled.nxn-ready.nxd-fullwidth #topofscroll,
+body.nxn-sidebar-enabled.nxn-ready.nxd-fullwidth .main-inner,
+body.nxn-sidebar-enabled.nxn-ready.nxd-fullwidth #region-main-box,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexdashboard.nxd-fullwidth #page,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexdashboard.nxd-fullwidth #page.drawers,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexdashboard.nxd-fullwidth #page-content,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexdashboard.nxd-fullwidth #topofscroll,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexdashboard.nxd-fullwidth .main-inner,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexdashboard.nxd-fullwidth #region-main-box,
+body.nxn-sidebar-enabled.nxn-ready.nxc-fullwidth #page,
+body.nxn-sidebar-enabled.nxn-ready.nxc-fullwidth #page.drawers,
+body.nxn-sidebar-enabled.nxn-ready.nxc-fullwidth #page-content,
+body.nxn-sidebar-enabled.nxn-ready.nxc-fullwidth #topofscroll,
+body.nxn-sidebar-enabled.nxn-ready.nxc-fullwidth .main-inner,
+body.nxn-sidebar-enabled.nxn-ready.nxc-fullwidth #region-main-box,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexcourse.nxc-fullwidth #page,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexcourse.nxc-fullwidth #page.drawers,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexcourse.nxc-fullwidth #page-content,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexcourse.nxc-fullwidth #topofscroll,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexcourse.nxc-fullwidth .main-inner,
+body.nxn-sidebar-enabled.nxn-ready.path-local-nexcourse.nxc-fullwidth #region-main-box {
+  padding-left: var(--nxn-offset) !important;
+  margin-left: 0 !important;
+  box-sizing: border-box !important;
+  transition: padding-left 0.22s ease;
+}
+
+/* Keep floating drawer toggles from sitting under the sidebar. */
+body.nxn-sidebar-enabled.nxn-ready .drawer-toggles {
+  left: var(--nxn-offset) !important;
+  margin-left: 0 !important;
+}
+
+/* Don’t let RemUI left drawers fight the Nex sidebar on first paint. */
+body.nxn-sidebar-enabled.nxn-ready .drawer.drawer-left,
+body.nxn-sidebar-enabled.nxn-ready #theme_remui-drawers-courseindex,
+body.nxn-sidebar-enabled.nxn-ready .edw-left-drawer {
+  z-index: 1040;
+}
+
+/* —— Sidebar shell —— */
+.nxn-sidebar {
+  position: fixed;
+  z-index: 1050;
+  top: 12px;
+  left: 12px;
+  bottom: 12px;
+  width: var(--nxn-width);
+  font-family: var(--nxn-font);
+  color: var(--nxn-text);
+  transition: width 0.22s ease;
+  pointer-events: none;
+}
+
+body.nxn-collapsed .nxn-sidebar {
+  width: var(--nxn-width-collapsed);
+}
+
+.nxn-sidebar__inner {
+  pointer-events: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--nxn-bg);
+  border: 1px solid var(--nxn-border);
+  border-radius: var(--nxn-radius);
+  box-shadow: var(--nxn-shadow);
+  padding: 0.85rem 0.75rem 0.9rem;
+  position: relative;
+  overflow: visible;
+}
+
+/* Profile card */
+.nxn-sidebar__profile {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none !important;
+  color: inherit !important;
+  background: var(--nxn-accent-soft);
+  border-radius: 14px;
+  padding: 0.55rem 0.6rem;
+  min-height: 3.4rem;
+}
+
+.nxn-sidebar__avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex: 0 0 auto;
+  background: #cbd5e1;
+}
+
+.nxn-sidebar__who {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.nxn-sidebar__name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nxn-sidebar__email {
+  font-size: 0.72rem;
+  color: var(--nxn-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nxn-sidebar__profile-chev {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  color: var(--nxn-muted);
+  opacity: 0.7;
+}
+
+.nxn-sidebar__profile-chev svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Collapse toggle (overlaps right edge) */
+.nxn-sidebar__toggle {
+  position: absolute;
+  top: 1.55rem;
+  right: -14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--nxn-accent);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  z-index: 2;
+  padding: 0;
+}
+
+.nxn-sidebar__toggle svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.22s ease;
+}
+
+body.nxn-collapsed .nxn-sidebar__toggle svg {
+  transform: rotate(180deg);
+}
+
+.nxn-sidebar__divider {
+  height: 1px;
+  background: var(--nxn-border);
+  margin: 0.75rem 0.25rem;
+}
+
+.nxn-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  overflow-y: auto;
+  flex: 0 1 auto;
+}
+
+.nxn-sidebar__spacer {
+  flex: 1 1 auto;
+  min-height: 0.5rem;
+}
+
+.nxn-sidebar__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.nxn-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none !important;
+  color: var(--nxn-text) !important;
+  border-radius: 12px;
+  padding: 0.62rem 0.7rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.2;
+  position: relative;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nxn-sidebar__link:hover {
+  background: #f8fafc;
+  color: var(--nxn-accent) !important;
+}
+
+.nxn-sidebar__link.is-active {
+  background: var(--nxn-accent-soft);
+  color: var(--nxn-accent) !important;
+}
+
+.nxn-sidebar__link.is-active .nxn-sidebar__ico {
+  background: var(--nxn-accent);
+  color: #fff;
+}
+
+.nxn-sidebar__link.is-active .nxn-sidebar__ico svg {
+  stroke: #fff;
+}
+
+.nxn-sidebar__ico {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: var(--nxn-muted);
+  background: transparent;
+}
+
+.nxn-sidebar__ico svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nxn-sidebar__label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nxn-sidebar__link--danger:hover {
+  color: #b91c1c !important;
+  background: #fef2f2;
+}
+
+/* Collapsed: icons only + tooltips */
+body.nxn-collapsed .nxn-sidebar__who,
+body.nxn-collapsed .nxn-sidebar__profile-chev,
+body.nxn-collapsed .nxn-sidebar__label {
+  display: none !important;
+}
+
+body.nxn-collapsed .nxn-sidebar__profile {
+  justify-content: center;
+  padding: 0.45rem;
+  background: transparent;
+}
+
+body.nxn-collapsed .nxn-sidebar__link {
+  justify-content: center;
+  padding: 0.55rem;
+}
+
+body.nxn-collapsed .nxn-sidebar__link[data-tip]:hover::after,
+body.nxn-collapsed .nxn-sidebar__profile[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--nxn-accent);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.28);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* RemUI utilities relocated into foot */
+.nxn-sidebar__utils {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.15rem;
+}
+
+.nxn-sidebar__util {
+  display: flex;
+  justify-content: center;
+}
+
+.nxn-sidebar__util .popover-region,
+.nxn-sidebar__util .nav-link,
+.nxn-sidebar__util .btn {
+  color: var(--nxn-text) !important;
+}
+
+.nxn-sidebar__util .popover-region-toggle {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.5rem;
+  border-radius: 12px;
+  padding: 0.4rem !important;
+}
+
+body:not(.nxn-collapsed) .nxn-sidebar__util .popover-region {
+  width: 100%;
+}
+
+/* Mobile overlay */
+@media (max-width: 900px) {
+  body.nxn-sidebar-enabled.nxn-ready {
+    --nxn-offset: 0px;
+  }
+
+  body.nxn-sidebar-enabled.nxn-ready:not(.nxn-collapsed) {
+    --nxn-offset: 0px;
+  }
+
+  body.nxn-sidebar-enabled.nxn-ready #page,
+  body.nxn-sidebar-enabled.nxn-ready #page.drawers,
+  body.nxn-sidebar-enabled.nxn-ready #page-wrapper,
+  body.nxn-sidebar-enabled.nxn-ready #page-content,
+  body.nxn-sidebar-enabled.nxn-ready #topofscroll,
+  body.nxn-sidebar-enabled.nxn-ready .main-inner,
+  body.nxn-sidebar-enabled.nxn-ready #region-main-box {
+    padding-left: 0 !important;
+  }
+
+  body.nxn-sidebar-enabled.nxn-ready:not(.nxn-collapsed)::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.35);
+    z-index: 1045;
+  }
+
+  body.nxn-collapsed .nxn-sidebar {
+    width: 0;
+    left: 0;
+    overflow: visible;
+  }
+
+  body.nxn-collapsed .nxn-sidebar__inner {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-12px);
+  }
+
+  body.nxn-collapsed .nxn-sidebar__toggle {
+    right: -40px;
+    top: 1rem;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  body.nxn-sidebar-enabled.nxn-ready:not(.nxn-collapsed) .nxn-sidebar {
+    width: min(268px, 82vw);
+    z-index: 1060;
+  }
+
+  .nxn-sidebar__inner {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+}
+
+body.theme-dark .nxn-sidebar__inner {
+  background: #0f172a;
+  border-color: #1e293b;
+  color: #e2e8f0;
+}
+
+body.theme-dark {
+  --nxn-text: #e2e8f0;
+  --nxn-muted: #94a3b8;
+  --nxn-border: #1e293b;
+  --nxn-bg: #0f172a;
+  --nxn-accent-soft: rgba(37, 99, 235, 0.22);
+}

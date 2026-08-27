@@ -1,0 +1,33 @@
+{{!
+    @template local_nexreports/learner
+
+    Learner self-report dashboard (My Time Spent On Site).
+}}
+<div class="nxr-app" data-region="nxr-learner"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-timespent-unavailable="{{#str}}timespentunavailable, local_nexreports{{/str}}"
+     data-label-avg-timespent="{{#str}}averagetimespent, local_nexreports{{/str}}"
+     data-label-total-timespent="{{#str}}totaltimespent, local_nexreports{{/str}}"
+     data-label-series-timespent="{{#str}}seriestimespent, local_nexreports{{/str}}"
+     data-label-pct-up="{{#str}}pctup, local_nexreports{{/str}}"
+     data-label-pct-down="{{#str}}pctdown, local_nexreports{{/str}}"
+     data-label-pct-flat="{{#str}}pctflat, local_nexreports{{/str}}"
+     data-label-export-error="{{#str}}exporterror, local_nexreports{{/str}}"
+     data-label-no-chart-export="{{#str}}nochartexport, local_nexreports{{/str}}">
+
+    {{> local_nexreports/shell }}
+
+    <section class="nxr-grid nxr-grid--charts">
+        <article class="nxr-card nxr-card--timespent" data-chart-card="my-timespent">
+            <header class="nxr-card__head">
+                <h2 class="nxr-card__title">{{#str}}mytimespentonsite, local_nexreports{{/str}}</h2>
+                <div class="nxr-card__actions">
+                    {{> local_nexreports/chart_export }}
+                </div>
+            </header>
+            <div class="nxr-summary" data-region="my-timespent-summary"></div>
+            <div class="nxr-chart" data-region="my-timespent-chart" data-export-chart="my-timespent-chart"></div>
+        </article>
+    </section>
+</div>

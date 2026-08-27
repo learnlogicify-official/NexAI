@@ -1,0 +1,141 @@
+{{!
+    @template local_nexinterview/hub
+}}
+{{> local_nexinterview/header }}
+<section class="nxi-hub">
+    {{#hasongoing}}
+        <aside class="nxi-ongoing" role="status">
+            <div class="nxi-ongoing__copy">
+                <strong class="nxi-ongoing__title">{{#str}}ongoingtitle, local_nexinterview{{/str}}</strong>
+                <p class="nxi-ongoing__sub">
+                    {{#str}}ongoingsub, local_nexinterview{{/str}}
+                    {{#ongoingtrack}} · {{ongoingtrack}}{{/ongoingtrack}}
+                    {{#ongoingstarted}} · {{ongoingstarted}}{{/ongoingstarted}}
+                </p>
+            </div>
+            <a class="nxi-ongoing__cta" href="{{{resumeurl}}}">{{#str}}resumeinterview, local_nexinterview{{/str}} →</a>
+        </aside>
+    {{/hasongoing}}
+
+    {{#hascustom}}
+        <div class="nxi-hub__intro">
+            <h2>{{customtitle}}</h2>
+            <p>{{customsub}}</p>
+        </div>
+        <div class="nxi-tracks">
+            {{#customtracks}}
+                <a class="nxi-track nxi-track--custom" href="{{{url}}}">
+                    <span class="nxi-track__icon" aria-hidden="true">{{icon}}</span>
+                    <div class="nxi-track__body">
+                        <div class="nxi-track__top">
+                            <strong class="nxi-track__title">{{title}}</strong>
+                            <span class="nxi-track__meta">{{duration}}</span>
+                        </div>
+                        <p class="nxi-track__sub">{{subtitle}}</p>
+                        {{#hasfocus}}
+                            <ul class="nxi-track__tags">
+                                {{#focus}}
+                                    <li>{{label}}</li>
+                                {{/focus}}
+                            </ul>
+                        {{/hasfocus}}
+                    </div>
+                    <span class="nxi-track__cta">{{#str}}startinterview, local_nexinterview{{/str}} →</span>
+                </a>
+            {{/customtracks}}
+        </div>
+    {{/hascustom}}
+
+    {{#hasresume}}
+        <div class="nxi-hub__intro">
+            <h2>{{resumetitle}}</h2>
+            <p>{{resumesubhub}}</p>
+        </div>
+        <div class="nxi-tracks">
+            {{#resumetracks}}
+                <a class="nxi-track nxi-track--{{id}}" href="{{{url}}}">
+                    <span class="nxi-track__icon" aria-hidden="true">{{icon}}</span>
+                    <div class="nxi-track__body">
+                        <div class="nxi-track__top">
+                            <strong class="nxi-track__title">{{title}}</strong>
+                            <span class="nxi-track__meta">{{duration}}</span>
+                        </div>
+                        <p class="nxi-track__sub">{{subtitle}}</p>
+                        {{#hasfocus}}
+                            <ul class="nxi-track__tags">
+                                {{#focus}}
+                                    <li>{{label}}</li>
+                                {{/focus}}
+                            </ul>
+                        {{/hasfocus}}
+                    </div>
+                    <span class="nxi-track__cta">{{#str}}startinterview, local_nexinterview{{/str}} →</span>
+                </a>
+            {{/resumetracks}}
+        </div>
+    {{/hasresume}}
+
+    <div class="nxi-hub__intro">
+        <h2>{{defaulttitle}}</h2>
+        <p>{{defaultsub}}</p>
+    </div>
+    <div class="nxi-tracks">
+        {{#tracks}}
+            <a class="nxi-track nxi-track--{{id}}" href="{{{url}}}">
+                <span class="nxi-track__icon" aria-hidden="true">{{icon}}</span>
+                <div class="nxi-track__body">
+                    <div class="nxi-track__top">
+                        <strong class="nxi-track__title">{{title}}</strong>
+                        <span class="nxi-track__meta">{{duration}}</span>
+                    </div>
+                    <p class="nxi-track__sub">{{subtitle}}</p>
+                    {{#hasfocus}}
+                        <ul class="nxi-track__tags">
+                            {{#focus}}
+                                <li>{{label}}</li>
+                            {{/focus}}
+                        </ul>
+                    {{/hasfocus}}
+                </div>
+                <span class="nxi-track__cta">{{#str}}startinterview, local_nexinterview{{/str}} →</span>
+            </a>
+        {{/tracks}}
+    </div>
+
+    <section class="nxi-history" data-region="nxi-history">
+        <div class="nxi-history__head">
+            <div>
+                <h2>{{#str}}historytitle, local_nexinterview{{/str}}</h2>
+                <p>{{#str}}historysub, local_nexinterview{{/str}}</p>
+            </div>
+            {{#hashistory}}
+                <a class="nxi-history__all" href="{{{reportsurl}}}">{{#str}}viewallreports, local_nexinterview{{/str}}</a>
+            {{/hashistory}}
+        </div>
+
+        {{#hashistory}}
+            <ul class="nxi-history__list">
+                {{#history}}
+                    <li class="nxi-history__item">
+                        <a class="nxi-history__link" href="{{{url}}}">
+                            <div class="nxi-history__score nxi-history__score--{{scoreclass}}">
+                                <strong>{{score}}</strong>
+                                <span>/100</span>
+                            </div>
+                            <div class="nxi-history__meta">
+                                <strong class="nxi-history__track">{{track}}</strong>
+                                <span class="nxi-history__date">{{datedisplay}}</span>
+                            </div>
+                            <span class="nxi-history__cta">{{#str}}viewreport, local_nexinterview{{/str}} →</span>
+                        </a>
+                    </li>
+                {{/history}}
+            </ul>
+        {{/hashistory}}
+        {{^hashistory}}
+            <div class="nxi-history__empty">
+                <p>{{#str}}historyempty, local_nexinterview{{/str}}</p>
+            </div>
+        {{/hashistory}}
+    </section>
+</section>

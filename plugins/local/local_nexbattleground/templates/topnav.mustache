@@ -1,0 +1,13 @@
+{{!
+    @template local_nexbattleground/topnav
+}}
+<nav class="nbg-topnav" aria-label="NexBattleGround">
+    <a class="nbg-topnav__item{{#navlobby}} is-active{{/navlobby}}" href="{{{lobbyurl}}}">
+        <span class="nbg-ico nbg-ico--swords" aria-hidden="true"></span>
+        {{#str}}lobby, local_nexbattleground{{/str}}
+    </a>
+    <a class="nbg-topnav__item{{#navleaderboard}} is-active{{/navleaderboard}}" href="{{{leaderboardurl}}}">
+        <span class="nbg-ico nbg-ico--trophy" aria-hidden="true"></span>
+        {{#str}}leaderboard, local_nexbattleground{{/str}}
+    </a>
+</nav>

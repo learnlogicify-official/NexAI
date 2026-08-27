@@ -1,0 +1,11 @@
+{{!
+    @template local_nexreports/courses_subnav
+    Course report options (Edwiser Course dropdown parity).
+}}
+{{#showcoursesubnav}}
+<nav class="nxr-subtabs" aria-label="{{#str}}courses, local_nexreports{{/str}}">
+    {{#coursesubnav}}
+    <a class="nxr-subtabs__item{{#active}} is-active{{/active}}" href="{{url}}">{{label}}</a>
+    {{/coursesubnav}}
+</nav>
+{{/showcoursesubnav}}

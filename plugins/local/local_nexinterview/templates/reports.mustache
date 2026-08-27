@@ -1,0 +1,57 @@
+{{!
+    @template local_nexinterview/reports
+}}
+<section class="nxi-reports-page">
+    <div class="nxi-reports__nav">
+        <a class="nxi-back" href="{{{huburl}}}">← {{#str}}backtohub, local_nexinterview{{/str}}</a>
+    </div>
+
+    <header class="nxi-reports__hero">
+        <p class="nxi-reports__eyebrow">{{#str}}feedbackeyebrow, local_nexinterview{{/str}}</p>
+        <h1>{{pagetitle}}</h1>
+        <p class="nxi-reports__sub">{{pagesub}}</p>
+        {{#canviewall}}
+            <p class="nxi-reports__switch">
+                {{#showall}}
+                    <a href="{{{myreportsurl}}}">{{#str}}myreports, local_nexinterview{{/str}}</a>
+                {{/showall}}
+                {{^showall}}
+                    <a href="{{{allreportsurl}}}">{{#str}}allreports, local_nexinterview{{/str}}</a>
+                {{/showall}}
+            </p>
+        {{/canviewall}}
+    </header>
+
+    {{#hashistory}}
+        <ul class="nxi-history__list nxi-history__list--page">
+            {{#history}}
+                <li class="nxi-history__item">
+                    <a class="nxi-history__link" href="{{{url}}}">
+                        <div class="nxi-history__score nxi-history__score--{{scoreclass}}">
+                            <strong>{{score}}</strong>
+                            <span>/100</span>
+                        </div>
+                        <div class="nxi-history__meta">
+                            {{#showstudent}}
+                                <strong class="nxi-history__track">{{student}}</strong>
+                                <span class="nxi-history__date">{{track}}{{#institution}} · {{institution}}{{/institution}} · {{datedisplay}}</span>
+                            {{/showstudent}}
+                            {{^showstudent}}
+                                <strong class="nxi-history__track">{{track}}</strong>
+                                <span class="nxi-history__date">{{datedisplay}}</span>
+                            {{/showstudent}}
+                        </div>
+                        <span class="nxi-history__cta">{{#str}}viewreport, local_nexinterview{{/str}} →</span>
+                    </a>
+                </li>
+            {{/history}}
+        </ul>
+    {{/hashistory}}
+    {{^hashistory}}
+        <div class="nxi-panel nxi-panel--empty">
+            <h2>{{#str}}historyempty, local_nexinterview{{/str}}</h2>
+            <p>{{#str}}historyempty_sub, local_nexinterview{{/str}}</p>
+            <a class="nxi-btn-solid" href="{{{huburl}}}">{{#str}}backtohub, local_nexinterview{{/str}}</a>
+        </div>
+    {{/hashistory}}
+</section>

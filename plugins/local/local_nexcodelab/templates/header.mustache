@@ -1,0 +1,58 @@
+{{!
+    @template local_nexcodelab/header
+    NexCodeLab banner + stats strip (NexCourse visual language).
+}}
+<section class="ncl-header" data-region="ncl-header">
+    <div class="ncl-header__banner">
+        <div class="ncl-header__veil"></div>
+        <div class="ncl-header__content">
+            <div class="ncl-header__row">
+                <div class="ncl-header__main">
+                    <span class="ncl-header__cat">{{eyebrow}}</span>
+                    <h1 class="ncl-header__title">{{title}}</h1>
+                    <p class="ncl-header__sub">{{subtitle}}</p>
+                    {{#displayname}}
+                        <p class="ncl-header__user">{{displayname}}</p>
+                    {{/displayname}}
+                </div>
+                <div class="ncl-header__progress" aria-label="{{#str}}solved, local_nexcodelab{{/str}}">
+                    <div class="ncl-header__progress-grid">
+                        <div class="ncl-donut" style="--ncl-donut-pct: {{contentpct}};"
+                             role="img"
+                             aria-label="{{contentpct}}%"
+                             data-region="donut">
+                            <span class="ncl-donut__ring" aria-hidden="true"></span>
+                            <span class="ncl-donut__hole" aria-hidden="true"></span>
+                            <strong class="ncl-donut__value" data-region="donut-value">{{contentpct}}%</strong>
+                        </div>
+                        <div class="ncl-header__breakdown">
+                            <div class="ncl-header__progress-label">{{#str}}practiceprogress, local_nexcodelab{{/str}}</div>
+                            <ul class="ncl-content-stats" data-region="content-stats">
+                                {{#contentitems}}
+                                    <li class="ncl-content-stat ncl-content-stat--{{key}}">
+                                        <span class="ncl-content-stat__label">{{label}}</span>
+                                        <strong class="ncl-content-stat__value" data-stat="{{key}}">{{display}}</strong>
+                                    </li>
+                                {{/contentitems}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{#hasstats}}
+        <div class="ncl-header__stats" data-region="header-stats">
+            {{#stats}}
+                <div class="ncl-hstat ncl-hstat--{{key}}">
+                    <span class="ncl-hstat__icon" aria-hidden="true"></span>
+                    <div class="ncl-hstat__body">
+                        <strong class="ncl-hstat__value" data-hstat="{{key}}">{{value}}</strong>
+                        <span class="ncl-hstat__label">{{label}}</span>
+                    </div>
+                </div>
+            {{/stats}}
+        </div>
+    {{/hasstats}}
+</section>

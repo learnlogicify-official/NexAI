@@ -1,0 +1,67 @@
+{{!
+    @template local_nexbattleground/battle
+    NexPractice IDE shell + battle chrome (VS, timer, forfeit).
+}}
+<div class="nbg-battle-shell" data-region="nbg-battle" data-battleid="{{battleid}}">
+    <header class="nbg-battlebar">
+        <a class="nbg-battlebar__back" href="{{{lobbyurl}}}">← {{#str}}backtolobby, local_nexbattleground{{/str}}</a>
+        <div class="nbg-battlebar__vs" data-region="vs">
+            <strong data-region="you-name">{{#str}}you, local_nexbattleground{{/str}}</strong>
+            <span class="nbg-battlebar__vs-sep">{{#str}}vs, local_nexbattleground{{/str}}</span>
+            <strong data-region="opp-name">{{#str}}opponent, local_nexbattleground{{/str}}</strong>
+        </div>
+        <div class="nbg-battlebar__clock">
+            <span>{{#str}}timeleft, local_nexbattleground{{/str}}</span>
+            <strong data-region="clock">--:--</strong>
+        </div>
+        <button type="button" class="nbg-btn nbg-btn--danger" data-action="forfeit">{{#str}}forfeit, local_nexbattleground{{/str}}</button>
+    </header>
+
+    <div class="nbg-overlay" data-region="overlay" hidden>
+        <div class="nbg-overlay__card" data-region="overlay-card">
+            <div class="nbg-overlay__icon" data-region="overlay-icon" aria-hidden="true">
+                <svg class="nbg-overlay__svg nbg-overlay__svg--win" viewBox="0 0 64 64" width="64" height="64" fill="none" hidden>
+                    <circle cx="32" cy="32" r="30" fill="#ECFDF5"/>
+                    <path d="M22 18h20v3.5c0 7.5-4.2 12.5-10 12.5S22 29 22 21.5V18z" fill="#10B981"/>
+                    <path d="M22 18h-4.5c0 6 3 9.5 7 10.5M42 18h4.5c0 6-3 9.5-7 10.5" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M28 34h8v4.5c0 1.5-1.5 3-4 3s-4-1.5-4-3V34z" fill="#047857"/>
+                    <rect x="24" y="41.5" width="16" height="3.5" rx="1.5" fill="#059669"/>
+                    <path d="M26 48h12" stroke="#047857" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <svg class="nbg-overlay__svg nbg-overlay__svg--lose" viewBox="0 0 64 64" width="64" height="64" fill="none" hidden>
+                    <circle cx="32" cy="32" r="30" fill="#FEF2F2"/>
+                    <circle cx="32" cy="32" r="14" stroke="#EF4444" stroke-width="3.5"/>
+                    <path d="M26 26l12 12M38 26L26 38" stroke="#EF4444" stroke-width="3.5" stroke-linecap="round"/>
+                </svg>
+                <svg class="nbg-overlay__svg nbg-overlay__svg--tie" viewBox="0 0 64 64" width="64" height="64" fill="none" hidden>
+                    <circle cx="32" cy="32" r="30" fill="#EFF6FF"/>
+                    <path d="M18 34c4 6 10 9 14 9s10-3 14-9" stroke="#3B82F6" stroke-width="3.5" stroke-linecap="round"/>
+                    <circle cx="24" cy="26" r="2.5" fill="#3B82F6"/>
+                    <circle cx="40" cy="26" r="2.5" fill="#3B82F6"/>
+                </svg>
+                <svg class="nbg-overlay__svg nbg-overlay__svg--wait" viewBox="0 0 64 64" width="64" height="64" fill="none" hidden>
+                    <circle cx="32" cy="32" r="30" fill="#F8FAFC"/>
+                    <circle cx="32" cy="32" r="14" stroke="#64748B" stroke-width="3" stroke-dasharray="8 6"/>
+                    <path d="M32 22v12l7 4" stroke="#475569" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 data-region="overlay-title">{{#str}}battleover, local_nexbattleground{{/str}}</h2>
+            <p data-region="overlay-msg"></p>
+            <div class="nbg-overlay__xp" data-region="overlay-xp" hidden>
+                <span class="nbg-overlay__xp-badge" data-region="overlay-xp-value">+0 XP</span>
+            </div>
+            <div class="nbg-overlay__code" data-region="overlay-code" hidden></div>
+            <a class="nbg-btn nbg-btn--primary" href="{{{lobbyurl}}}" data-region="overlay-lobby">{{#str}}backtolobby, local_nexbattleground{{/str}}</a>
+            <div class="nbg-overlay__redirect" data-region="overlay-redirect" hidden>
+                <span data-region="overlay-redirect-msg">{{#str}}returningtolobby, local_nexbattleground{{/str}}</span>
+                <div class="nbg-overlay__loader" aria-hidden="true">
+                    <div class="nbg-overlay__loader-bar" data-region="overlay-loader-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nbg-ide-host" data-region="ide-host" hidden>
+        {{> local_learnlogic/problem }}
+    </div>
+</div>

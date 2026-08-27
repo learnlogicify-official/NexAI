@@ -1,0 +1,65 @@
+{{!
+    @template local_nexportfolio/dashboard
+
+    Coding portfolio dashboard with NexPractice-style chrome.
+}}
+<div id="np-dashboard" class="nxf-app nxf-app--bleed" data-region="nexportfolio-dashboard">
+    {{> local_nexportfolio/header }}
+
+    <div class="nxf-bar">
+        <nav class="nxf-topnav" aria-label="NexPortfolio">
+            <a class="nxf-topnav__item is-active" href="{{{dashboardurl}}}">
+                {{#str}}dashboard, local_nexportfolio{{/str}}
+            </a>
+            {{#canmanage}}
+                <a class="nxf-topnav__item" href="{{{connecturl}}}">
+                    {{#str}}connect, local_nexportfolio{{/str}}
+                </a>
+            {{/canmanage}}
+        </nav>
+        {{#canmanage}}
+            <div class="nxf-bar__actions">
+                <a class="nxf-btn" href="{{{connecturl}}}">{{connectlabel}}</a>
+                <button type="button" class="nxf-btn nxf-btn--primary" data-action="refresh-all" disabled>
+                    {{#str}} refreshall, local_nexportfolio {{/str}}
+                </button>
+            </div>
+        {{/canmanage}}
+    </div>
+
+    <div class="np-empty" data-region="empty" {{#hasconnections}}hidden{{/hasconnections}}>
+        <p>{{noconnections}}</p>
+        {{#canmanage}}
+            <a class="nxf-btn nxf-btn--primary" href="{{{connecturl}}}">{{connectlabel}}</a>
+        {{/canmanage}}
+    </div>
+
+    <div class="np-platforms" data-region="platforms"></div>
+
+    <section class="np-gh" data-region="github-stats" hidden></section>
+
+    <section class="np-projects-wrap" data-region="projects-wrap" hidden>
+        <div class="np-projects__head">
+            <h3 class="np-section-title">{{#str}} projects, local_nexportfolio {{/str}}</h3>
+            {{#canmanage}}
+                <a class="nxf-btn nxf-btn--sm" href="{{{connecturl}}}">{{#str}}githubrefresh, local_nexportfolio{{/str}}</a>
+            {{/canmanage}}
+        </div>
+        <div class="np-projects" data-region="projects"></div>
+    </section>
+
+    <section class="np-heatmap-wrap" data-region="heatmap-wrap" hidden>
+        <h3 class="np-section-title">{{#str}} heatmap, local_nexportfolio {{/str}}</h3>
+        <p class="np-heatmap__hint">{{#str}}heatmap_hint, local_nexportfolio{{/str}}</p>
+        <div class="np-heatmap" data-region="heatmap" aria-label="{{#str}} heatmap, local_nexportfolio {{/str}}"></div>
+        <div class="np-heatmap__legend">
+            <span>Less</span>
+            <span class="np-heat np-heat--0"></span>
+            <span class="np-heat np-heat--1"></span>
+            <span class="np-heat np-heat--2"></span>
+            <span class="np-heat np-heat--3"></span>
+            <span class="np-heat np-heat--4"></span>
+            <span>More</span>
+        </div>
+    </section>
+</div>

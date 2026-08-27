@@ -1,0 +1,64 @@
+{{!
+    @template mod_nexinterview/view
+}}
+<div class="nxi-act{{#inpane}} nxi-act--pane{{/inpane}}">
+    <header class="nxi-act__hero">
+        {{^inpane}}
+        <p class="nxi-act__eyebrow">NexInterview</p>
+        <h1 class="nxi-act__title">{{name}}</h1>
+        {{/inpane}}
+        {{#intro}}<div class="nxi-act__intro">{{{intro}}}</div>{{/intro}}
+        <p class="nxi-act__blurb">{{readyblurb}}</p>
+        {{#hasprofile}}
+            <p class="nxi-act__meta">
+                {{#str}}profilelabel, nexinterview{{/str}}: <strong>{{profilename}}</strong>
+                · {{#str}}minutes, nexinterview, {{duration}}{{/str}}
+                {{#topics}} · {{topics}}{{/topics}}
+            </p>
+        {{/hasprofile}}
+        {{#haswindow}}
+            <p class="nxi-act__meta">{{windowlabel}}</p>
+        {{/haswindow}}
+        {{#noprofile}}
+            <p class="nxi-act__warn">{{#str}}noprofilebound, nexinterview{{/str}}</p>
+        {{/noprofile}}
+        {{#windowclosed}}
+            <p class="nxi-act__warn">{{closedmessage}}</p>
+        {{/windowclosed}}
+        {{#showstartbutton}}
+            <p class="nxi-act__actions">
+                <a class="nxi-act__btn nxi-act__btn--primary" href="{{{starturl}}}">{{#str}}startinterview, nexinterview{{/str}}</a>
+            </p>
+        {{/showstartbutton}}
+        {{#attemptslimit}}
+            <p class="nxi-act__warn">{{#str}}attemptslimit, nexinterview{{/str}}</p>
+        {{/attemptslimit}}
+        {{^serviceok}}
+            <p class="nxi-act__warn">{{servicemessage}}</p>
+        {{/serviceok}}
+        {{#canreports}}
+            <p><a class="nxi-act__link" href="{{{reportsurl}}}">{{#str}}viewreports, nexinterview{{/str}}</a></p>
+        {{/canreports}}
+    </header>
+
+    {{^inpane}}
+    {{#hasattempts}}
+    <section class="nxi-act__attempts">
+        <h2>{{#str}}yourattempts, nexinterview{{/str}}</h2>
+        <ul class="nxi-act__list">
+            {{#attempts}}
+            <li>
+                <span>#{{attemptno}} — {{status}} — {{score}}</span>
+                {{#continueurl}}
+                    <a href="{{{continueurl}}}">{{#str}}continueinterview, nexinterview{{/str}}</a>
+                {{/continueurl}}
+                {{#feedbackurl}}
+                    <a href="{{{feedbackurl}}}">{{#str}}viewfeedback, nexinterview{{/str}}</a>
+                {{/feedbackurl}}
+            </li>
+            {{/attempts}}
+        </ul>
+    </section>
+    {{/hasattempts}}
+    {{/inpane}}
+</div>

@@ -1,0 +1,172 @@
+{{!
+    @template local_learnlogic/problem
+
+    NexPractice-style full-screen IDE: problem list | description | NexEditor.
+}}
+<div class="ll-np" data-region="ll-ide" data-problemid="{{problemid}}">
+    <div class="ll-np__toasts" data-region="toasts" aria-live="polite" aria-atomic="true"></div>
+
+    <header class="ll-np__topbar">
+        <div class="ll-np__topbar-left">
+            <button type="button" class="ll-np__iconbtn" data-action="toggle-sidebar" title="Problems" aria-label="Problems">☰</button>
+            <a class="ll-np__brand" href="{{{listurl}}}" data-action="go-list">{{#str}}pluginname, local_learnlogic{{/str}}</a>
+        </div>
+        <div class="ll-np__topbar-center">
+            <button type="button" class="ll-np__btn ll-np__btn--run" data-action="run">
+                <span class="ll-np__btn-ico" aria-hidden="true">▶</span>
+                {{#str}}runcode, local_learnlogic{{/str}}
+            </button>
+            <button type="button" class="ll-np__btn ll-np__btn--submit" data-action="submit">
+                <span class="ll-np__btn-ico" aria-hidden="true">✓</span>
+                {{#str}}submit, local_learnlogic{{/str}}
+            </button>
+        </div>
+        <div class="ll-np__topbar-right">
+            <button type="button" class="ll-np__themebtn" data-action="toggle-theme" title="Toggle theme" aria-pressed="false">
+                <span class="ll-np__theme-ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" width="14" height="14" focusable="false"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><path fill="currentColor" d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M12.8 3.2l-1.1 1.1M4.3 11.7l-1.1 1.1"/></svg>
+                </span>
+                <span data-region="theme-label">{{#str}}editorlight, local_learnlogic{{/str}}</span>
+            </button>
+            <button type="button" class="ll-np__iconbtn" data-action="focus-page" title="{{#str}}fs_page, local_learnlogic{{/str}}" aria-label="{{#str}}fs_page, local_learnlogic{{/str}}" aria-pressed="false">⛶</button>
+            <a class="ll-np__iconbtn ll-np__back" href="{{{listurl}}}" data-action="go-list" title="{{#str}}backtolist, local_learnlogic{{/str}}">←</a>
+        </div>
+    </header>
+
+    <div class="ll-np__body">
+        {{! —— Problem list sidebar —— }}
+        <aside class="ll-np__sidebar" data-region="sidebar">
+            <div class="ll-np__sidebar-head">
+                <div>
+                    <div class="ll-np__sidebar-title">{{#str}}codingproblems, local_learnlogic{{/str}}</div>
+                    <div class="ll-np__sidebar-sub" data-region="sidebar-count">—</div>
+                </div>
+                <button type="button" class="ll-np__iconbtn ll-np__iconbtn--sm" data-action="toggle-sidebar" title="Close">×</button>
+            </div>
+            <div class="ll-np__sidebar-filters">
+                <input type="search" class="ll-np__search" data-region="sidebar-search"
+                       placeholder="{{#str}}searchproblems, local_learnlogic{{/str}}" />
+                <div class="ll-np__diff-filters" data-region="sidebar-diffs">
+                    <button type="button" class="ll-np__diffchip is-active" data-diff="">{{#str}}all, local_learnlogic{{/str}}</button>
+                    <button type="button" class="ll-np__diffchip" data-diff="easy">{{#str}}easy, local_learnlogic{{/str}}</button>
+                    <button type="button" class="ll-np__diffchip" data-diff="medium">{{#str}}medium, local_learnlogic{{/str}}</button>
+                    <button type="button" class="ll-np__diffchip" data-diff="hard">{{#str}}hard, local_learnlogic{{/str}}</button>
+                </div>
+            </div>
+            <div class="ll-np__sidebar-list" data-region="sidebar-list"></div>
+        </aside>
+
+        <div class="ll-np__workspace" data-region="split">
+            {{! —— Description pane —— }}
+            <section class="ll-np__pane ll-np__pane--desc" data-region="left-pane">
+                <div class="ll-np__pane-bar">
+                    <nav class="ll-np__tabs" data-region="left-tabs">
+                        <button type="button" class="ll-np__tab is-active" data-left="desc">{{#str}}description, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-np__tab" data-left="solution">{{#str}}solution, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-np__tab" data-left="subs">{{#str}}submissions, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-np__tab" data-left="discussion">{{#str}}discussion, local_learnlogic{{/str}}</button>
+                    </nav>
+                    <button type="button" class="ll-np__iconbtn ll-np__iconbtn--sm" data-action="focus-desc" title="{{#str}}fs_desc, local_learnlogic{{/str}}">⤢</button>
+                </div>
+
+                <div class="ll-np__scroll" data-region="desc">
+                    <header class="ll-np__meta">
+                        <h1 class="ll-np__title" data-region="title">…</h1>
+                        <div class="ll-np__meta-row" data-region="meta"></div>
+                    </header>
+                    <div class="ll-np__statement" data-region="statement"></div>
+                    <div class="ll-np__examples" data-region="examples"></div>
+                </div>
+
+                <div class="ll-np__scroll" data-region="solution" hidden></div>
+                <div class="ll-np__scroll" data-region="subs" hidden></div>
+                <div class="ll-np__scroll" data-region="discussion" hidden>
+                    <p class="ll-np__empty">{{#str}}discussionsoon, local_learnlogic{{/str}}</p>
+                </div>
+            </section>
+
+            <div class="ll-np__vresizer" data-action="resize-col" role="separator" aria-orientation="vertical" tabindex="0"></div>
+
+            {{! —— NexEditor + tests —— }}
+            <section class="ll-np__pane ll-np__pane--editor" data-region="right-pane">
+                <div class="ll-np__editor-stack" data-region="editor-stack">
+                    <div class="ll-np__nex-head">
+                        <div class="ll-np__nex-brand">
+                            <span class="ll-np__nex-mark" aria-hidden="true"></span>
+                            {{#str}}nexeditor, local_learnlogic{{/str}}
+                        </div>
+                        <div class="ll-np__nex-actions">
+                            <label class="ll-np__langwrap ll-np__langwrap--editor">
+                                <span class="sr-only">{{#str}}language, local_learnlogic{{/str}}</span>
+                                <select class="ll-np__lang" data-region="language"></select>
+                            </label>
+                            <button type="button" class="ll-np__iconbtn ll-np__iconbtn--sm" data-action="focus-right" title="{{#str}}fs_right, local_learnlogic{{/str}}">⧉</button>
+                            <button type="button" class="ll-np__iconbtn ll-np__iconbtn--sm" data-action="focus-editor" title="{{#str}}fs_editor, local_learnlogic{{/str}}">⛶</button>
+                        </div>
+                    </div>
+
+                    <div class="ll-np__ace-stage" data-region="editor-stage">
+                        <textarea id="ll-ide-editor" class="ll-np__textarea" data-region="editor" spellcheck="false"></textarea>
+                        <div class="ll-np__ace" data-region="ace" hidden></div>
+                    </div>
+
+                    <div class="ll-np__statusbar">
+                        <span data-region="cursor">Ln 1, Col 1</span>
+                        <span data-region="status-lang">—</span>
+                        <span>Spaces: 4</span>
+                        <button type="button" class="ll-np__status-theme" data-action="toggle-theme" title="Toggle theme" aria-pressed="false">
+                            <span class="ll-np__theme-ico" aria-hidden="true">☀</span>
+                            <span data-region="theme-label">{{#str}}editorlight, local_learnlogic{{/str}}</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="ll-np__hresizer" data-action="resize-row" role="separator" aria-orientation="horizontal" tabindex="0"></div>
+
+                <div class="ll-np__tests" data-region="bottom">
+                    <nav class="ll-np__tabs ll-np__tabs--tests" data-region="right-tabs">
+                        <button type="button" class="ll-np__tab is-active" data-right="samples">{{#str}}sampletests, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-np__tab" data-right="hidden">{{#str}}hiddentests, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-np__tab" data-right="custom">{{#str}}customtest, local_learnlogic{{/str}}</button>
+                        <button type="button" class="ll-np__tab" data-right="results">{{#str}}results, local_learnlogic{{/str}}</button>
+                    </nav>
+
+                    <div class="ll-np__tests-body" data-region="samples">
+                        <div class="ll-np__loader" data-region="samples-loader" hidden>
+                            <div class="ll-np__spinner" aria-hidden="true"></div>
+                            <div class="ll-np__loader-text">{{#str}}running, local_learnlogic{{/str}}</div>
+                        </div>
+                        <div class="ll-np__casechips" data-region="sample-chips"></div>
+                        <div class="ll-np__caseview" data-region="sample-view"></div>
+                    </div>
+
+                    <div class="ll-np__tests-body" data-region="hidden" hidden>
+                        <div class="ll-np__loader" data-region="hidden-loader" hidden>
+                            <div class="ll-np__spinner" aria-hidden="true"></div>
+                            <div class="ll-np__loader-text">{{#str}}submitting, local_learnlogic{{/str}}</div>
+                        </div>
+                        <p class="ll-np__empty" data-region="hidden-msg">—</p>
+                    </div>
+
+                    <div class="ll-np__tests-body" data-region="custom" hidden>
+                        <div class="ll-np__custom">
+                            <div class="ll-np__iocards">
+                                <label class="ll-np__iocard">
+                                    <div class="ll-np__iocard-head">{{#str}}stdin, local_learnlogic{{/str}}</div>
+                                    <textarea class="ll-np__iocard-input" data-region="custom-stdin" rows="5"></textarea>
+                                </label>
+                                <label class="ll-np__iocard">
+                                    <div class="ll-np__iocard-head">{{#str}}expected, local_learnlogic{{/str}}</div>
+                                    <textarea class="ll-np__iocard-input" data-region="custom-expected" rows="5"></textarea>
+                                </label>
+                            </div>
+                            <button type="button" class="ll-np__btn ll-np__btn--run" data-action="run-custom">{{#str}}run, local_learnlogic{{/str}}</button>
+                        </div>
+                    </div>
+
+                    <div class="ll-np__tests-body" data-region="results" hidden></div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

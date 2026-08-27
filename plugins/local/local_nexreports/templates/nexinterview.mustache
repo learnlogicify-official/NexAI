@@ -1,0 +1,139 @@
+{{!
+    @template local_nexreports/nexinterview
+    NexInterview attempts report.
+}}
+<div class="nxr-app" data-region="nxr-interview"
+     data-label-nodata="{{#str}}nodata, local_nexreports{{/str}}"
+     data-label-loaderror="{{#str}}loaderror, local_nexreports{{/str}}"
+     data-label-all-cohorts="{{#str}}allcohorts, local_nexreports{{/str}}"
+     data-label-all-colleges="{{#str}}allcolleges, local_nexreports{{/str}}"
+     data-label-all-years="{{#str}}allyears, local_nexreports{{/str}}"
+     data-label-all-departments="{{#str}}alldepartments, local_nexreports{{/str}}"
+     data-label-all-tracks="{{#str}}alltracks, local_nexreports{{/str}}"
+     data-label-all-statuses="{{#str}}allstatuses, local_nexreports{{/str}}"
+     data-label-status-completed="{{#str}}interviewstatuscompleted, local_nexreports{{/str}}"
+     data-label-status-inprogress="{{#str}}interviewstatusinprogress, local_nexreports{{/str}}"
+     data-label-firstname="{{#str}}firstname, local_nexreports{{/str}}"
+     data-label-lastname="{{#str}}lastname, local_nexreports{{/str}}"
+     data-label-username="{{#str}}username, local_nexreports{{/str}}"
+     data-label-institution="{{#str}}college, local_nexreports{{/str}}"
+     data-label-yearofpassing="{{#str}}yearofpassing, local_nexreports{{/str}}"
+     data-label-department="{{#str}}department, local_nexreports{{/str}}"
+     data-label-track="{{#str}}interviewtrack, local_nexreports{{/str}}"
+     data-label-status="{{#str}}interviewstatus, local_nexreports{{/str}}"
+     data-label-score="{{#str}}interviewscore, local_nexreports{{/str}}"
+     data-label-conceptual="{{#str}}interviewscoreconceptual, local_nexreports{{/str}}"
+     data-label-problemsolving="{{#str}}interviewscoreproblemsolving, local_nexreports{{/str}}"
+     data-label-coding="{{#str}}interviewscorecoding, local_nexreports{{/str}}"
+     data-label-explanation="{{#str}}interviewscoreexplanation, local_nexreports{{/str}}"
+     data-label-communication="{{#str}}interviewscorecommunication, local_nexreports{{/str}}"
+     data-label-independence="{{#str}}interviewscoreindependence, local_nexreports{{/str}}"
+     data-label-started="{{#str}}interviewstarted, local_nexreports{{/str}}"
+     data-label-completed="{{#str}}interviewcompletedat, local_nexreports{{/str}}"
+     data-label-feedback="{{#str}}interviewfeedback, local_nexreports{{/str}}"
+     data-export-url="{{exporturl}}">
+
+    {{> local_nexreports/shell }}
+
+    <div class="nxr-kpis nxr-kpis--interview" data-region="interview-kpis">
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}interviewlearners, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="learners">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}interviewtotalattempts, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="totalattempts">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}interviewcompleted, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="completed">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}interviewinprogress, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="inprogress">—</strong>
+                </div>
+            </div>
+        </article>
+        <article class="nxr-kpi">
+            <div class="nxr-kpi__body">
+                <div class="nxr-kpi__label">{{#str}}interviewavgscore, local_nexreports{{/str}}</div>
+                <div class="nxr-kpi__metrics">
+                    <strong class="nxr-kpi__value" data-kpi="avgscore">—</strong>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <article class="nxr-card">
+        <header class="nxr-card__head">
+            <h2 class="nxr-card__title">{{#str}}interviewattempts, local_nexreports{{/str}}</h2>
+            {{> local_nexreports/table_export }}
+        </header>
+        <p class="nxr-card__hint">{{#str}}interviewattempts_help, local_nexreports{{/str}}</p>
+        <div class="nxr-report-filters">
+            {{#showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}college, local_nexreports{{/str}}</span>
+                <select data-filter="college" name="nxr_iv_college" autocomplete="off">
+                    <option value="" selected>{{#str}}allcolleges, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showcollege}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}yearofpassing, local_nexreports{{/str}}</span>
+                <select data-filter="year" name="nxr_iv_year" autocomplete="off">
+                    <option value="" selected>{{#str}}allyears, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{#showdepartment}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}department, local_nexreports{{/str}}</span>
+                <select data-filter="department" name="nxr_iv_department" autocomplete="off">
+                    <option value="" selected>{{#str}}alldepartments, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            {{/showdepartment}}
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}cohortfilter, local_nexreports{{/str}}</span>
+                <select data-filter="cohort">
+                    <option value="0">{{#str}}allcohorts, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}interviewtrack, local_nexreports{{/str}}</span>
+                <select data-filter="track" name="nxr_iv_track" autocomplete="off">
+                    <option value="" selected>{{#str}}alltracks, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            <div class="nxr-report-filter">
+                <span class="nxr-report-filter__label">{{#str}}interviewstatus, local_nexreports{{/str}}</span>
+                <select data-filter="status" name="nxr_iv_status" autocomplete="off">
+                    <option value="all" selected>{{#str}}allstatuses, local_nexreports{{/str}}</option>
+                    <option value="completed">{{#str}}interviewstatuscompleted, local_nexreports{{/str}}</option>
+                    <option value="inprogress">{{#str}}interviewstatusinprogress, local_nexreports{{/str}}</option>
+                </select>
+            </div>
+            <label class="nxr-search">
+                <span class="nxr-search__icon" aria-hidden="true"></span>
+                <input type="search" data-filter="search" placeholder="{{#str}}searchbyuser, local_nexreports{{/str}}">
+            </label>
+        </div>
+        <div data-region="interview-table">
+            <div class="nxr-skeleton nxr-skeleton--table"></div>
+        </div>
+    </article>
+</div>
